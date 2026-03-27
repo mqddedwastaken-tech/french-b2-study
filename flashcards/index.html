@@ -1,0 +1,4786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="French B2">
+  <meta name="theme-color" content="#111111">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>French B2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #F5F5F7;
+      --surface: #FFFFFF;
+      --surface-hover: #F0F0F2;
+      --card-front: #FFFFFF;
+      --card-back: #F9FAF9;
+      --accent: #111111;
+      --accent-dim: #333333;
+      --text: #1A1A1A;
+      --text-dim: #9CA3AF;
+      --green: #16A34A;
+      --green-dim: #DCFCE7;
+      --red: #DC2626;
+      --orange: #D97706;
+      --radius: 16px;
+      --border: #E5E7EB;
+      --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg: #1A1A1A;
+      --surface: #262626;
+      --surface-hover: #333333;
+      --card-front: #2A2A2A;
+      --card-back: #2E2E2E;
+      --accent: #FFFFFF;
+      --accent-dim: #E0E0E0;
+      --text: #F0F0F0;
+      --text-dim: #888888;
+      --green: #4ADE80;
+      --green-dim: #1A3A2A;
+      --red: #F87171;
+      --orange: #FBBF24;
+      --border: #3A3A3A;
+      --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.15);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="dark"] .mode-toggle button.active { color: #1A1A1A; }
+    [data-theme="dark"] .btn.active { color: #1A1A1A; }
+    [data-theme="dark"] .grammar-sub-nav button.active { color: #1A1A1A; }
+    [data-theme="dark"] .listening-sub-nav button.active { color: #1A1A1A; }
+    [data-theme="dark"] .writing-sub-nav button.active { color: #1A1A1A; }
+    [data-theme="dark"] .exam-nav button.active { color: #1A1A1A; }
+    [data-theme="dark"] .writing-actions .btn.primary { color: #1A1A1A; }
+    [data-theme="dark"] .speaking-actions .btn.primary { color: #1A1A1A; }
+    [data-theme="dark"] .exam-mc-opt.selected { color: #1A1A1A; }
+    [data-theme="dark"] .exam-vf-btn.selected { color: #1A1A1A; }
+    [data-theme="dark"] .mc-option.selected-wrong,
+    [data-theme="dark"] .reading-q-option.selected-wrong,
+    [data-theme="dark"] .exam-vf-btn.wrong,
+    [data-theme="dark"] .exam-mc-opt.wrong,
+    [data-theme="dark"] .exam-conj-input.wrong,
+    [data-theme="dark"] .exam-cloze-select.wrong { background: #3A1A1A; }
+    [data-theme="dark"] .listen-input.incorrect { background: #3A1A1A; }
+    [data-theme="dark"] .listen-input.close { background: #3A2A10; }
+    [data-theme="dark"] .mc-option.selected-correct,
+    [data-theme="dark"] .exam-vf-btn.correct,
+    [data-theme="dark"] .exam-mc-opt.correct,
+    [data-theme="dark"] .exam-conj-input.correct,
+    [data-theme="dark"] .exam-cloze-select.correct { background: #1A3A2A; }
+    [data-theme="dark"] .speaking-type-badge.monologue { background: #2D1B69; color: #B794F4; }
+    [data-theme="dark"] .speaking-type-badge.expose { background: #1B3A69; color: #90CDF4; }
+    [data-theme="dark"] .speaking-type-badge.debat { background: #69241B; color: #FEB2B2; }
+    [data-theme="dark"] .speaking-browser-warn { background: #3A2A10; border-color: #D97706; color: #FBBF24; }
+
+    body {
+      font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* === HEADER === */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 22px 40px 18px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .header h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .header h1 span { color: var(--text-dim); font-weight: 500; }
+    .header-stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 10px 40px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-stats strong { color: var(--text); font-weight: 600; }
+
+    /* === CONTROLS === */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 40px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      font-family: inherit;
+    }
+    .btn:hover { background: var(--surface-hover); border-color: #D1D5DB; }
+    .btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn.active:hover { background: var(--accent-dim); }
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    select.btn {
+      appearance: none;
+      padding-right: 30px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .spacer { flex: 1; }
+    .counter {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      min-width: 80px;
+      text-align: center;
+    }
+    .counter strong { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+    /* === PROGRESS BAR === */
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      margin: 0 40px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      border-radius: 2px;
+    }
+
+    /* === FLASHCARD === */
+    .card-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 40px;
+      perspective: 1200px;
+    }
+    .card-wrapper {
+      width: 100%;
+      max-width: 560px;
+      aspect-ratio: 5 / 3;
+      cursor: pointer;
+      position: relative;
+    }
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+    .card-front {
+      background: var(--surface);
+    }
+    .card-back {
+      background: var(--card-back);
+      transform: rotateY(180deg);
+    }
+    .card-label {
+      position: absolute;
+      top: 18px;
+      left: 22px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .card-category {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 0.65rem;
+      padding: 3px 10px;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .card-word {
+      font-size: 1.7rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .card-expression {
+      margin-top: 20px;
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.6;
+      font-style: italic;
+      max-width: 90%;
+    }
+    .card-hint {
+      position: absolute;
+      bottom: 16px;
+      font-size: 0.7rem;
+      color: #D1D5DB;
+    }
+
+    /* === ACTION BUTTONS === */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 40px 24px;
+    }
+    .action-btn {
+      padding: 11px 24px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      background: var(--surface);
+    }
+    .action-btn.know {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .action-btn.know:hover { background: var(--accent-dim); }
+    .action-btn.dont-know {
+      background: var(--surface);
+      color: var(--red);
+      border-color: #FCA5A5;
+    }
+    .action-btn.dont-know:hover { background: #FEF2F2; }
+    .action-btn.skip {
+      background: var(--surface);
+      color: var(--text-dim);
+    }
+    .action-btn.skip:hover { background: var(--surface-hover); }
+
+    /* === KEYBOARD HINTS === */
+    .keyboard-hints {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 4px 40px 28px;
+      font-size: 0.7rem;
+      color: #D1D5DB;
+    }
+    .keyboard-hints kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      margin-right: 4px;
+      background: var(--surface);
+      font-size: 0.68rem;
+    }
+
+    /* === EMPTY STATE === */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+    }
+    .empty-state h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--green);
+      letter-spacing: -0.02em;
+    }
+    .empty-state p {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+    }
+    .empty-state .btn {
+      margin-top: 24px;
+      padding: 12px 24px;
+      font-size: 0.92rem;
+    }
+
+    /* === MODE TOGGLE === */
+    .mode-toggle {
+      display: flex;
+      gap: 0;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 3px;
+      border: none;
+      overflow: visible;
+    }
+    .mode-toggle button {
+      padding: 8px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-radius: 10px;
+      font-family: inherit;
+    }
+    .mode-toggle button.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    .mode-toggle button:hover:not(.active) {
+      color: var(--text);
+    }
+
+    /* === GRAMMAR VIEW === */
+    .grammar-view {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 28px 40px 48px;
+    }
+    .grammar-sidebar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .grammar-sidebar .btn.topic-active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .grammar-filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .grammar-topic {
+      margin-bottom: 32px;
+    }
+    .grammar-topic h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    .grammar-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .grammar-section-header {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background 0.15s;
+      user-select: none;
+      color: var(--text);
+    }
+    .grammar-section-header:hover {
+      background: var(--surface-hover);
+    }
+    .grammar-section-header .chevron {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      transition: transform 0.2s;
+    }
+    .grammar-section.open .chevron {
+      transform: rotate(90deg);
+    }
+    .grammar-section-body {
+      display: none;
+      padding: 0 20px 20px;
+      font-size: 0.86rem;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .grammar-section.open .grammar-section-body {
+      display: block;
+    }
+    .grammar-section-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.82rem;
+    }
+    .grammar-section-body th,
+    .grammar-section-body td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .grammar-section-body th {
+      background: var(--bg);
+      font-weight: 600;
+      color: var(--text);
+    }
+    .grammar-section-body em {
+      color: var(--green);
+      font-style: italic;
+    }
+    .grammar-section-body strong {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* === GRAMMAR SUB-NAV === */
+    .grammar-sub-nav {
+      display: flex;
+      gap: 0;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 3px;
+      border: none;
+      overflow: visible;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .grammar-sub-nav button {
+      padding: 9px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      border-radius: 10px;
+      font-family: inherit;
+    }
+    .grammar-sub-nav button.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    .grammar-sub-nav button:hover:not(.active) {
+      color: var(--text);
+    }
+
+    /* === PRACTICE COMMON === */
+    .practice-view { max-width: 680px; margin: 0 auto; }
+    .practice-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .practice-score {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .practice-score strong { color: var(--text); font-weight: 600; }
+    .practice-progress {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .practice-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.4s ease;
+      border-radius: 2px;
+    }
+
+    /* === FILL IN THE BLANK === */
+    .fib-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .fib-hint {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .fib-sentence {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .fib-input {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      width: 100%;
+      max-width: 300px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .fib-input:focus { border-color: var(--accent); }
+    .fib-input.correct { border-color: var(--green); background: #F0FDF4; }
+    .fib-input.incorrect { border-color: var(--red); background: #FEF2F2; }
+    .fib-input.close { border-color: var(--orange); background: #FFFBEB; }
+    .fib-feedback {
+      margin-top: 16px;
+      font-size: 0.88rem;
+      min-height: 24px;
+    }
+    .fib-feedback.correct { color: var(--green); }
+    .fib-feedback.incorrect { color: var(--red); }
+    .fib-feedback.close { color: var(--orange); }
+    .fib-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* === CONJUGATION CARDS === */
+    .conj-card-front .conj-verb {
+      font-size: 1.9rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .conj-card-front .conj-details {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .conj-tag {
+      padding: 5px 14px;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    .conj-tag.tense { color: var(--text); border: 1px solid var(--border); }
+    .conj-tag.person { color: var(--text); border: 1px solid var(--border); font-weight: 600; }
+
+    .conj-explanation {
+      margin-top: 16px;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      background: var(--bg);
+      border-radius: 10px;
+      line-height: 1.5;
+      max-width: 340px;
+    }
+
+    .fib-explanation {
+      margin-top: 10px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      background: var(--bg);
+      border-radius: 10px;
+      line-height: 1.5;
+      display: none;
+    }
+    .fib-explanation.show { display: block; }
+
+    /* === MULTIPLE CHOICE === */
+    .mc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .mc-question {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .mc-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .mc-option {
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+      font-family: inherit;
+    }
+    .mc-option:hover:not(.disabled) { background: #E8E8EA; border-color: #D1D5DB; }
+    .mc-option.selected-correct { background: #DCFCE7; border-color: var(--green); color: var(--green); }
+    .mc-option.selected-wrong { background: #FEE2E2; border-color: var(--red); color: var(--red); }
+    .mc-option.reveal-correct { border-color: var(--green); color: var(--green); }
+    .mc-option.disabled { cursor: default; opacity: 0.7; }
+    .mc-explanation {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: var(--bg);
+      border-radius: 10px;
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      display: none;
+    }
+    .mc-explanation.show { display: block; }
+
+    /* === TRANSFORMATION === */
+    .trans-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .trans-instruction {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      font-weight: 500;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .trans-given {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      padding: 18px 20px;
+      background: var(--bg);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 3px solid var(--accent);
+      font-weight: 500;
+    }
+    .trans-textarea {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      width: 100%;
+      min-height: 60px;
+      outline: none;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+      transition: border-color 0.2s;
+    }
+    .trans-textarea:focus { border-color: var(--accent); }
+    .trans-textarea.correct { border-color: var(--green); background: #F0FDF4; }
+    .trans-textarea.incorrect { border-color: var(--red); background: #FEF2F2; }
+    .trans-expected {
+      margin-top: 12px;
+      padding: 14px 18px;
+      background: var(--bg);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      display: none;
+    }
+    .trans-expected.show { display: block; }
+    .trans-expected strong { color: var(--green); font-weight: 600; }
+    .trans-self-assess {
+      display: none;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .trans-self-assess.show { display: flex; }
+
+    /* === READING VIEW === */
+    .reading-view {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 28px 40px 48px;
+    }
+    .reading-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .reading-text-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .reading-text-card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.03em;
+    }
+    .reading-meta {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      display: flex;
+      gap: 16px;
+    }
+    .reading-meta span {
+      background: var(--bg);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+    .reading-body {
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: var(--text);
+      white-space: pre-line;
+    }
+    .reading-body p { margin-bottom: 12px; }
+    .reading-vocab-toggle {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .reading-vocab-toggle summary {
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      user-select: none;
+    }
+    .reading-vocab-list {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+      font-size: 0.82rem;
+    }
+    .reading-vocab-list .rv-item {
+      display: flex;
+      gap: 8px;
+    }
+    .reading-vocab-list .rv-fr { font-weight: 500; color: var(--text); }
+    .reading-vocab-list .rv-de { color: var(--text-dim); }
+
+    .reading-exercises {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .reading-exercises h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .reading-q {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .reading-q:last-child { border-bottom: none; padding-bottom: 0; }
+    .reading-q-text {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .reading-q-type {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .reading-q input[type="text"],
+    .reading-q textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .reading-q input:focus,
+    .reading-q textarea:focus {
+      border-color: var(--accent);
+    }
+    .reading-q textarea { min-height: 60px; resize: vertical; }
+    .reading-q-options {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .reading-q-option {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+      font-family: inherit;
+      color: var(--text);
+    }
+    .reading-q-option:hover { background: var(--surface-hover); }
+    .reading-q-option.selected-correct { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+    .reading-q-option.selected-wrong { background: #FEE2E2; border-color: var(--red); color: var(--red); }
+    .reading-q-option.reveal-correct { border-color: var(--green); color: var(--green); }
+    .reading-q-option.disabled { pointer-events: none; }
+    .reading-q-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .reading-q-feedback.correct { color: var(--green); }
+    .reading-q-feedback.incorrect { color: var(--red); }
+    .reading-check-btn {
+      margin-top: 6px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .reading-check-btn:hover { background: var(--accent-dim); }
+    .reading-score {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: var(--bg);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: none;
+    }
+    .reading-progress-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .reading-progress-dot {
+      width: 32px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .reading-progress-dot.active { background: var(--accent); }
+    .reading-progress-dot.completed { background: var(--green); }
+
+    /* === LISTENING VIEW === */
+    .listening-view {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 28px 40px 48px;
+    }
+    .listening-sub-nav {
+      display: flex;
+      gap: 0;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 3px;
+      border: none;
+      overflow: visible;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .listening-sub-nav button {
+      padding: 9px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      border-radius: 10px;
+      font-family: inherit;
+    }
+    .listening-sub-nav button.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    .listening-sub-nav button:hover:not(.active) {
+      color: var(--text);
+    }
+    .listen-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .listen-play-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .listen-play-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--surface);
+      color: var(--accent);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .listen-play-btn:hover { background: var(--accent); color: #fff; }
+    .listen-play-btn.playing { background: var(--accent); color: #fff; }
+    .listen-hint {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+    .listen-difficulty {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      display: flex;
+      gap: 3px;
+    }
+    .listen-difficulty span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .listen-difficulty span.filled { background: var(--accent); }
+    .listen-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .listen-input:focus { border-color: var(--accent); }
+    .listen-input.correct { border-color: var(--green); background: var(--green-dim); }
+    .listen-input.incorrect { border-color: var(--red); background: #FEE2E2; }
+    .listen-input.close { border-color: var(--orange); background: #FEF3C7; }
+    .listen-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .listen-comp-passage {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.6;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .listen-comp-passage.show { display: block; }
+    .listen-stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+    .listen-stats strong { color: var(--text); font-weight: 600; }
+
+    /* === WRITING === */
+    .writing-view { max-width: 760px; margin: 0 auto; padding: 24px; }
+    .writing-sub-nav {
+      display: flex; gap: 4px; background: var(--surface); border-radius: 12px;
+      padding: 4px; box-shadow: var(--shadow); margin-bottom: 20px; width: fit-content;
+    }
+    .writing-sub-nav button {
+      padding: 8px 18px; border: none; background: transparent; border-radius: 10px;
+      font-family: inherit; font-size: 0.82rem; font-weight: 500; color: var(--text-dim);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .writing-sub-nav button.active { background: var(--accent); color: #fff; }
+    .writing-select-row { margin-bottom: 20px; }
+    .writing-select-row select {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+      font-family: inherit; font-size: 0.85rem; background: var(--surface); color: var(--text);
+      cursor: pointer; outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+    .writing-prompt-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .writing-prompt-label {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-dim); font-weight: 600; margin-bottom: 8px;
+    }
+    .writing-prompt-text {
+      font-size: 1.05rem; font-weight: 600; color: var(--text); line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .writing-instruction {
+      font-size: 0.82rem; color: var(--text-dim); font-style: italic;
+    }
+    .writing-job-ad {
+      background: var(--bg); border-radius: 12px; padding: 18px; margin-top: 14px;
+      border: 1px solid var(--border);
+    }
+    .writing-job-ad h4 {
+      font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; color: var(--text);
+    }
+    .writing-job-ad .job-field {
+      font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px; line-height: 1.5;
+    }
+    .writing-job-ad .job-field strong { color: var(--text); font-weight: 500; }
+    .writing-area-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .writing-textarea {
+      width: 100%; min-height: 260px; padding: 16px; border: 1px solid var(--border);
+      border-radius: 12px; font-family: inherit; font-size: 0.88rem; line-height: 1.7;
+      background: var(--bg); color: var(--text); resize: vertical; outline: none;
+      transition: border-color 0.15s;
+    }
+    .writing-textarea:focus { border-color: var(--accent); }
+    .writing-textarea::placeholder { color: var(--text-dim); }
+    .writing-meta-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 12px; font-size: 0.78rem; color: var(--text-dim);
+    }
+    .writing-word-count { font-weight: 500; }
+    .writing-word-count.over { color: var(--orange); }
+    .writing-word-count.good { color: var(--green); }
+    .writing-actions {
+      display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
+    }
+    .writing-actions .btn {
+      padding: 10px 20px; border-radius: 10px; font-size: 0.82rem; font-weight: 600;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .writing-actions .btn:hover { border-color: var(--accent); }
+    .writing-actions .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .writing-actions .btn.primary:hover { opacity: 0.9; }
+    .writing-tips-card {
+      background: var(--surface); border-radius: var(--radius); padding: 20px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .writing-tips-header {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+    }
+    .writing-tips-title {
+      font-size: 0.88rem; font-weight: 600; color: var(--text);
+    }
+    .writing-tips-chevron {
+      font-size: 0.75rem; color: var(--text-dim); transition: transform 0.2s;
+    }
+    .writing-tips-chevron.open { transform: rotate(180deg); }
+    .writing-tips-body { display: none; margin-top: 14px; }
+    .writing-tips-body.open { display: block; }
+    .writing-tip {
+      background: var(--bg); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px;
+      border-left: 3px solid var(--accent);
+    }
+    .writing-tip:last-child { margin-bottom: 0; }
+    .writing-tip-label {
+      font-size: 0.76rem; font-weight: 600; color: var(--accent); margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .writing-tip-text {
+      font-size: 0.82rem; color: var(--text); line-height: 1.6; white-space: pre-line;
+    }
+    .writing-feedback-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 20px; display: none;
+    }
+    .writing-feedback-card.show { display: block; }
+    .writing-feedback-title {
+      font-size: 0.92rem; font-weight: 600; margin-bottom: 16px; color: var(--text);
+    }
+    .writing-fb-section {
+      margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .writing-fb-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .writing-fb-label {
+      font-size: 0.76rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 6px;
+    }
+    .writing-fb-label.good { color: var(--green); }
+    .writing-fb-label.warn { color: var(--orange); }
+    .writing-fb-label.info { color: #6366F1; }
+    .writing-fb-text {
+      font-size: 0.82rem; color: var(--text); line-height: 1.6;
+    }
+    .writing-fb-list {
+      list-style: none; padding: 0; margin: 6px 0 0 0;
+    }
+    .writing-fb-list li {
+      font-size: 0.8rem; color: var(--text); padding: 4px 0; padding-left: 16px;
+      position: relative; line-height: 1.5;
+    }
+    .writing-fb-list li::before {
+      content: ''; position: absolute; left: 0; top: 10px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim);
+    }
+    .writing-score-bar {
+      display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .writing-score-item {
+      background: var(--bg); border-radius: 10px; padding: 10px 16px;
+      text-align: center; flex: 1; min-width: 100px;
+    }
+    .writing-score-value {
+      font-size: 1.2rem; font-weight: 700; color: var(--text);
+    }
+    .writing-score-label {
+      font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 0.03em; margin-top: 2px;
+    }
+    .writing-sample {
+      background: var(--bg); border-radius: 12px; padding: 18px; margin-top: 16px;
+      display: none; border: 1px solid var(--border);
+    }
+    .writing-sample.show { display: block; }
+    .writing-sample-label {
+      font-size: 0.74rem; font-weight: 600; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;
+    }
+    .writing-sample-text {
+      font-size: 0.84rem; color: var(--text); line-height: 1.7; white-space: pre-line;
+    }
+
+    /* === SPEAKING === */
+    .speaking-view { max-width: 760px; margin: 0 auto; padding: 24px; }
+    .speaking-topic-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .speaking-type-badge {
+      display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 3px 10px; border-radius: 6px; margin-bottom: 10px;
+    }
+    .speaking-type-badge.monologue { background: #EDE9FE; color: #7C3AED; }
+    .speaking-type-badge.expose { background: #DBEAFE; color: #2563EB; }
+    .speaking-type-badge.debat { background: #FEE2E2; color: #DC2626; }
+    .speaking-topic-text {
+      font-size: 1.05rem; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 8px;
+    }
+    .speaking-instruction {
+      font-size: 0.82rem; color: var(--text-dim); font-style: italic;
+    }
+    .speaking-select-row { margin-bottom: 20px; }
+    .speaking-select-row select {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+      font-family: inherit; font-size: 0.85rem; background: var(--surface); color: var(--text);
+      cursor: pointer; outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+    .speaking-timer-card {
+      background: var(--surface); border-radius: var(--radius); padding: 32px;
+      box-shadow: var(--shadow); margin-bottom: 20px; text-align: center;
+    }
+    .speaking-phase-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .speaking-phase-label.prep { color: var(--orange); }
+    .speaking-phase-label.recording { color: var(--red); }
+    .speaking-phase-label.review { color: var(--green); }
+    .speaking-timer-display {
+      font-size: 3.5rem; font-weight: 700; font-variant-numeric: tabular-nums;
+      color: var(--text); letter-spacing: -0.02em; line-height: 1;
+    }
+    .speaking-timer-sub {
+      font-size: 0.78rem; color: var(--text-dim); margin-top: 8px;
+    }
+    .speaking-rec-dot {
+      display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red); margin-right: 8px; animation: speakPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes speakPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .speaking-topic-reminder {
+      font-size: 0.82rem; color: var(--text-dim); font-style: italic;
+      margin: 12px 0 16px; padding: 10px 14px; background: var(--bg);
+      border-radius: 8px; border-left: 3px solid var(--accent);
+    }
+    .speaking-transcript-area {
+      background: var(--bg); border-radius: 12px; padding: 18px;
+      min-height: 120px; max-height: 300px; overflow-y: auto;
+      margin: 16px 0; text-align: left; border: 1px solid var(--border);
+    }
+    .speaking-transcript-text {
+      font-size: 0.88rem; line-height: 1.7; color: var(--text);
+    }
+    .speaking-transcript-interim {
+      color: var(--text-dim); font-style: italic;
+    }
+    .speaking-transcript-empty {
+      color: var(--text-dim); font-style: italic; font-size: 0.82rem;
+    }
+    .speaking-actions {
+      display: flex; gap: 10px; margin-top: 16px; justify-content: center; flex-wrap: wrap;
+    }
+    .speaking-actions .btn {
+      padding: 10px 22px; border-radius: 10px; font-size: 0.84rem; font-weight: 600;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .speaking-actions .btn:hover { border-color: var(--accent); }
+    .speaking-actions .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .speaking-actions .btn.primary:hover { opacity: 0.9; }
+    .speaking-actions .btn.danger { background: var(--red); color: #fff; border-color: var(--red); }
+    .speaking-metrics-bar {
+      display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap;
+    }
+    .speaking-metric-item {
+      background: var(--bg); border-radius: 10px; padding: 12px 16px;
+      text-align: center; flex: 1; min-width: 80px;
+    }
+    .speaking-metric-value {
+      font-size: 1.3rem; font-weight: 700; color: var(--text);
+    }
+    .speaking-metric-label {
+      font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: 0.03em; margin-top: 2px;
+    }
+    .speaking-fb-section {
+      margin-top: 16px; padding: 14px 18px; background: var(--bg);
+      border-radius: 10px; text-align: left;
+    }
+    .speaking-fb-label {
+      font-size: 0.76rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 6px;
+    }
+    .speaking-fb-label.good { color: var(--green); }
+    .speaking-fb-label.warn { color: var(--orange); }
+    .speaking-fb-label.info { color: #6366F1; }
+    .speaking-fb-text {
+      font-size: 0.82rem; color: var(--text); line-height: 1.6;
+    }
+    .speaking-outline {
+      background: var(--bg); border-radius: 12px; padding: 16px; margin-top: 14px;
+      border: 1px solid var(--border); display: none;
+    }
+    .speaking-outline.show { display: block; }
+    .speaking-outline-label {
+      font-size: 0.74rem; font-weight: 600; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px;
+    }
+    .speaking-outline-text {
+      font-size: 0.82rem; color: var(--text); line-height: 1.7; white-space: pre-line;
+    }
+    .speaking-browser-warn {
+      background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 10px;
+      padding: 12px 16px; font-size: 0.82rem; color: #92400E; margin-bottom: 20px;
+    }
+    .speaking-wc-live {
+      font-size: 0.78rem; color: var(--text-dim); margin-top: 6px;
+    }
+
+    /* === DARK MODE TOGGLE === */
+    .header-top-row {
+      display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;
+    }
+    .dark-toggle {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; position: absolute; right: 24px;
+      font-family: serif;
+    }
+    .dark-toggle:hover { border-color: var(--accent); }
+    .header { position: relative; }
+
+    /* === PROGRESS DASHBOARD === */
+    .progress-toggle-bar {
+      display: flex; justify-content: center; background: var(--surface);
+      border-bottom: 1px solid var(--border); padding: 4px 0;
+    }
+    .progress-toggle-btn {
+      background: none; border: none; font-family: inherit; font-size: 0.72rem;
+      color: var(--text-dim); cursor: pointer; padding: 4px 14px; font-weight: 500;
+      transition: color 0.15s;
+    }
+    .progress-toggle-btn:hover { color: var(--text); }
+    .progress-dashboard {
+      display: flex; gap: 8px; padding: 12px 24px; justify-content: center;
+      flex-wrap: wrap; background: var(--surface); border-bottom: 1px solid var(--border);
+    }
+    .progress-chip {
+      display: flex; align-items: center; gap: 6px; padding: 5px 12px;
+      background: var(--bg); border-radius: 8px; font-size: 0.72rem; color: var(--text-dim);
+    }
+    .progress-chip strong { color: var(--text); font-weight: 600; }
+    .progress-mini-bar {
+      width: 40px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+    }
+    .progress-mini-fill {
+      height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s;
+    }
+
+    /* === EXAM === */
+    .exam-view { max-width: 800px; margin: 0 auto; padding: 24px; }
+    .exam-select-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 16px; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.15s;
+    }
+    .exam-select-card:hover { border-color: var(--accent); }
+    .exam-select-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .exam-select-card .exam-meta {
+      font-size: 0.78rem; color: var(--text-dim);
+    }
+    .exam-header-bar {
+      background: var(--surface); border-radius: var(--radius); padding: 16px 20px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .exam-header-title { font-size: 0.92rem; font-weight: 600; }
+    .exam-timer {
+      font-size: 0.88rem; font-weight: 600; font-variant-numeric: tabular-nums;
+      color: var(--text); padding: 6px 14px; background: var(--bg); border-radius: 8px;
+    }
+    .exam-timer.warning { color: var(--orange); }
+    .exam-timer.danger { color: var(--red); }
+    .exam-nav {
+      display: flex; gap: 4px; background: var(--surface); border-radius: 12px;
+      padding: 4px; box-shadow: var(--shadow); margin-bottom: 20px;
+      overflow-x: auto; width: fit-content; max-width: 100%;
+    }
+    .exam-nav button {
+      padding: 8px 16px; border: none; background: transparent; border-radius: 10px;
+      font-family: inherit; font-size: 0.78rem; font-weight: 500; color: var(--text-dim);
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .exam-nav button.active { background: var(--accent); color: #fff; }
+    .exam-nav button.completed { color: var(--green); }
+    .exam-section-card {
+      background: var(--surface); border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .exam-section-title {
+      font-size: 0.96rem; font-weight: 600; margin-bottom: 4px;
+    }
+    .exam-section-pts {
+      font-size: 0.76rem; color: var(--text-dim); margin-bottom: 16px;
+    }
+    .exam-text-block {
+      background: var(--bg); border-radius: 12px; padding: 18px; margin-bottom: 20px;
+      border: 1px solid var(--border); max-height: 400px; overflow-y: auto;
+    }
+    .exam-text-title { font-size: 0.92rem; font-weight: 600; margin-bottom: 4px; }
+    .exam-text-source { font-size: 0.72rem; color: var(--text-dim); font-style: italic; margin-bottom: 12px; }
+    .exam-text-body { font-size: 0.84rem; line-height: 1.8; color: var(--text); white-space: pre-line; }
+    .exam-exercise { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .exam-exercise:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .exam-ex-title { font-size: 0.84rem; font-weight: 600; margin-bottom: 12px; }
+    .exam-ex-pts { font-size: 0.72rem; color: var(--text-dim); font-weight: 500; }
+    .exam-vf-item {
+      display: flex; align-items: center; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.84rem;
+    }
+    .exam-vf-item:last-child { border-bottom: none; }
+    .exam-vf-statement { flex: 1; }
+    .exam-vf-options { display: flex; gap: 6px; flex-shrink: 0; }
+    .exam-vf-btn {
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--surface); font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .exam-vf-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .exam-vf-btn.correct { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+    .exam-vf-btn.wrong { background: #FEE2E2; color: var(--red); border-color: var(--red); }
+    .exam-mc-item { margin-bottom: 16px; }
+    .exam-mc-q { font-size: 0.84rem; font-weight: 500; margin-bottom: 8px; }
+    .exam-mc-opts { display: flex; flex-direction: column; gap: 6px; }
+    .exam-mc-opt {
+      padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.82rem; cursor: pointer; transition: all 0.15s; background: var(--surface);
+    }
+    .exam-mc-opt:hover { border-color: var(--accent); }
+    .exam-mc-opt.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .exam-mc-opt.correct { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+    .exam-mc-opt.wrong { background: #FEE2E2; color: var(--red); border-color: var(--red); }
+    .exam-mc-opt.reveal { border-color: var(--green); }
+    .exam-conj-item {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 10px; font-size: 0.84rem; line-height: 1.8;
+    }
+    .exam-conj-input {
+      padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px;
+      font-family: inherit; font-size: 0.84rem; width: 180px; background: var(--bg);
+      color: var(--text); outline: none;
+    }
+    .exam-conj-input:focus { border-color: var(--accent); }
+    .exam-conj-input.correct { border-color: var(--green); background: var(--green-dim); }
+    .exam-conj-input.wrong { border-color: var(--red); background: #FEE2E2; }
+    .exam-conj-tense { font-size: 0.72rem; color: var(--text-dim); font-style: italic; }
+    .exam-conj-answer { font-size: 0.78rem; color: var(--green); font-weight: 500; display: none; }
+    .exam-open-item { margin-bottom: 16px; }
+    .exam-open-q { font-size: 0.84rem; font-weight: 500; margin-bottom: 8px; }
+    .exam-open-textarea {
+      width: 100%; min-height: 80px; padding: 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-family: inherit; font-size: 0.84rem; line-height: 1.6;
+      background: var(--bg); color: var(--text); resize: vertical; outline: none;
+    }
+    .exam-open-textarea:focus { border-color: var(--accent); }
+    .exam-open-guideline {
+      font-size: 0.78rem; color: var(--green); margin-top: 6px; display: none;
+      padding: 8px 12px; background: var(--green-dim); border-radius: 6px;
+    }
+    .exam-cloze-instruction { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 10px; font-style: italic; }
+    .exam-cloze-words {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+    }
+    .exam-cloze-word {
+      padding: 4px 12px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; font-size: 0.8rem; font-weight: 500;
+    }
+    .exam-cloze-word.used { opacity: 0.4; text-decoration: line-through; }
+    .exam-cloze-text {
+      font-size: 0.84rem; line-height: 2; color: var(--text);
+    }
+    .exam-cloze-select {
+      padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px;
+      font-family: inherit; font-size: 0.82rem; background: var(--bg); color: var(--text);
+      cursor: pointer; outline: none; min-width: 140px;
+    }
+    .exam-cloze-select.correct { border-color: var(--green); background: var(--green-dim); }
+    .exam-cloze-select.wrong { border-color: var(--red); background: #FEE2E2; }
+    .exam-writing-area {
+      margin-top: 12px;
+    }
+    .exam-writing-textarea {
+      width: 100%; min-height: 200px; padding: 14px; border: 1px solid var(--border);
+      border-radius: 10px; font-family: inherit; font-size: 0.86rem; line-height: 1.7;
+      background: var(--bg); color: var(--text); resize: vertical; outline: none;
+    }
+    .exam-writing-textarea:focus { border-color: var(--accent); }
+    .exam-wc { font-size: 0.76rem; color: var(--text-dim); margin-top: 6px; }
+    .exam-wc.good { color: var(--green); }
+    .exam-wc.over { color: var(--orange); }
+    .exam-job-ad {
+      background: var(--bg); border-radius: 10px; padding: 16px; margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+    .exam-job-ad h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 8px; }
+    .exam-job-ad .jf { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 4px; line-height: 1.5; }
+    .exam-job-ad .jf strong { color: var(--text); font-weight: 500; }
+    .exam-results-card {
+      background: var(--surface); border-radius: var(--radius); padding: 28px;
+      box-shadow: var(--shadow-md); text-align: center; margin-bottom: 20px;
+    }
+    .exam-results-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+    .exam-results-score { font-size: 3rem; font-weight: 700; margin-bottom: 4px; }
+    .exam-results-score.pass { color: var(--green); }
+    .exam-results-score.fail { color: var(--red); }
+    .exam-results-sub { font-size: 0.84rem; color: var(--text-dim); margin-bottom: 20px; }
+    .exam-results-sections { text-align: left; }
+    .exam-results-row {
+      display: flex; justify-content: space-between; padding: 10px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.84rem;
+    }
+    .exam-results-row:last-child { border-bottom: none; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 640px) {
+      .header, .controls, .actions { padding-left: 16px; padding-right: 16px; }
+      .progress-bar { margin: 0 16px; }
+      .card-container { padding: 24px 16px; }
+      .card-word { font-size: 1.3rem; }
+      .card-face { padding: 28px; }
+      .controls { gap: 8px; }
+      .grammar-view { padding: 16px; }
+      .header { gap: 10px; padding: 16px 16px 14px; }
+      .mode-toggle { flex-wrap: wrap; justify-content: center; }
+      .mode-toggle button { padding: 6px 14px; font-size: 0.78rem; }
+      .speaking-view { padding: 16px; }
+      .grammar-sub-nav button { padding: 7px 10px; font-size: 0.75rem; }
+      .mc-options { grid-template-columns: 1fr; }
+      .fib-card, .mc-card, .trans-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-top-row">
+      <h1>French B2 <span>Study</span></h1>
+      <button class="dark-toggle" id="dark-toggle" title="Toggle dark mode">☾</button>
+    </div>
+    <div class="mode-toggle">
+      <button id="mode-vocab" class="active">Vocabulary</button>
+      <button id="mode-grammar">Grammar</button>
+      <button id="mode-reading">Reading</button>
+      <button id="mode-listening">Listening</button>
+      <button id="mode-writing">Writing</button>
+      <button id="mode-speaking">Speaking</button>
+      <button id="mode-exam">Exams</button>
+    </div>
+  </div>
+
+  <div class="progress-toggle-bar">
+    <button class="progress-toggle-btn" id="progress-toggle">Progress ▾</button>
+  </div>
+  <div class="progress-dashboard" id="progress-dashboard" style="display:none;">
+    <div class="progress-chip">Vocab <strong id="pg-vocab">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-vocab-bar" style="width:0%"></div></div></div>
+    <div class="progress-chip">Grammar <strong id="pg-grammar">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-grammar-bar" style="width:0%"></div></div></div>
+    <div class="progress-chip">Reading <strong id="pg-reading">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-reading-bar" style="width:0%"></div></div></div>
+    <div class="progress-chip">Listening <strong id="pg-listening">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-listening-bar" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="header-stats">
+    <span>Learned: <strong id="stat-learned">0</strong></span>
+    <span>Remaining: <strong id="stat-remaining">0</strong></span>
+    <span>Total: <strong id="stat-total">0</strong></span>
+  </div>
+  <div class="controls">
+    <select class="btn" id="category-filter">
+      <option value="all">All Categories</option>
+      <option value="Entreprise">Entreprise</option>
+      <option value="Ressources Humaines">Ressources Humaines</option>
+      <option value="Marketing">Marketing</option>
+    </select>
+
+    <select class="btn" id="filter-mode">
+      <option value="unlearned">Unlearned only</option>
+      <option value="all">All cards</option>
+      <option value="learned">Learned only</option>
+    </select>
+
+    <button class="btn" id="direction-btn" title="Switch card direction">FR → DE</button>
+    <button class="btn btn-icon" id="shuffle-btn" title="Shuffle cards">&#x1f500;</button>
+
+    <div class="spacer"></div>
+
+    <div class="counter"><strong id="current-index">0</strong> / <strong id="deck-size">0</strong></div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <div id="card-area">
+    <div class="card-container">
+      <div class="card-wrapper" id="card-wrapper">
+        <div class="card" id="card">
+          <div class="card-face card-front">
+            <div class="card-label" id="front-label">FRANÇAIS</div>
+            <div class="card-category" id="front-category"></div>
+            <div class="card-word" id="front-word"></div>
+            <div class="card-hint">Click or press Space to flip</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-label" id="back-label">DEUTSCH</div>
+            <div class="card-category" id="back-category"></div>
+            <div class="card-word" id="back-word"></div>
+            <div class="card-expression" id="back-expression"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn dont-know" id="btn-dont-know">Don't know</button>
+      <button class="action-btn skip" id="btn-skip">Skip →</button>
+      <button class="action-btn know" id="btn-know">Know it!</button>
+    </div>
+
+    <div class="keyboard-hints">
+      <span><kbd>Space</kbd> Flip</span>
+      <span><kbd>←</kbd> Don't know</span>
+      <span><kbd>→</kbd> Skip / Next</span>
+      <span><kbd>↑</kbd> Know it</span>
+      <span><kbd>D</kbd> Direction</span>
+    </div>
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <h2>All done!</h2>
+    <p>You've learned all the cards in this set.</p>
+    <button class="btn" id="btn-reset-filter">Show all cards</button>
+    <br>
+    <button class="btn" id="btn-reset-progress" style="margin-top:12px;">Reset all progress</button>
+  </div>
+
+  <!-- GRAMMAR VIEW -->
+  <div id="grammar-view" class="grammar-view" style="display:none;">
+    <div class="grammar-sub-nav" id="grammar-sub-nav">
+      <button class="active" data-sub="reference">Reference</button>
+      <button data-sub="conjugation">Conjugation</button>
+      <button data-sub="fill-blank">Fill in Blank</button>
+      <button data-sub="multiple-choice">Multiple Choice</button>
+      <button data-sub="transformation">Transformation</button>
+    </div>
+
+    <!-- Reference sub-view -->
+    <div id="grammar-sub-reference">
+      <div class="grammar-filter-row">
+        <select class="btn" id="grammar-category-filter">
+          <option value="all">All Topics</option>
+          <option value="Verb Forms">Verb Forms</option>
+          <option value="Other Grammar">Other Grammar</option>
+        </select>
+        <button class="btn" id="grammar-expand-all">Expand All</button>
+        <button class="btn" id="grammar-collapse-all">Collapse All</button>
+      </div>
+      <div id="grammar-content"></div>
+    </div>
+
+    <!-- Conjugation flashcards sub-view -->
+    <div id="grammar-sub-conjugation" style="display:none;">
+      <div class="practice-view">
+        <div class="practice-header">
+          <select class="btn" id="conj-tense-filter">
+            <option value="all">All Tenses</option>
+            <option value="Présent">Présent</option>
+            <option value="Futur Simple">Futur Simple</option>
+            <option value="Conditionnel Présent">Conditionnel</option>
+            <option value="Imparfait">Imparfait</option>
+            <option value="Subjonctif Présent">Subjonctif</option>
+            <option value="Gérondif">Gérondif</option>
+          </select>
+          <select class="btn" id="conj-filter-mode">
+            <option value="unlearned">Unlearned only</option>
+            <option value="all">All cards</option>
+            <option value="learned">Learned only</option>
+          </select>
+          <button class="btn btn-icon" id="conj-shuffle" title="Shuffle">&#x1f500;</button>
+          <div class="spacer"></div>
+          <div class="practice-score"><strong id="conj-index">0</strong> / <strong id="conj-total">0</strong></div>
+        </div>
+        <div class="practice-progress"><div class="practice-progress-fill" id="conj-progress"></div></div>
+
+        <div id="conj-card-area">
+          <div class="card-container">
+            <div class="card-wrapper" id="conj-card-wrapper">
+              <div class="card" id="conj-card">
+                <div class="card-face card-front conj-card-front">
+                  <div class="card-label">CONJUGATE</div>
+                  <div class="conj-verb" id="conj-verb"></div>
+                  <div class="conj-details">
+                    <span class="conj-tag tense" id="conj-tense"></span>
+                    <span class="conj-tag person" id="conj-person"></span>
+                  </div>
+                  <div class="card-hint">Click or press Space to flip</div>
+                </div>
+                <div class="card-face card-back">
+                  <div class="card-label">ANSWER</div>
+                  <div class="card-word" id="conj-answer"></div>
+                  <div class="conj-explanation" id="conj-explanation"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="action-btn dont-know" id="conj-dont-know">Don't know</button>
+            <button class="action-btn skip" id="conj-skip">Skip →</button>
+            <button class="action-btn know" id="conj-know">Know it!</button>
+          </div>
+        </div>
+
+        <div id="conj-empty" class="empty-state" style="display:none;">
+          <h2>All done!</h2>
+          <p>You've mastered all conjugation cards in this set.</p>
+          <button class="btn" id="conj-reset-filter">Show all cards</button>
+          <br>
+          <button class="btn" id="conj-reset-progress" style="margin-top:12px;">Reset progress</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fill in the blank sub-view -->
+    <div id="grammar-sub-fill-blank" style="display:none;">
+      <div class="practice-view">
+        <div class="practice-header">
+          <select class="btn" id="fib-topic-filter">
+            <option value="all">All Topics</option>
+          </select>
+          <div class="spacer"></div>
+          <div class="practice-score"><strong id="fib-correct">0</strong> correct of <strong id="fib-total">0</strong></div>
+        </div>
+        <div class="practice-progress"><div class="practice-progress-fill" id="fib-progress"></div></div>
+        <div id="fib-card-area">
+          <div class="fib-card">
+            <div class="fib-hint" id="fib-hint"></div>
+            <div class="fib-sentence" id="fib-sentence"></div>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <input type="text" class="fib-input" id="fib-input" placeholder="Type your answer..." autocomplete="off" spellcheck="false">
+              <button class="btn" id="fib-check">Check</button>
+            </div>
+            <div class="fib-feedback" id="fib-feedback"></div>
+            <div class="fib-explanation" id="fib-explanation"></div>
+            <div class="fib-actions">
+              <button class="btn" id="fib-next" style="display:none;">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div id="fib-empty" class="empty-state" style="display:none;">
+          <h2>All done!</h2>
+          <p>You've completed all fill-in-the-blank exercises.</p>
+          <button class="btn" id="fib-restart">Restart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multiple choice sub-view -->
+    <div id="grammar-sub-multiple-choice" style="display:none;">
+      <div class="practice-view">
+        <div class="practice-header">
+          <select class="btn" id="mc-topic-filter">
+            <option value="all">All Topics</option>
+          </select>
+          <div class="spacer"></div>
+          <div class="practice-score"><strong id="mc-correct">0</strong> / <strong id="mc-answered">0</strong> correct</div>
+        </div>
+        <div class="practice-progress"><div class="practice-progress-fill" id="mc-progress"></div></div>
+        <div id="mc-card-area">
+          <div class="mc-card">
+            <div class="mc-question" id="mc-question"></div>
+            <div class="mc-options" id="mc-options"></div>
+            <div class="mc-explanation" id="mc-explanation"></div>
+            <div style="margin-top:16px; text-align:center;">
+              <button class="btn" id="mc-next" style="display:none;">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div id="mc-empty" class="empty-state" style="display:none;">
+          <h2>All done!</h2>
+          <p>You've answered all multiple choice questions.</p>
+          <button class="btn" id="mc-restart">Restart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transformation sub-view -->
+    <div id="grammar-sub-transformation" style="display:none;">
+      <div class="practice-view">
+        <div class="practice-header">
+          <select class="btn" id="trans-type-filter">
+            <option value="all">All Types</option>
+          </select>
+          <div class="spacer"></div>
+          <div class="practice-score"><strong id="trans-correct">0</strong> / <strong id="trans-total">0</strong></div>
+        </div>
+        <div class="practice-progress"><div class="practice-progress-fill" id="trans-progress"></div></div>
+        <div id="trans-card-area">
+          <div class="trans-card">
+            <div class="trans-instruction" id="trans-instruction"></div>
+            <div class="trans-given" id="trans-given"></div>
+            <textarea class="trans-textarea" id="trans-input" placeholder="Type your transformation..." spellcheck="false"></textarea>
+            <div style="margin-top:12px;">
+              <button class="btn" id="trans-check">Check</button>
+            </div>
+            <div class="trans-expected" id="trans-expected"></div>
+            <div class="trans-self-assess" id="trans-self-assess">
+              <button class="action-btn know" id="trans-was-right">I was right</button>
+              <button class="action-btn dont-know" id="trans-was-wrong">I was wrong</button>
+            </div>
+            <div class="fib-feedback" id="trans-feedback"></div>
+            <div style="margin-top:12px; text-align:center;">
+              <button class="btn" id="trans-next" style="display:none;">Next →</button>
+            </div>
+          </div>
+        </div>
+        <div id="trans-empty" class="empty-state" style="display:none;">
+          <h2>All done!</h2>
+          <p>You've completed all transformation exercises.</p>
+          <button class="btn" id="trans-restart">Restart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- READING VIEW -->
+  <div id="reading-view" class="reading-view" style="display:none;">
+    <div class="reading-nav">
+      <select class="btn" id="reading-select"></select>
+      <button class="btn" id="reading-check-all">Check All Answers</button>
+      <button class="btn" id="reading-reset">Reset</button>
+    </div>
+    <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    <div id="reading-text-area"></div>
+    <div id="reading-exercises-area"></div>
+    <div class="reading-score" id="reading-score"></div>
+  </div>
+
+  <!-- LISTENING VIEW -->
+  <div id="listening-view" class="listening-view" style="display:none;">
+    <div class="listening-sub-nav" id="listening-sub-nav">
+      <button class="active" data-lsub="dictation">Dictation</button>
+      <button data-lsub="vocab-listen">Vocabulary</button>
+      <button data-lsub="comprehension">Comprehension</button>
+    </div>
+    <div class="listen-stats">
+      <span>Score: <strong id="listen-correct">0</strong> / <strong id="listen-total">0</strong></span>
+      <span style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+        Speed: <input type="range" id="listen-speed" min="0.5" max="1.2" step="0.05" value="0.9" style="width:100px;accent-color:var(--accent);"> <strong id="listen-speed-label">0.9×</strong>
+      </span>
+    </div>
+    <div id="listen-content"></div>
+  </div>
+
+  <div id="writing-view" class="writing-view" style="display:none;">
+    <div class="writing-sub-nav" id="writing-sub-nav">
+      <button class="active" data-wsub="essay">Essay</button>
+      <button data-wsub="email">Email</button>
+    </div>
+    <div class="writing-select-row">
+      <select id="writing-select"></select>
+    </div>
+    <div id="writing-content"></div>
+  </div>
+
+  <div id="speaking-view" class="speaking-view" style="display:none;">
+    <div id="speaking-content"></div>
+  </div>
+
+  <div id="exam-view" class="exam-view" style="display:none;">
+    <div id="exam-content"></div>
+  </div>
+
+  <script src="vocab-data.js"></script>
+  <script src="grammar-data.js"></script>
+  <script src="grammar-exercises.js"></script>
+  <script src="reading-data.js"></script>
+  <script src="listening-data.js"></script>
+  <script src="writing-data.js"></script>
+  <script src="speaking-data.js"></script>
+  <script src="exam-data.js"></script>
+  <script>
+    // === STATE ===
+    const STORAGE_KEY = 'frenchB2_progress';
+
+    let learned = loadProgress();
+    let direction = 'fr-de'; // 'fr-de' or 'de-fr'
+    let currentDeck = [];
+    let currentIndex = 0;
+    let isFlipped = false;
+
+    // === DOM ===
+    const $ = id => document.getElementById(id);
+
+    const els = {
+      card: $('card'),
+      cardWrapper: $('card-wrapper'),
+      frontLabel: $('front-label'),
+      backLabel: $('back-label'),
+      frontCategory: $('front-category'),
+      backCategory: $('back-category'),
+      frontWord: $('front-word'),
+      backWord: $('back-word'),
+      backExpression: $('back-expression'),
+      currentIndex: $('current-index'),
+      deckSize: $('deck-size'),
+      progressFill: $('progress-fill'),
+      statLearned: $('stat-learned'),
+      statRemaining: $('stat-remaining'),
+      statTotal: $('stat-total'),
+      categoryFilter: $('category-filter'),
+      filterMode: $('filter-mode'),
+      directionBtn: $('direction-btn'),
+      shuffleBtn: $('shuffle-btn'),
+      btnKnow: $('btn-know'),
+      btnDontKnow: $('btn-dont-know'),
+      btnSkip: $('btn-skip'),
+      cardArea: $('card-area'),
+      emptyState: $('empty-state'),
+      btnResetFilter: $('btn-reset-filter'),
+      btnResetProgress: $('btn-reset-progress'),
+    };
+
+    // === PERSISTENCE ===
+    function loadProgress() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+      } catch { return new Set(); }
+    }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...learned]));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    // === DECK BUILDING ===
+    function buildDeck() {
+      const cat = els.categoryFilter.value;
+      const mode = els.filterMode.value;
+
+      let cards = VOCAB_DATA;
+      if (cat !== 'all') cards = cards.filter(c => c.category === cat);
+      if (mode === 'unlearned') cards = cards.filter(c => !learned.has(c.id));
+      else if (mode === 'learned') cards = cards.filter(c => learned.has(c.id));
+
+      currentDeck = [...cards];
+      currentIndex = 0;
+      isFlipped = false;
+      render();
+    }
+
+    function shuffleDeck() {
+      for (let i = currentDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]];
+      }
+      currentIndex = 0;
+      isFlipped = false;
+      render();
+    }
+
+    // === RENDERING ===
+    function render() {
+      updateStats();
+
+      if (currentDeck.length === 0) {
+        els.cardArea.style.display = 'none';
+        els.emptyState.style.display = 'block';
+        els.currentIndex.textContent = '0';
+        els.deckSize.textContent = '0';
+        els.progressFill.style.width = '100%';
+        return;
+      }
+
+      els.cardArea.style.display = 'block';
+      els.emptyState.style.display = 'none';
+
+      const card = currentDeck[currentIndex];
+      const isFrFront = direction === 'fr-de';
+
+      els.frontLabel.textContent = isFrFront ? 'FRANÇAIS' : 'DEUTSCH';
+      els.backLabel.textContent = isFrFront ? 'DEUTSCH' : 'FRANÇAIS';
+
+      els.frontCategory.textContent = card.category;
+      els.backCategory.textContent = card.category;
+
+      els.frontWord.textContent = isFrFront ? card.french : card.german;
+      els.backWord.textContent = isFrFront ? card.german : card.french;
+
+      // Show expression on the French side (back if DE front, front if FR front — but we want it on the back always with the answer)
+      // User wants example sentence on the french side. Let's show expression on back if fr-de (back=german+expression),
+      // Actually: "example sentence on the french side" — the expression IS french, so show it wherever french content is.
+      // If fr-de: front=french, back=german. Expression on back as extra context? Or on front as hint?
+      // Let's put expression on the BACK (answer side) always — it serves as a usage example after you've answered.
+      if (card.expression) {
+        els.backExpression.textContent = card.expression;
+        els.backExpression.style.display = 'block';
+      } else {
+        els.backExpression.textContent = '';
+        els.backExpression.style.display = 'none';
+      }
+
+      els.currentIndex.textContent = currentIndex + 1;
+      els.deckSize.textContent = currentDeck.length;
+      els.progressFill.style.width = `${((currentIndex) / currentDeck.length) * 100}%`;
+
+      // Reset flip — if we were flipped, skip the animation so the
+      // next card's answer doesn't flash while unflipping
+      if (isFlipped) {
+        els.card.classList.add('flipped');
+      } else {
+        els.card.classList.remove('flipped');
+      }
+    }
+
+    function advanceCard(_, removeCurrent) {
+      const wasFlipped = isFlipped;
+      if (wasFlipped) {
+        // Instantly unflip: disable transition, remove class, force reflow
+        els.card.style.transition = 'none';
+        els.card.classList.remove('flipped');
+        els.card.offsetHeight; // force reflow
+        els.card.style.transition = '';
+      }
+      if (removeCurrent) {
+        currentDeck.splice(currentIndex, 1);
+        if (currentDeck.length === 0) { currentIndex = 0; }
+        else if (currentIndex >= currentDeck.length) { currentIndex = 0; }
+      } else {
+        currentIndex = currentDeck.length > 0 ? (currentIndex + 1) % currentDeck.length : 0;
+      }
+      isFlipped = false;
+      render();
+    }
+
+    function updateStats() {
+      const cat = els.categoryFilter.value;
+      let total = cat === 'all' ? VOCAB_DATA.length : VOCAB_DATA.filter(c => c.category === cat).length;
+      let learnedCount = cat === 'all'
+        ? learned.size
+        : VOCAB_DATA.filter(c => c.category === cat && learned.has(c.id)).length;
+
+      els.statLearned.textContent = learnedCount;
+      els.statRemaining.textContent = total - learnedCount;
+      els.statTotal.textContent = total;
+    }
+
+    // === ACTIONS ===
+    function flipCard() {
+      if (currentDeck.length === 0) return;
+      isFlipped = !isFlipped;
+      els.card.classList.toggle('flipped');
+    }
+
+    function markKnown() {
+      if (currentDeck.length === 0) return;
+      learned.add(currentDeck[currentIndex].id);
+      saveProgress();
+      advanceCard(currentIndex, els.filterMode.value === 'unlearned');
+    }
+
+    function markUnknown() {
+      if (currentDeck.length === 0) return;
+      learned.delete(currentDeck[currentIndex].id);
+      saveProgress();
+      advanceCard(currentIndex, false);
+    }
+
+    function nextCard() {
+      if (currentDeck.length === 0) return;
+      advanceCard(currentIndex, false);
+    }
+
+    function toggleDirection() {
+      direction = direction === 'fr-de' ? 'de-fr' : 'fr-de';
+      els.directionBtn.textContent = direction === 'fr-de' ? 'FR → DE' : 'DE → FR';
+      isFlipped = false;
+      render();
+    }
+
+    // === EVENT LISTENERS ===
+    els.cardWrapper.addEventListener('click', flipCard);
+    els.btnKnow.addEventListener('click', markKnown);
+    els.btnDontKnow.addEventListener('click', markUnknown);
+    els.btnSkip.addEventListener('click', nextCard);
+    els.directionBtn.addEventListener('click', toggleDirection);
+    els.shuffleBtn.addEventListener('click', shuffleDeck);
+    els.categoryFilter.addEventListener('change', buildDeck);
+    els.filterMode.addEventListener('change', buildDeck);
+
+    els.btnResetFilter.addEventListener('click', () => {
+      els.filterMode.value = 'all';
+      buildDeck();
+    });
+
+    els.btnResetProgress.addEventListener('click', () => {
+      if (confirm('Reset all progress? This cannot be undone.')) {
+        learned.clear();
+        saveProgress();
+        buildDeck();
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (currentMode !== 'vocab') return;
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      switch (e.key) {
+        case ' ':
+          e.preventDefault();
+          flipCard();
+          break;
+        case 'ArrowRight':
+          nextCard();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          markKnown();
+          break;
+        case 'ArrowLeft':
+          markUnknown();
+          break;
+        case 'd':
+        case 'D':
+          toggleDirection();
+          break;
+      }
+    });
+
+    // === UTILITY ===
+    function normalizeAnswer(str) {
+      return str.trim().toLowerCase().replace(/\s+/g, ' ').replace(/[''ʼ]/g, "'").replace(/[.!?,;:]+$/, '');
+    }
+    function stripAccents(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // === MODE SWITCHING ===
+    const vocabControls = document.querySelector('.controls');
+    const vocabProgress = document.querySelector('.progress-bar');
+    const grammarView = $('grammar-view');
+    const modeVocabBtn = $('mode-vocab');
+    const modeGrammarBtn = $('mode-grammar');
+    const modeReadingBtn = $('mode-reading');
+    const modeListeningBtn = $('mode-listening');
+    const modeWritingBtn = $('mode-writing');
+    const modeSpeakingBtn = $('mode-speaking');
+    const writingView = $('writing-view');
+    const speakingView = $('speaking-view');
+    const examView = $('exam-view');
+    const modeExamBtn = $('mode-exam');
+    const grammarContent = $('grammar-content');
+    const grammarCategoryFilter = $('grammar-category-filter');
+    const grammarExpandAll = $('grammar-expand-all');
+    const grammarCollapseAll = $('grammar-collapse-all');
+    const headerStats = document.querySelector('.header-stats');
+    const readingView = $('reading-view');
+    const listeningView = $('listening-view');
+
+    let currentMode = 'vocab';
+    let grammarSubMode = 'reference';
+
+    function switchMode(mode) {
+      currentMode = mode;
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      modeVocabBtn.classList.toggle('active', mode === 'vocab');
+      modeGrammarBtn.classList.toggle('active', mode === 'grammar');
+      modeReadingBtn.classList.toggle('active', mode === 'reading');
+      modeListeningBtn.classList.toggle('active', mode === 'listening');
+      modeWritingBtn.classList.toggle('active', mode === 'writing');
+      modeSpeakingBtn.classList.toggle('active', mode === 'speaking');
+      modeExamBtn.classList.toggle('active', mode === 'exam');
+
+      // Clean up speaking if leaving
+      if (speakingRecognition) { try { speakingRecognition.abort(); } catch(e) {} speakingRecognition = null; }
+      if (speakingTimerInterval) { clearInterval(speakingTimerInterval); speakingTimerInterval = null; }
+      // Clean up exam timer if leaving
+      if (examTimerInterval && mode !== 'exam') { clearInterval(examTimerInterval); examTimerInterval = null; }
+
+      vocabControls.style.display = 'none';
+      vocabProgress.style.display = 'none';
+      headerStats.style.display = 'none';
+      els.cardArea.style.display = 'none';
+      els.emptyState.style.display = 'none';
+      grammarView.style.display = 'none';
+      readingView.style.display = 'none';
+      listeningView.style.display = 'none';
+      writingView.style.display = 'none';
+      speakingView.style.display = 'none';
+      examView.style.display = 'none';
+
+      if (mode === 'vocab') {
+        vocabControls.style.display = '';
+        vocabProgress.style.display = '';
+        headerStats.style.display = '';
+        render();
+      } else if (mode === 'grammar') {
+        grammarView.style.display = 'block';
+        switchGrammarSub(grammarSubMode);
+      } else if (mode === 'reading') {
+        readingView.style.display = 'block';
+        readingInit();
+      } else if (mode === 'listening') {
+        listeningView.style.display = 'block';
+        listeningInit();
+      } else if (mode === 'writing') {
+        writingView.style.display = 'block';
+        writingInit();
+      } else if (mode === 'speaking') {
+        speakingView.style.display = 'block';
+        speakingInit();
+      } else if (mode === 'exam') {
+        examView.style.display = 'block';
+        examInit();
+      }
+    }
+
+    function switchGrammarSub(sub) {
+      grammarSubMode = sub;
+      document.querySelectorAll('#grammar-sub-nav button').forEach(b => {
+        b.classList.toggle('active', b.dataset.sub === sub);
+      });
+      ['reference','conjugation','fill-blank','multiple-choice','transformation'].forEach(s => {
+        const el = $('grammar-sub-' + s);
+        if (el) el.style.display = s === sub ? 'block' : 'none';
+      });
+
+      if (sub === 'reference') renderGrammar();
+      else if (sub === 'conjugation') conjInit();
+      else if (sub === 'fill-blank') fibInit();
+      else if (sub === 'multiple-choice') mcInit();
+      else if (sub === 'transformation') transInit();
+    }
+
+    document.querySelectorAll('#grammar-sub-nav button').forEach(btn => {
+      btn.addEventListener('click', () => switchGrammarSub(btn.dataset.sub));
+    });
+
+    // === GRAMMAR REFERENCE ===
+    function renderGrammar() {
+      const cat = grammarCategoryFilter.value;
+      let topics = GRAMMAR_DATA;
+      if (cat !== 'all') topics = topics.filter(t => t.category === cat);
+
+      grammarContent.innerHTML = topics.map(topic => `
+        <div class="grammar-topic">
+          <h2>${topic.title}</h2>
+          ${topic.sections.map(section => `
+            <div class="grammar-section">
+              <div class="grammar-section-header" onclick="this.parentElement.classList.toggle('open')">
+                <span>${section.heading}</span>
+                <span class="chevron">▶</span>
+              </div>
+              <div class="grammar-section-body">${section.content}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    modeVocabBtn.addEventListener('click', () => switchMode('vocab'));
+    modeGrammarBtn.addEventListener('click', () => switchMode('grammar'));
+    modeReadingBtn.addEventListener('click', () => switchMode('reading'));
+    modeListeningBtn.addEventListener('click', () => switchMode('listening'));
+    modeWritingBtn.addEventListener('click', () => switchMode('writing'));
+    modeSpeakingBtn.addEventListener('click', () => switchMode('speaking'));
+    modeExamBtn.addEventListener('click', () => switchMode('exam'));
+    grammarCategoryFilter.addEventListener('change', renderGrammar);
+    grammarExpandAll.addEventListener('click', () => {
+      grammarContent.querySelectorAll('.grammar-section').forEach(s => s.classList.add('open'));
+    });
+    grammarCollapseAll.addEventListener('click', () => {
+      grammarContent.querySelectorAll('.grammar-section').forEach(s => s.classList.remove('open'));
+    });
+
+    // =============================================
+    // CONJUGATION FLASHCARDS
+    // =============================================
+    const CONJ_STORAGE = 'frenchB2_conjProgress';
+    let conjLearned = new Set(JSON.parse(localStorage.getItem(CONJ_STORAGE) || '[]'));
+    let conjDeck = [];
+    let conjIndex = 0;
+    let conjFlipped = false;
+
+    function conjSaveProgress() {
+      localStorage.setItem(CONJ_STORAGE, JSON.stringify([...conjLearned]));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    function conjInit() {
+      const tense = $('conj-tense-filter').value;
+      const mode = $('conj-filter-mode').value;
+      let cards = GRAMMAR_EXERCISES.conjugation;
+      if (tense !== 'all') cards = cards.filter(c => c.tense === tense);
+      if (mode === 'unlearned') cards = cards.filter(c => !conjLearned.has(c.id));
+      else if (mode === 'learned') cards = cards.filter(c => conjLearned.has(c.id));
+      conjDeck = [...cards];
+      conjIndex = 0;
+      conjFlipped = false;
+      conjRender();
+    }
+
+    function conjRender() {
+      if (conjDeck.length === 0) {
+        $('conj-card-area').style.display = 'none';
+        $('conj-empty').style.display = 'block';
+        $('conj-index').textContent = '0';
+        $('conj-total').textContent = '0';
+        $('conj-progress').style.width = '100%';
+        return;
+      }
+      $('conj-card-area').style.display = 'block';
+      $('conj-empty').style.display = 'none';
+
+      const card = conjDeck[conjIndex];
+      $('conj-verb').textContent = card.verb;
+      $('conj-tense').textContent = card.tense;
+      $('conj-person').textContent = card.person;
+      $('conj-answer').textContent = card.fullForm;
+      $('conj-explanation').textContent = card.explanation || '';
+      $('conj-index').textContent = conjIndex + 1;
+      $('conj-total').textContent = conjDeck.length;
+      $('conj-progress').style.width = `${(conjIndex / conjDeck.length) * 100}%`;
+
+      if (conjFlipped) $('conj-card').classList.add('flipped');
+      else $('conj-card').classList.remove('flipped');
+    }
+
+    function conjFlip() {
+      if (conjDeck.length === 0) return;
+      conjFlipped = !conjFlipped;
+      $('conj-card').classList.toggle('flipped');
+    }
+
+    function conjAdvance(remove) {
+      if (conjFlipped) {
+        $('conj-card').style.transition = 'none';
+        $('conj-card').classList.remove('flipped');
+        $('conj-card').offsetHeight;
+        $('conj-card').style.transition = '';
+      }
+      if (remove) {
+        conjDeck.splice(conjIndex, 1);
+        if (conjDeck.length === 0) { conjIndex = 0; }
+        else if (conjIndex >= conjDeck.length) { conjIndex = 0; }
+      } else {
+        conjIndex = conjDeck.length > 0 ? (conjIndex + 1) % conjDeck.length : 0;
+      }
+      conjFlipped = false;
+      conjRender();
+    }
+
+    $('conj-card-wrapper').addEventListener('click', conjFlip);
+    $('conj-know').addEventListener('click', () => {
+      if (conjDeck.length === 0) return;
+      conjLearned.add(conjDeck[conjIndex].id);
+      conjSaveProgress();
+      conjAdvance($('conj-filter-mode').value === 'unlearned');
+    });
+    $('conj-dont-know').addEventListener('click', () => {
+      if (conjDeck.length === 0) return;
+      conjLearned.delete(conjDeck[conjIndex].id);
+      conjSaveProgress();
+      conjAdvance(false);
+    });
+    $('conj-skip').addEventListener('click', () => conjAdvance(false));
+    $('conj-shuffle').addEventListener('click', () => { shuffleArray(conjDeck); conjIndex = 0; conjFlipped = false; conjRender(); });
+    $('conj-tense-filter').addEventListener('change', conjInit);
+    $('conj-filter-mode').addEventListener('change', conjInit);
+    $('conj-reset-filter').addEventListener('click', () => { $('conj-filter-mode').value = 'all'; conjInit(); });
+    $('conj-reset-progress').addEventListener('click', () => {
+      if (confirm('Reset conjugation progress?')) { conjLearned.clear(); conjSaveProgress(); conjInit(); }
+    });
+
+    // =============================================
+    // FILL IN THE BLANK
+    // =============================================
+    const FIB_STORAGE = 'frenchB2_fibProgress';
+    let fibCompleted = new Set(JSON.parse(localStorage.getItem(FIB_STORAGE) || '[]'));
+    let fibDeck = [];
+    let fibIndex = 0;
+    let fibCorrectCount = 0;
+    let fibAnswered = false;
+
+    function fibSaveProgress() {
+      localStorage.setItem(FIB_STORAGE, JSON.stringify([...fibCompleted]));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    function fibInit() {
+      // Populate topic filter
+      const topicFilter = $('fib-topic-filter');
+      if (topicFilter.options.length <= 1) {
+        const topics = [...new Set(GRAMMAR_EXERCISES.fillInTheBlank.map(e => e.topicId))];
+        topics.forEach(t => {
+          const topic = GRAMMAR_DATA.find(g => g.id === t);
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.textContent = topic ? topic.title : t;
+          topicFilter.appendChild(opt);
+        });
+      }
+
+      const topic = topicFilter.value;
+      let exercises = GRAMMAR_EXERCISES.fillInTheBlank;
+      if (topic !== 'all') exercises = exercises.filter(e => e.topicId === topic);
+      fibDeck = shuffleArray([...exercises]);
+      fibIndex = 0;
+      fibCorrectCount = 0;
+      fibAnswered = false;
+      fibRender();
+    }
+
+    function fibRender() {
+      if (fibIndex >= fibDeck.length) {
+        $('fib-card-area').style.display = 'none';
+        $('fib-empty').style.display = 'block';
+        return;
+      }
+      $('fib-card-area').style.display = 'block';
+      $('fib-empty').style.display = 'none';
+
+      const ex = fibDeck[fibIndex];
+      $('fib-hint').textContent = ex.hint;
+      $('fib-sentence').innerHTML = ex.sentence.replace('___', '<span style="border-bottom:2px solid var(--accent); padding:0 8px; min-width:80px; display:inline-block;">___</span>');
+      $('fib-input').value = '';
+      $('fib-input').className = 'fib-input';
+      $('fib-input').disabled = false;
+      $('fib-feedback').textContent = '';
+      $('fib-feedback').className = 'fib-feedback';
+      $('fib-explanation').textContent = '';
+      $('fib-explanation').className = 'fib-explanation';
+      $('fib-next').style.display = 'none';
+      $('fib-input').focus();
+      fibAnswered = false;
+
+      $('fib-correct').textContent = fibCorrectCount;
+      $('fib-total').textContent = fibDeck.length;
+      $('fib-progress').style.width = `${(fibIndex / fibDeck.length) * 100}%`;
+    }
+
+    function fibCheck() {
+      if (fibAnswered || fibIndex >= fibDeck.length) return;
+      const ex = fibDeck[fibIndex];
+      const userAnswer = normalizeAnswer($('fib-input').value);
+      const correct = normalizeAnswer(ex.answer);
+
+      if (!userAnswer) return;
+      fibAnswered = true;
+
+      if (userAnswer === correct) {
+        $('fib-input').className = 'fib-input correct';
+        $('fib-feedback').textContent = 'Correct!';
+        $('fib-feedback').className = 'fib-feedback correct';
+        fibCorrectCount++;
+        fibCompleted.add(ex.id);
+        fibSaveProgress();
+      } else if (stripAccents(userAnswer) === stripAccents(correct)) {
+        $('fib-input').className = 'fib-input close';
+        $('fib-feedback').innerHTML = `Almost! Check your accents. Correct: <strong>${ex.answer}</strong>`;
+        $('fib-feedback').className = 'fib-feedback close';
+      } else {
+        $('fib-input').className = 'fib-input incorrect';
+        $('fib-feedback').innerHTML = `Incorrect. The answer is: <strong>${ex.answer}</strong><br><em>${ex.fullSentence}</em>`;
+        $('fib-feedback').className = 'fib-feedback incorrect';
+      }
+      $('fib-input').disabled = true;
+      if (ex.explanation) {
+        $('fib-explanation').textContent = ex.explanation;
+        $('fib-explanation').className = 'fib-explanation show';
+      }
+      $('fib-next').style.display = 'inline-block';
+      $('fib-correct').textContent = fibCorrectCount;
+    }
+
+    $('fib-check').addEventListener('click', fibCheck);
+    $('fib-input').addEventListener('keydown', e => { if (e.key === 'Enter') fibCheck(); });
+    $('fib-next').addEventListener('click', () => { fibIndex++; fibRender(); });
+    $('fib-topic-filter').addEventListener('change', fibInit);
+    $('fib-restart').addEventListener('click', fibInit);
+
+    // =============================================
+    // MULTIPLE CHOICE
+    // =============================================
+    const MC_STORAGE = 'frenchB2_mcProgress';
+    let mcCompleted = new Set(JSON.parse(localStorage.getItem(MC_STORAGE) || '[]'));
+    let mcDeck = [];
+    let mcIndex = 0;
+    let mcCorrectCount = 0;
+    let mcAnsweredCount = 0;
+    let mcAnswered = false;
+
+    function mcSaveProgress() {
+      localStorage.setItem(MC_STORAGE, JSON.stringify([...mcCompleted]));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    function mcInit() {
+      const topicFilter = $('mc-topic-filter');
+      if (topicFilter.options.length <= 1) {
+        const topics = [...new Set(GRAMMAR_EXERCISES.multipleChoice.map(e => e.topicId))];
+        topics.forEach(t => {
+          const topic = GRAMMAR_DATA.find(g => g.id === t);
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.textContent = topic ? topic.title : t;
+          topicFilter.appendChild(opt);
+        });
+      }
+
+      const topic = topicFilter.value;
+      let exercises = GRAMMAR_EXERCISES.multipleChoice;
+      if (topic !== 'all') exercises = exercises.filter(e => e.topicId === topic);
+      mcDeck = shuffleArray([...exercises]);
+      mcIndex = 0;
+      mcCorrectCount = 0;
+      mcAnsweredCount = 0;
+      mcAnswered = false;
+      mcRender();
+    }
+
+    function mcRender() {
+      if (mcIndex >= mcDeck.length) {
+        $('mc-card-area').style.display = 'none';
+        $('mc-empty').style.display = 'block';
+        return;
+      }
+      $('mc-card-area').style.display = 'block';
+      $('mc-empty').style.display = 'none';
+
+      const ex = mcDeck[mcIndex];
+      $('mc-question').innerHTML = ex.question.replace('___', '<span style="border-bottom:2px solid var(--accent); padding:0 4px;">___</span>');
+
+      // Shuffle options but track correct index
+      const indices = ex.options.map((_, i) => i);
+      shuffleArray(indices);
+
+      $('mc-options').innerHTML = indices.map(i => `
+        <button class="mc-option" data-idx="${i}">${ex.options[i]}</button>
+      `).join('');
+
+      $('mc-explanation').className = 'mc-explanation';
+      $('mc-explanation').textContent = '';
+      $('mc-next').style.display = 'none';
+      mcAnswered = false;
+
+      // Attach click handlers
+      $('mc-options').querySelectorAll('.mc-option').forEach(btn => {
+        btn.addEventListener('click', () => mcSelect(parseInt(btn.dataset.idx)));
+      });
+
+      $('mc-correct').textContent = mcCorrectCount;
+      $('mc-answered').textContent = mcAnsweredCount;
+      $('mc-progress').style.width = `${(mcIndex / mcDeck.length) * 100}%`;
+    }
+
+    function mcSelect(idx) {
+      if (mcAnswered) return;
+      mcAnswered = true;
+      mcAnsweredCount++;
+      const ex = mcDeck[mcIndex];
+
+      $('mc-options').querySelectorAll('.mc-option').forEach(btn => {
+        const bIdx = parseInt(btn.dataset.idx);
+        btn.classList.add('disabled');
+        if (bIdx === ex.correctIndex) btn.classList.add(idx === ex.correctIndex ? 'selected-correct' : 'reveal-correct');
+        if (bIdx === idx && idx !== ex.correctIndex) btn.classList.add('selected-wrong');
+      });
+
+      if (idx === ex.correctIndex) {
+        mcCorrectCount++;
+        mcCompleted.add(ex.id);
+        mcSaveProgress();
+      }
+
+      $('mc-explanation').textContent = ex.explanation;
+      $('mc-explanation').className = 'mc-explanation show';
+      $('mc-next').style.display = 'inline-block';
+      $('mc-correct').textContent = mcCorrectCount;
+      $('mc-answered').textContent = mcAnsweredCount;
+    }
+
+    $('mc-next').addEventListener('click', () => { mcIndex++; mcRender(); });
+    $('mc-topic-filter').addEventListener('change', mcInit);
+    $('mc-restart').addEventListener('click', mcInit);
+
+    // =============================================
+    // SENTENCE TRANSFORMATION
+    // =============================================
+    const TRANS_STORAGE = 'frenchB2_transProgress';
+    let transCompleted = new Set(JSON.parse(localStorage.getItem(TRANS_STORAGE) || '[]'));
+    let transDeck = [];
+    let transIndex = 0;
+    let transCorrectCount = 0;
+    let transChecked = false;
+
+    function transSaveProgress() {
+      localStorage.setItem(TRANS_STORAGE, JSON.stringify([...transCompleted]));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    function transInit() {
+      const typeFilter = $('trans-type-filter');
+      if (typeFilter.options.length <= 1) {
+        const types = [...new Set(GRAMMAR_EXERCISES.transformation.map(e => e.type))];
+        types.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t;
+          opt.textContent = t;
+          typeFilter.appendChild(opt);
+        });
+      }
+
+      const type = typeFilter.value;
+      let exercises = GRAMMAR_EXERCISES.transformation;
+      if (type !== 'all') exercises = exercises.filter(e => e.type === type);
+      transDeck = shuffleArray([...exercises]);
+      transIndex = 0;
+      transCorrectCount = 0;
+      transChecked = false;
+      transRender();
+    }
+
+    function transRender() {
+      if (transIndex >= transDeck.length) {
+        $('trans-card-area').style.display = 'none';
+        $('trans-empty').style.display = 'block';
+        return;
+      }
+      $('trans-card-area').style.display = 'block';
+      $('trans-empty').style.display = 'none';
+
+      const ex = transDeck[transIndex];
+      $('trans-instruction').textContent = ex.instruction;
+      $('trans-given').textContent = ex.given;
+      $('trans-input').value = '';
+      $('trans-input').className = 'trans-textarea';
+      $('trans-input').disabled = false;
+      $('trans-expected').className = 'trans-expected';
+      $('trans-self-assess').className = 'trans-self-assess';
+      $('trans-feedback').textContent = '';
+      $('trans-feedback').className = 'fib-feedback';
+      $('trans-next').style.display = 'none';
+      transChecked = false;
+
+      $('trans-correct').textContent = transCorrectCount;
+      $('trans-total').textContent = transDeck.length;
+      $('trans-progress').style.width = `${(transIndex / transDeck.length) * 100}%`;
+      $('trans-input').focus();
+    }
+
+    function transCheck() {
+      if (transChecked) return;
+      const ex = transDeck[transIndex];
+      const userAnswer = normalizeAnswer($('trans-input').value);
+      if (!userAnswer) return;
+      transChecked = true;
+
+      const correctAnswers = [ex.answer, ...(ex.acceptAlso || [])];
+      const isCorrect = correctAnswers.some(a => normalizeAnswer(a) === userAnswer);
+      const isClose = !isCorrect && correctAnswers.some(a => stripAccents(normalizeAnswer(a)) === stripAccents(userAnswer));
+
+      if (isCorrect) {
+        $('trans-input').className = 'trans-textarea correct';
+        $('trans-feedback').innerHTML = 'Correct!' + (ex.explanation ? `<div style="margin-top:8px;color:var(--text-dim);font-size:0.82rem;">${ex.explanation}</div>` : '');
+        $('trans-feedback').className = 'fib-feedback correct';
+        transCorrectCount++;
+        transCompleted.add(ex.id);
+        transSaveProgress();
+        $('trans-next').style.display = 'inline-block';
+      } else if (isClose) {
+        $('trans-input').className = 'trans-textarea correct';
+        $('trans-feedback').innerHTML = `Almost! Check your accents. Expected: <strong>${ex.answer}</strong>` + (ex.explanation ? `<div style="margin-top:8px;color:var(--text-dim);font-size:0.82rem;">${ex.explanation}</div>` : '');
+        $('trans-feedback').className = 'fib-feedback close';
+        transCorrectCount++;
+        transCompleted.add(ex.id);
+        transSaveProgress();
+        $('trans-next').style.display = 'inline-block';
+      } else {
+        $('trans-input').disabled = true;
+        $('trans-expected').innerHTML = `<strong>Expected:</strong> ${ex.answer}${ex.explanation ? '<br><br>' + ex.explanation : ''}`;
+        $('trans-expected').className = 'trans-expected show';
+        $('trans-self-assess').className = 'trans-self-assess show';
+      }
+      $('trans-correct').textContent = transCorrectCount;
+    }
+
+    $('trans-check').addEventListener('click', transCheck);
+    $('trans-input').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); transCheck(); } });
+    $('trans-was-right').addEventListener('click', () => {
+      transCorrectCount++;
+      transCompleted.add(transDeck[transIndex].id);
+      transSaveProgress();
+      $('trans-correct').textContent = transCorrectCount;
+      $('trans-self-assess').className = 'trans-self-assess';
+      $('trans-next').style.display = 'inline-block';
+    });
+    $('trans-was-wrong').addEventListener('click', () => {
+      $('trans-self-assess').className = 'trans-self-assess';
+      $('trans-next').style.display = 'inline-block';
+    });
+    $('trans-next').addEventListener('click', () => { transIndex++; transRender(); });
+    $('trans-type-filter').addEventListener('change', transInit);
+    $('trans-restart').addEventListener('click', transInit);
+
+    // =============================================
+    // READING COMPREHENSION
+    // =============================================
+    const READING_STORAGE = 'frenchB2_readingProgress';
+    let readingProgress = JSON.parse(localStorage.getItem(READING_STORAGE) || '{}');
+    let currentReadingIdx = 0;
+    let readingInitialized = false;
+
+    function readingSaveProgress() {
+      localStorage.setItem(READING_STORAGE, JSON.stringify(readingProgress));
+      if (typeof updateProgressDashboard === 'function') updateProgressDashboard();
+    }
+
+    function readingInit() {
+      if (typeof READING_DATA === 'undefined' || READING_DATA.length === 0) return;
+      const sel = $('reading-select');
+      if (!readingInitialized) {
+        sel.innerHTML = READING_DATA.map((r, i) => `<option value="${i}">${r.title}</option>`).join('');
+        sel.addEventListener('change', () => { currentReadingIdx = parseInt(sel.value); readingRenderText(); });
+        $('reading-check-all').addEventListener('click', readingCheckAll);
+        $('reading-reset').addEventListener('click', readingReset);
+        readingInitialized = true;
+      }
+      // Build progress dots
+      $('reading-progress-bar').innerHTML = READING_DATA.map((r, i) =>
+        `<div class="reading-progress-dot ${readingProgress[r.id] ? 'completed' : ''} ${i === currentReadingIdx ? 'active' : ''}" data-idx="${i}"></div>`
+      ).join('');
+      $('reading-progress-bar').querySelectorAll('.reading-progress-dot').forEach(dot => {
+        dot.addEventListener('click', () => { currentReadingIdx = parseInt(dot.dataset.idx); $('reading-select').value = currentReadingIdx; readingRenderText(); });
+      });
+      readingRenderText();
+    }
+
+    function readingRenderText() {
+      const r = READING_DATA[currentReadingIdx];
+      // Update progress dots
+      $('reading-progress-bar').querySelectorAll('.reading-progress-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentReadingIdx);
+      });
+
+      $('reading-text-area').innerHTML = `
+        <div class="reading-text-card">
+          <h2>${r.title}</h2>
+          <div class="reading-meta">
+            <span>${r.source}</span>
+            <span>${r.theme}</span>
+            <span>${r.wordCount} words</span>
+          </div>
+          <div class="reading-body">${r.text.split('\n\n').map(p => '<p>' + p + '</p>').join('')}</div>
+          ${r.vocab && r.vocab.length ? `
+          <div class="reading-vocab-toggle">
+            <details>
+              <summary>Useful Vocabulary (${r.vocab.length} words)</summary>
+              <div class="reading-vocab-list">
+                ${r.vocab.map(v => `<div class="rv-item"><span class="rv-fr">${v.fr}</span><span class="rv-de">— ${v.de}</span></div>`).join('')}
+              </div>
+            </details>
+          </div>` : ''}
+        </div>
+      `;
+
+      // Render exercises
+      $('reading-exercises-area').innerHTML = `
+        <div class="reading-exercises">
+          <h3>Reading Comprehension</h3>
+          ${r.exercises.map((ex, qi) => readingRenderQuestion(ex, qi)).join('')}
+        </div>
+      `;
+
+      // Attach MC handlers
+      $('reading-exercises-area').querySelectorAll('.reading-q-option').forEach(btn => {
+        btn.addEventListener('click', () => readingSelectOption(btn));
+      });
+
+      // Attach text check handlers
+      $('reading-exercises-area').querySelectorAll('.reading-check-btn').forEach(btn => {
+        btn.addEventListener('click', () => readingCheckSingle(btn));
+      });
+
+      $('reading-score').style.display = 'none';
+    }
+
+    function readingRenderQuestion(ex, qi) {
+      if (ex.type === 'mc') {
+        return `<div class="reading-q" data-qi="${qi}" data-type="mc" data-correct="${ex.correctIndex}">
+          <div class="reading-q-type">Multiple Choice</div>
+          <div class="reading-q-text">${qi + 1}. ${ex.question}</div>
+          <div class="reading-q-options">
+            ${ex.options.map((opt, oi) => `<button class="reading-q-option" data-oi="${oi}">${opt}</button>`).join('')}
+          </div>
+          <div class="reading-q-feedback"></div>
+        </div>`;
+      } else if (ex.type === 'truefalse') {
+        return `<div class="reading-q" data-qi="${qi}" data-type="truefalse" data-correct="${ex.correct}">
+          <div class="reading-q-type">True or False</div>
+          <div class="reading-q-text">${qi + 1}. ${ex.statement}</div>
+          <div class="reading-q-options">
+            <button class="reading-q-option" data-oi="true">Vrai</button>
+            <button class="reading-q-option" data-oi="false">Faux</button>
+          </div>
+          <div class="reading-q-feedback"></div>
+        </div>`;
+      } else if (ex.type === 'open') {
+        return `<div class="reading-q" data-qi="${qi}" data-type="open">
+          <div class="reading-q-type">Open Question</div>
+          <div class="reading-q-text">${qi + 1}. ${ex.question}</div>
+          <textarea class="reading-q-textarea" placeholder="Write your answer..."></textarea>
+          <button class="reading-check-btn" data-qi="${qi}">Show Answer</button>
+          <div class="reading-q-feedback"></div>
+        </div>`;
+      } else if (ex.type === 'fill') {
+        return `<div class="reading-q" data-qi="${qi}" data-type="fill" data-answer="${ex.answer}">
+          <div class="reading-q-type">Fill in</div>
+          <div class="reading-q-text">${qi + 1}. ${ex.question}</div>
+          <input type="text" class="reading-q-input" placeholder="Your answer...">
+          <button class="reading-check-btn" data-qi="${qi}">Check</button>
+          <div class="reading-q-feedback"></div>
+        </div>`;
+      }
+      return '';
+    }
+
+    function readingSelectOption(btn) {
+      const q = btn.closest('.reading-q');
+      if (q.classList.contains('answered')) return;
+      q.classList.add('answered');
+
+      const type = q.dataset.type;
+      const feedback = q.querySelector('.reading-q-feedback');
+      const selectedVal = btn.dataset.oi;
+
+      if (type === 'mc') {
+        const correctIdx = parseInt(q.dataset.correct);
+        const selectedIdx = parseInt(selectedVal);
+        q.querySelectorAll('.reading-q-option').forEach((opt, i) => {
+          opt.classList.add('disabled');
+          if (i === correctIdx) opt.classList.add(selectedIdx === correctIdx ? 'selected-correct' : 'reveal-correct');
+          if (i === selectedIdx && selectedIdx !== correctIdx) opt.classList.add('selected-wrong');
+        });
+        const ex = READING_DATA[currentReadingIdx].exercises[parseInt(q.dataset.qi)];
+        feedback.textContent = selectedIdx === correctIdx ? 'Correct !' : ex.explanation || 'Incorrect.';
+        feedback.className = 'reading-q-feedback ' + (selectedIdx === correctIdx ? 'correct' : 'incorrect');
+      } else if (type === 'truefalse') {
+        const correct = q.dataset.correct;
+        q.querySelectorAll('.reading-q-option').forEach(opt => {
+          opt.classList.add('disabled');
+          if (opt.dataset.oi === correct) opt.classList.add(selectedVal === correct ? 'selected-correct' : 'reveal-correct');
+          if (opt.dataset.oi === selectedVal && selectedVal !== correct) opt.classList.add('selected-wrong');
+        });
+        const ex = READING_DATA[currentReadingIdx].exercises[parseInt(q.dataset.qi)];
+        feedback.textContent = selectedVal === correct ? 'Correct !' : (ex.explanation || 'Incorrect.');
+        feedback.className = 'reading-q-feedback ' + (selectedVal === correct ? 'correct' : 'incorrect');
+      }
+    }
+
+    function readingCheckSingle(btn) {
+      const q = btn.closest('.reading-q');
+      if (q.classList.contains('answered')) return;
+      q.classList.add('answered');
+
+      const type = q.dataset.type;
+      const feedback = q.querySelector('.reading-q-feedback');
+      const ex = READING_DATA[currentReadingIdx].exercises[parseInt(q.dataset.qi)];
+
+      if (type === 'fill') {
+        const input = q.querySelector('input');
+        const userAnswer = normalizeAnswer(input.value);
+        const correctAnswer = normalizeAnswer(ex.answer);
+        if (userAnswer === correctAnswer || stripAccents(userAnswer) === stripAccents(correctAnswer)) {
+          input.style.borderColor = 'var(--green)';
+          feedback.textContent = 'Correct !';
+          feedback.className = 'reading-q-feedback correct';
+        } else {
+          input.style.borderColor = 'var(--red)';
+          feedback.innerHTML = `La bonne réponse : <strong>${ex.answer}</strong>${ex.explanation ? '<br>' + ex.explanation : ''}`;
+          feedback.className = 'reading-q-feedback incorrect';
+        }
+        input.disabled = true;
+      } else if (type === 'open') {
+        feedback.innerHTML = `<strong>Réponse modèle :</strong> ${ex.modelAnswer}`;
+        feedback.className = 'reading-q-feedback';
+        feedback.style.color = 'var(--text-dim)';
+      }
+      btn.style.display = 'none';
+    }
+
+    function readingCheckAll() {
+      // Auto-click all un-answered check buttons
+      $('reading-exercises-area').querySelectorAll('.reading-q:not(.answered) .reading-check-btn').forEach(btn => {
+        readingCheckSingle(btn);
+      });
+      // For MC/TF that haven't been clicked, reveal answers
+      $('reading-exercises-area').querySelectorAll('.reading-q:not(.answered)').forEach(q => {
+        q.classList.add('answered');
+        const type = q.dataset.type;
+        const feedback = q.querySelector('.reading-q-feedback');
+        const ex = READING_DATA[currentReadingIdx].exercises[parseInt(q.dataset.qi)];
+        if (type === 'mc') {
+          const correctIdx = parseInt(q.dataset.correct);
+          q.querySelectorAll('.reading-q-option').forEach((opt, i) => {
+            opt.classList.add('disabled');
+            if (i === correctIdx) opt.classList.add('reveal-correct');
+          });
+          feedback.textContent = ex.explanation || `Correct answer: ${ex.options[correctIdx]}`;
+          feedback.className = 'reading-q-feedback incorrect';
+        } else if (type === 'truefalse') {
+          q.querySelectorAll('.reading-q-option').forEach(opt => {
+            opt.classList.add('disabled');
+            if (opt.dataset.oi === q.dataset.correct) opt.classList.add('reveal-correct');
+          });
+          feedback.textContent = ex.explanation || `Answer: ${q.dataset.correct}`;
+          feedback.className = 'reading-q-feedback incorrect';
+        }
+      });
+
+      // Score
+      const total = $('reading-exercises-area').querySelectorAll('.reading-q').length;
+      let correct = 0;
+      $('reading-exercises-area').querySelectorAll('.reading-q-feedback.correct').forEach(() => correct++);
+      $('reading-score').textContent = `Score: ${correct} / ${total} correct`;
+      $('reading-score').style.display = 'block';
+
+      // Mark as completed
+      readingProgress[READING_DATA[currentReadingIdx].id] = true;
+      readingSaveProgress();
+      $('reading-progress-bar').querySelectorAll('.reading-progress-dot').forEach((dot, i) => {
+        if (readingProgress[READING_DATA[i].id]) dot.classList.add('completed');
+      });
+    }
+
+    function readingReset() {
+      readingRenderText();
+    }
+
+    // =============================================
+    // LISTENING
+    // =============================================
+    let listenSubMode = 'dictation';
+    let listenDeck = [];
+    let listenIndex = 0;
+    let listenCorrect = 0;
+    let listenTotal = 0;
+
+    function getFrenchVoice() {
+      const voices = speechSynthesis.getVoices();
+      return voices.find(v => v.name === 'Thomas' && v.lang === 'fr-FR')
+        || voices.find(v => v.lang === 'fr-FR')
+        || voices.find(v => v.lang.startsWith('fr'))
+        || null;
+    }
+
+    function getListenSpeed() {
+      const slider = $('listen-speed');
+      return slider ? parseFloat(slider.value) : 0.9;
+    }
+
+    let currentUtterance = null;
+    let isSpeaking = false;
+
+    function speakFrench(text, rate) {
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'fr-FR';
+      utter.rate = rate !== undefined ? rate : getListenSpeed();
+      const voice = getFrenchVoice();
+      if (voice) utter.voice = voice;
+      utter.onend = () => { isSpeaking = false; updatePlayButtons('▶'); };
+      utter.onerror = () => { isSpeaking = false; updatePlayButtons('▶'); };
+      currentUtterance = utter;
+      isSpeaking = true;
+      speechSynthesis.speak(utter);
+      updatePlayButtons('⏸');
+      return utter;
+    }
+
+    function toggleSpeech(text, rate) {
+      if (speechSynthesis.speaking && !speechSynthesis.paused) {
+        speechSynthesis.pause();
+        isSpeaking = false;
+        updatePlayButtons('▶');
+      } else if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+        isSpeaking = true;
+        updatePlayButtons('⏸');
+      } else {
+        speakFrench(text, rate);
+      }
+    }
+
+    function updatePlayButtons(icon) {
+      ['dict-play', 'vl-play', 'comp-play'].forEach(id => {
+        const btn = $(id);
+        if (btn) btn.textContent = icon;
+      });
+    }
+
+    function listeningInit() {
+      if (typeof LISTENING_DATA === 'undefined') return;
+      // Speed slider
+      $('listen-speed').oninput = () => { $('listen-speed-label').textContent = parseFloat($('listen-speed').value).toFixed(2).replace(/0$/, '') + '×'; };
+      // Attach sub-nav handlers once
+      document.querySelectorAll('#listening-sub-nav button').forEach(btn => {
+        btn.onclick = () => {
+          listenSubMode = btn.dataset.lsub;
+          document.querySelectorAll('#listening-sub-nav button').forEach(b => b.classList.toggle('active', b.dataset.lsub === listenSubMode));
+          listenCorrect = 0;
+          listenTotal = 0;
+          listenIndex = 0;
+          listeningRender();
+        };
+      });
+      listeningRender();
+    }
+
+    function listeningRender() {
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+      const content = $('listen-content');
+
+      if (listenSubMode === 'dictation') {
+        listenDeck = shuffleArray([...LISTENING_DATA.dictation]);
+        listenIndex = 0;
+        renderDictation();
+      } else if (listenSubMode === 'vocab-listen') {
+        listenDeck = shuffleArray([...LISTENING_DATA.vocabListening]);
+        listenIndex = 0;
+        renderVocabListen();
+      } else if (listenSubMode === 'comprehension') {
+        listenDeck = [...LISTENING_DATA.comprehension];
+        listenIndex = 0;
+        renderComprehension();
+      }
+    }
+
+    // --- DICTATION ---
+    function renderDictation() {
+      if (listenIndex >= listenDeck.length) {
+        $('listen-content').innerHTML = '<div class="empty-state"><h2>Done!</h2><p>Score:' + listenCorrect + ' / ' + listenTotal + '</p><button class="btn" onclick="listenCorrect=0;listenTotal=0;listenIndex=0;listeningRender();">Restart</button></div>';
+        return;
+      }
+      const item = listenDeck[listenIndex];
+      const diffDots = Array.from({length: 3}, (_, i) => `<span class="${i < item.difficulty ? 'filled' : ''}"></span>`).join('');
+
+      $('listen-content').innerHTML = `
+        <div class="listen-card">
+          <div class="listen-play-row">
+            <button class="listen-play-btn" id="dict-play">▶</button>
+            <span class="listen-hint">${item.hint}</span>
+            <div class="listen-difficulty">${diffDots}</div>
+          </div>
+          <input type="text" class="listen-input" id="dict-input" placeholder="Write what you hear..." autocomplete="off" autocorrect="off" spellcheck="false">
+          <div class="listen-actions">
+            <button class="btn active" id="dict-check">Check</button>
+            <button class="btn" id="dict-replay">Replay</button>
+            <button class="btn" id="dict-skip">Skip →</button>
+          </div>
+          <div class="fib-feedback" id="dict-feedback" style="margin-top:12px;"></div>
+        </div>
+      `;
+
+      const playBtn = $('dict-play');
+      const input = $('dict-input');
+
+      playBtn.onclick = () => toggleSpeech(item.text);
+      $('dict-replay').onclick = () => speakFrench(item.text);
+
+      $('dict-check').onclick = () => dictCheck(item);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') dictCheck(item); });
+
+      $('dict-skip').onclick = () => { listenIndex++; renderDictation(); };
+
+      setTimeout(() => input.focus(), 300);
+
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+    }
+
+    function dictCheck(item) {
+      const input = $('dict-input');
+      const feedback = $('dict-feedback');
+      if (input.disabled) { listenIndex++; renderDictation(); return; }
+
+      const userAnswer = input.value.trim();
+      if (!userAnswer) return;
+      input.disabled = true;
+      listenTotal++;
+      trackListenComplete('dictation');
+
+      const normalUser = normalizeAnswer(userAnswer);
+      const normalCorrect = normalizeAnswer(item.text);
+
+      if (normalUser === normalCorrect) {
+        input.className = 'listen-input correct';
+        feedback.innerHTML = 'Parfait !';
+        feedback.className = 'fib-feedback correct';
+        listenCorrect++;
+      } else if (stripAccents(normalUser) === stripAccents(normalCorrect)) {
+        input.className = 'listen-input close';
+        feedback.innerHTML = 'Presque ! Vérifiez les accents.<br><strong>' + item.text + '</strong>';
+        feedback.className = 'fib-feedback close';
+        listenCorrect++;
+      } else {
+        input.className = 'listen-input incorrect';
+        feedback.innerHTML = 'La phrase correcte :<br><strong>' + item.text + '</strong>';
+        feedback.className = 'fib-feedback incorrect';
+      }
+
+      $('dict-check').textContent = 'Next →';
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+    }
+
+    // --- VOCAB LISTENING ---
+    function renderVocabListen() {
+      if (listenIndex >= listenDeck.length) {
+        $('listen-content').innerHTML = '<div class="empty-state"><h2>Done!</h2><p>Score:' + listenCorrect + ' / ' + listenTotal + '</p><button class="btn" onclick="listenCorrect=0;listenTotal=0;listenIndex=0;listenDeck=shuffleArray([...LISTENING_DATA.vocabListening]);renderVocabListen();">Restart</button></div>';
+        return;
+      }
+      const item = listenDeck[listenIndex];
+      const indices = shuffleArray([0, 1, 2, 3]);
+
+      $('listen-content').innerHTML = `
+        <div class="listen-card">
+          <div class="listen-play-row">
+            <button class="listen-play-btn" id="vl-play">▶</button>
+            <span class="listen-hint">${listenIndex + 1} / ${listenDeck.length}</span>
+          </div>
+          <div class="reading-q-options" id="vl-options">
+            ${indices.map(i => `<button class="reading-q-option" data-oi="${i}">${item.options[i]}</button>`).join('')}
+          </div>
+          <div class="fib-feedback" id="vl-feedback" style="margin-top:12px;"></div>
+        </div>
+      `;
+
+      $('vl-play').onclick = () => toggleSpeech(item.french);
+
+      document.querySelectorAll('#vl-options .reading-q-option').forEach(btn => {
+        btn.onclick = () => vlSelect(btn, item);
+      });
+
+      // No auto-play; user clicks play
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+    }
+
+    function vlSelect(btn, item) {
+      if (btn.closest('.listen-card').classList.contains('answered')) return;
+      btn.closest('.listen-card').classList.add('answered');
+      const selected = parseInt(btn.dataset.oi);
+      listenTotal++;
+      trackListenComplete('vocab-listen');
+
+      document.querySelectorAll('#vl-options .reading-q-option').forEach(opt => {
+        const idx = parseInt(opt.dataset.oi);
+        opt.classList.add('disabled');
+        if (idx === item.correct) opt.classList.add(selected === item.correct ? 'selected-correct' : 'reveal-correct');
+        if (idx === selected && selected !== item.correct) opt.classList.add('selected-wrong');
+      });
+
+      const feedback = $('vl-feedback');
+      if (selected === item.correct) {
+        listenCorrect++;
+        feedback.textContent = 'Correct ! — ' + item.french;
+        feedback.className = 'fib-feedback correct';
+      } else {
+        feedback.innerHTML = item.french + ' = <strong>' + item.options[item.correct] + '</strong>';
+        feedback.className = 'fib-feedback incorrect';
+      }
+
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+
+      setTimeout(() => { listenIndex++; renderVocabListen(); }, 1800);
+    }
+
+    // --- COMPREHENSION ---
+    function renderComprehension() {
+      if (listenIndex >= listenDeck.length) {
+        $('listen-content').innerHTML = '<div class="empty-state"><h2>Done!</h2><p>Score:' + listenCorrect + ' / ' + listenTotal + '</p><button class="btn" onclick="listenCorrect=0;listenTotal=0;listenIndex=0;renderComprehension();">Restart</button></div>';
+        return;
+      }
+      const item = listenDeck[listenIndex];
+
+      $('listen-content').innerHTML = `
+        <div class="listen-card">
+          <h3 style="margin-bottom:12px;font-size:1rem;">${item.title}</h3>
+          <div class="listen-play-row">
+            <button class="listen-play-btn" id="comp-play">▶</button>
+            <span class="listen-hint">Listen, then answer the questions</span>
+          </div>
+          <div class="listen-comp-passage" id="comp-transcript">${item.text}</div>
+          <button class="btn" id="comp-show-transcript" style="margin-bottom:16px;font-size:0.78rem;">Show Transcript</button>
+          <div id="comp-questions">
+            ${item.questions.map((q, qi) => renderCompQuestion(q, qi)).join('')}
+          </div>
+          <div class="listen-actions" style="margin-top:16px;">
+            <button class="btn active" id="comp-check-all">Check All</button>
+            <button class="btn" id="comp-next" style="display:none;">Next Passage →</button>
+          </div>
+        </div>
+      `;
+
+      $('comp-play').onclick = () => toggleSpeech(item.text);
+      $('comp-show-transcript').onclick = () => { $('comp-transcript').classList.toggle('show'); $('comp-show-transcript').textContent = $('comp-transcript').classList.contains('show') ? 'Hide Transcript' : 'Show Transcript'; };
+
+      // MC handlers
+      document.querySelectorAll('#comp-questions .reading-q-option').forEach(btn => {
+        btn.onclick = () => {
+          const q = btn.closest('.reading-q');
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          const qItem = item.questions[parseInt(q.dataset.qi)];
+          const selected = parseInt(btn.dataset.oi);
+          listenTotal++;
+          trackListenComplete('comprehension');
+          q.querySelectorAll('.reading-q-option').forEach((opt, i) => {
+            opt.classList.add('disabled');
+            if (i === qItem.correct) opt.classList.add(selected === qItem.correct ? 'selected-correct' : 'reveal-correct');
+            if (i === selected && selected !== qItem.correct) opt.classList.add('selected-wrong');
+          });
+          if (selected === qItem.correct) listenCorrect++;
+          $('listen-correct').textContent = listenCorrect;
+          $('listen-total').textContent = listenTotal;
+        };
+      });
+
+      // Fill check handlers
+      document.querySelectorAll('#comp-questions .reading-check-btn').forEach(btn => {
+        btn.onclick = () => {
+          const q = btn.closest('.reading-q');
+          if (q.classList.contains('answered')) return;
+          q.classList.add('answered');
+          const qItem = item.questions[parseInt(q.dataset.qi)];
+          const input = q.querySelector('input');
+          const userVal = input.value.trim();
+          listenTotal++;
+          trackListenComplete('comprehension');
+          const feedback = q.querySelector('.reading-q-feedback');
+          if (normalizeAnswer(userVal) === normalizeAnswer(qItem.answer) || stripAccents(normalizeAnswer(userVal)) === stripAccents(normalizeAnswer(qItem.answer))) {
+            input.style.borderColor = 'var(--green)';
+            feedback.textContent = 'Correct !';
+            feedback.className = 'reading-q-feedback correct';
+            listenCorrect++;
+          } else {
+            input.style.borderColor = 'var(--red)';
+            feedback.innerHTML = 'Réponse : <strong>' + qItem.answer + '</strong>';
+            feedback.className = 'reading-q-feedback incorrect';
+          }
+          input.disabled = true;
+          btn.style.display = 'none';
+          $('listen-correct').textContent = listenCorrect;
+          $('listen-total').textContent = listenTotal;
+        };
+      });
+
+      $('comp-check-all').onclick = () => {
+        document.querySelectorAll('#comp-questions .reading-q:not(.answered) .reading-check-btn').forEach(b => b.click());
+        document.querySelectorAll('#comp-questions .reading-q:not(.answered)').forEach(q => {
+          q.classList.add('answered');
+          const qItem = item.questions[parseInt(q.dataset.qi)];
+          q.querySelectorAll('.reading-q-option').forEach((opt, i) => {
+            opt.classList.add('disabled');
+            if (i === qItem.correct) opt.classList.add('reveal-correct');
+          });
+          listenTotal++;
+          trackListenComplete('comprehension');
+          $('listen-total').textContent = listenTotal;
+        });
+        $('comp-next').style.display = 'inline-block';
+        $('comp-check-all').style.display = 'none';
+      };
+
+      $('comp-next').onclick = () => { listenIndex++; renderComprehension(); };
+
+      // No auto-play; user clicks play
+      $('listen-correct').textContent = listenCorrect;
+      $('listen-total').textContent = listenTotal;
+    }
+
+    function renderCompQuestion(q, qi) {
+      if (q.type === 'mc') {
+        return `<div class="reading-q" data-qi="${qi}" style="margin-bottom:14px;">
+          <div class="reading-q-text" style="font-size:0.88rem;">${qi+1}. ${q.question}</div>
+          <div class="reading-q-options">${q.options.map((o, i) => `<button class="reading-q-option" data-oi="${i}">${o}</button>`).join('')}</div>
+        </div>`;
+      } else if (q.type === 'fill') {
+        return `<div class="reading-q" data-qi="${qi}" style="margin-bottom:14px;">
+          <div class="reading-q-text" style="font-size:0.88rem;">${qi+1}. ${q.question}</div>
+          <input type="text" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.85rem;background:var(--bg);color:var(--text);outline:none;" placeholder="Your answer...">
+          <button class="reading-check-btn" style="margin-top:6px;">Check</button>
+          <div class="reading-q-feedback"></div>
+        </div>`;
+      }
+      return '';
+    }
+
+    // === WRITING MODE ===
+    let writingSubMode = 'essay';
+    let currentWritingExercise = null;
+
+    function writingInit() {
+      if (typeof WRITING_DATA === 'undefined') return;
+      // Sub-nav handlers
+      document.querySelectorAll('#writing-sub-nav button').forEach(btn => {
+        btn.onclick = () => {
+          writingSubMode = btn.dataset.wsub;
+          document.querySelectorAll('#writing-sub-nav button').forEach(b => b.classList.toggle('active', b.dataset.wsub === writingSubMode));
+          writingPopulateSelect();
+        };
+      });
+      writingPopulateSelect();
+    }
+
+    function writingPopulateSelect() {
+      const select = $('writing-select');
+      const exercises = WRITING_DATA.exercises.filter(e => e.type === writingSubMode);
+      select.innerHTML = exercises.map((e, i) => `<option value="${e.id}">${e.title}</option>`).join('');
+      select.onchange = () => writingLoad(select.value);
+      if (exercises.length > 0) writingLoad(exercises[0].id);
+    }
+
+    function writingLoad(id) {
+      const ex = WRITING_DATA.exercises.find(e => e.id === id);
+      if (!ex) return;
+      currentWritingExercise = ex;
+
+      const content = $('writing-content');
+      let jobAdHtml = '';
+      if (ex.type === 'email' && ex.jobAd) {
+        const ja = ex.jobAd;
+        jobAdHtml = `
+          <div class="writing-job-ad">
+            <h4>${ja.position} — ${ja.company}</h4>
+            <div class="job-field"><strong>Lieu :</strong> ${ja.location}</div>
+            <div class="job-field"><strong>Mission :</strong> ${ja.mission}</div>
+            <div class="job-field"><strong>Profil :</strong> ${ja.profile}</div>
+            <div class="job-field"><strong>Langues :</strong> ${ja.languages}</div>
+            <div class="job-field"><strong>Contact :</strong> ${ja.contact}</div>
+          </div>`;
+      }
+
+      content.innerHTML = `
+        <div class="writing-prompt-card">
+          <div class="writing-prompt-label">${ex.type === 'essay' ? 'Essay' : 'Email'}</div>
+          <div class="writing-prompt-text">${ex.prompt}</div>
+          <div class="writing-instruction">${ex.instruction}</div>
+          ${jobAdHtml}
+        </div>
+
+        <div class="writing-tips-card">
+          <div class="writing-tips-header" id="writing-tips-toggle">
+            <span class="writing-tips-title">💡 Tips & Help</span>
+            <span class="writing-tips-chevron" id="writing-tips-chevron">▼</span>
+          </div>
+          <div class="writing-tips-body" id="writing-tips-body">
+            ${ex.tips.map(t => `
+              <div class="writing-tip">
+                <div class="writing-tip-label">${t.label}</div>
+                <div class="writing-tip-text">${t.text}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="writing-area-card">
+          <textarea class="writing-textarea" id="writing-textarea" placeholder="${ex.type === 'email' ? 'Objet : ...\n\nMadame / Monsieur,\n\n...\n\nFormule de politesse,\n[Votre nom]' : 'Commencez à écrire ici...'}"></textarea>
+          <div class="writing-meta-row">
+            <span class="writing-word-count" id="writing-wc">0 / ${ex.wordTarget} words</span>
+            <span id="writing-saved" style="font-size:0.75rem;color:var(--green);opacity:0;transition:opacity 0.3s;">Saved</span>
+          </div>
+          <div class="writing-actions">
+            <button class="btn primary" id="writing-check">Analyze</button>
+            <button class="btn" id="writing-clear">Clear</button>
+            ${ex.sampleAnswer ? '<button class="btn" id="writing-show-sample">Show Example</button>' : ''}
+          </div>
+        </div>
+
+        <div class="writing-feedback-card" id="writing-feedback"></div>
+
+        ${ex.sampleAnswer ? `
+          <div class="writing-sample" id="writing-sample">
+            <div class="writing-sample-label">Sample Answer</div>
+            <div class="writing-sample-text">${ex.sampleAnswer}</div>
+          </div>
+        ` : ''}
+      `;
+
+      // Restore saved text
+      const savedKey = 'writing_' + ex.id;
+      const saved = localStorage.getItem(savedKey);
+      if (saved) $('writing-textarea').value = saved;
+      writingUpdateWC();
+
+      // Event handlers
+      $('writing-textarea').oninput = () => {
+        writingUpdateWC();
+        localStorage.setItem(savedKey, $('writing-textarea').value);
+        const savedEl = $('writing-saved');
+        savedEl.style.opacity = '1';
+        setTimeout(() => savedEl.style.opacity = '0', 1200);
+      };
+
+      $('writing-tips-toggle').onclick = () => {
+        $('writing-tips-body').classList.toggle('open');
+        $('writing-tips-chevron').classList.toggle('open');
+      };
+
+      $('writing-check').onclick = () => writingAnalyze();
+      $('writing-clear').onclick = () => {
+        if (confirm('Clear your text?')) {
+          $('writing-textarea').value = '';
+          localStorage.removeItem(savedKey);
+          writingUpdateWC();
+          $('writing-feedback').classList.remove('show');
+        }
+      };
+
+      const sampleBtn = $('writing-show-sample');
+      if (sampleBtn) {
+        sampleBtn.onclick = () => {
+          $('writing-sample').classList.toggle('show');
+          sampleBtn.textContent = $('writing-sample').classList.contains('show') ? 'Hide Example' : 'Show Example';
+        };
+      }
+    }
+
+    function writingUpdateWC() {
+      const text = ($('writing-textarea').value || '').trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      const target = currentWritingExercise ? currentWritingExercise.wordTarget : 170;
+      const wcEl = $('writing-wc');
+      wcEl.textContent = words + ' / ' + target + ' words';
+      wcEl.className = 'writing-word-count';
+      if (words >= target - 20 && words <= target + 30) wcEl.classList.add('good');
+      else if (words > target + 30) wcEl.classList.add('over');
+    }
+
+    function writingAnalyze() {
+      const text = ($('writing-textarea').value || '').trim();
+      if (!text || text.split(/\s+/).length < 15) {
+        alert('Please write at least a few sentences before analyzing.');
+        return;
+      }
+
+      const ex = currentWritingExercise;
+      const lower = text.toLowerCase();
+      const words = text.split(/\s+/);
+      const wordCount = words.length;
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      const avgSentenceLen = sentences.length > 0 ? Math.round(wordCount / sentences.length) : 0;
+      const criteria = WRITING_DATA.criteria;
+
+      const feedback = [];
+      let scores = { structure: 0, vocabulary: 0, grammar: 0, overall: 0 };
+
+      if (ex.type === 'essay') {
+        // --- STRUCTURE ---
+        const hasIntro = criteria.essay.structure.intro.some(w => lower.includes(w));
+        const devConnectors = criteria.essay.structure.development.filter(w => lower.includes(w));
+        const hasConclusion = criteria.essay.structure.conclusion.some(w => lower.includes(w));
+        const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 20);
+
+        let structureScore = 0;
+        const structureFb = [];
+
+        if (paragraphs.length >= 3) {
+          structureScore += 2;
+          structureFb.push('✓ Bon découpage en paragraphes (' + paragraphs.length + ' paragraphes détectés)');
+        } else {
+          structureFb.push('⚠ Pensez à structurer en paragraphes distincts (intro, développement, conclusion). Séparez-les par une ligne vide.');
+        }
+        if (hasIntro) {
+          structureScore += 1;
+          structureFb.push('✓ Introduction avec connecteur d\'ouverture détectée');
+        } else {
+          structureFb.push('⚠ Ajoutez un connecteur d\'introduction : « Tout d\'abord », « De nos jours », « Force est de constater »');
+        }
+        if (devConnectors.length >= 2) {
+          structureScore += 1;
+          structureFb.push('✓ Bon usage de connecteurs logiques (' + devConnectors.length + ' trouvés : ' + devConnectors.slice(0, 4).join(', ') + ')');
+        } else {
+          structureFb.push('⚠ Utilisez davantage de connecteurs : « De plus », « En revanche », « Néanmoins », « Par ailleurs »');
+        }
+        if (hasConclusion) {
+          structureScore += 1;
+          structureFb.push('✓ Conclusion identifiée');
+        } else {
+          structureFb.push('⚠ Ajoutez une conclusion avec : « En conclusion », « En somme », « En définitive »');
+        }
+
+        scores.structure = Math.min(5, structureScore);
+        feedback.push({ label: 'Structure', type: structureScore >= 3 ? 'good' : 'warn', items: structureFb });
+
+        // --- VOCABULARY ---
+        const sophisticatedUsed = criteria.essay.sophisticatedVocab.filter(w => lower.includes(w));
+        let vocabScore = Math.min(5, Math.round(sophisticatedUsed.length * 1.2));
+        const vocabFb = [];
+        if (sophisticatedUsed.length >= 3) {
+          vocabFb.push('✓ Vocabulaire riche et varié (' + sophisticatedUsed.join(', ') + ')');
+        } else if (sophisticatedUsed.length >= 1) {
+          vocabFb.push('✓ Quelques termes soutenus détectés (' + sophisticatedUsed.join(', ') + ')');
+          vocabFb.push('⚠ Enrichissez avec : « considérable », « engendrer », « contribuer », « primordial »');
+        } else {
+          vocabFb.push('⚠ Vocabulaire basique. Essayez d\'intégrer des termes plus soutenus : « indéniable », « susciter », « favoriser », « néfaste »');
+        }
+        scores.vocabulary = vocabScore;
+        feedback.push({ label: 'Vocabulaire', type: vocabScore >= 3 ? 'good' : 'warn', items: vocabFb });
+
+      } else if (ex.type === 'email') {
+        // --- EMAIL STRUCTURE ---
+        const hasGreeting = criteria.email.greetings.some(w => lower.includes(w));
+        const hasClosing = criteria.email.closings.some(w => lower.includes(w));
+        const hasObjet = lower.includes('objet');
+        const formalUsed = criteria.email.formalMarkers.filter(w => lower.includes(w));
+
+        let structureScore = 0;
+        const structureFb = [];
+
+        if (hasObjet) { structureScore += 1; structureFb.push('✓ Objet de l\'e-mail présent'); }
+        else { structureFb.push('⚠ Ajoutez un objet : « Objet : Candidature au poste de... »'); }
+
+        if (hasGreeting) { structureScore += 1; structureFb.push('✓ Formule d\'appel présente'); }
+        else { structureFb.push('⚠ Ajoutez une formule d\'appel : « Madame, Monsieur, » ou « Madame Léchenne, »'); }
+
+        if (hasClosing) { structureScore += 1.5; structureFb.push('✓ Formule de politesse présente'); }
+        else { structureFb.push('⚠ Ajoutez une formule de politesse : « Veuillez agréer... mes salutations distinguées »'); }
+
+        if (formalUsed.length >= 2) { structureScore += 1.5; structureFb.push('✓ Registre formel approprié (' + formalUsed.slice(0, 3).join(', ') + ')'); }
+        else { structureFb.push('⚠ Utilisez un registre plus formel : « Je me permets de... », « Je souhaiterais... », « Je reste à votre disposition »'); }
+
+        scores.structure = Math.min(5, Math.round(structureScore));
+        feedback.push({ label: 'Format & Structure', type: structureScore >= 3 ? 'good' : 'warn', items: structureFb });
+
+        // --- EMAIL CONTENT ---
+        const vocabFb = [];
+        let vocabScore = 0;
+        const emailKeywords = ['candidature', 'compétence', 'expérience', 'formation', 'motivation', 'poste', 'profil', 'qualité', 'atout', 'contribuer', 'intégrer', 'équipe'];
+        const found = emailKeywords.filter(w => lower.includes(w));
+        vocabScore = Math.min(5, Math.round(found.length * 0.8));
+        if (found.length >= 4) {
+          vocabFb.push('✓ Vocabulaire professionnel adapté (' + found.join(', ') + ')');
+        } else {
+          vocabFb.push('⚠ Intégrez plus de vocabulaire professionnel : « candidature », « compétences », « contribuer », « intégrer votre équipe »');
+        }
+        scores.vocabulary = vocabScore;
+        feedback.push({ label: 'Contenu & Vocabulaire', type: vocabScore >= 3 ? 'good' : 'warn', items: vocabFb });
+      }
+
+      // --- GRAMMAR (both types) ---
+      const grammarFb = [];
+      let grammarScore = 3; // Start at 3, adjust
+
+      // Check for B2 grammar features
+      const b2features = [];
+      if (/\b(bien que|quoique|afin que|pour que|avant que|à moins que|il (est|faut|semble) (essentiel|nécessaire|important|possible) que)\b/i.test(text)) b2features.push('subjonctif');
+      if (/\b(si j[e']|s'il|si nous|si les|je serais|j'aurais|il serait|nous pourrions|on pourrait)\b/i.test(text)) b2features.push('conditionnel');
+      if (/\ben\s+\w+ant\b/i.test(text)) b2features.push('gérondif');
+      if (/\b(dont|auquel|duquel|à laquelle|desquels)\b/i.test(text)) b2features.push('pronoms relatifs composés');
+      if (/\b(ce qui|ce que|ce dont)\b/i.test(text)) b2features.push('ce qui/ce que/ce dont');
+      if (/\bne\s+(?:\w+\s+){1,4}(ni|guère|aucun|jamais|plus\b(?!\s+de\s+\d)|que)\b/i.test(text)) b2features.push('négation complexe');
+
+      if (b2features.length >= 3) {
+        grammarScore = 5;
+        grammarFb.push('✓ Excellent usage de structures B2 : ' + b2features.join(', '));
+      } else if (b2features.length >= 1) {
+        grammarScore = 4;
+        grammarFb.push('✓ Structures B2 détectées : ' + b2features.join(', '));
+        grammarFb.push('💡 Pour aller plus loin, essayez d\'intégrer : le subjonctif (bien que...), le gérondif (en + -ant), les pronoms relatifs composés (dont, auquel)');
+      } else {
+        grammarScore = 2;
+        grammarFb.push('⚠ Peu de structures grammaticales B2 détectées. Essayez d\'utiliser :');
+        grammarFb.push('  • Le subjonctif : « bien que ce soit... », « il est nécessaire que... »');
+        grammarFb.push('  • Le conditionnel : « il serait préférable de... »');
+        grammarFb.push('  • Le gérondif : « en développant... »');
+        grammarFb.push('  • Les pronoms relatifs : « ...dont les résultats... »');
+      }
+
+      // Check sentence variety
+      if (avgSentenceLen > 5 && avgSentenceLen < 25) {
+        grammarFb.push('✓ Good sentence length variety (avg: ' + avgSentenceLen + ' words/sentence)');
+      } else if (avgSentenceLen >= 25) {
+        grammarFb.push('⚠ Sentences a bit long (avg: ' + avgSentenceLen + ' words). Try to vary length.');
+        grammarScore = Math.max(1, grammarScore - 1);
+      }
+
+      scores.grammar = grammarScore;
+      feedback.push({ label: 'Grammaire B2', type: grammarScore >= 3 ? 'good' : 'warn', items: grammarFb });
+
+      // --- WORD COUNT ---
+      const wcFb = [];
+      const target = ex.wordTarget;
+      if (wordCount >= target - 20 && wordCount <= target + 30) {
+        wcFb.push('✓ Good word count (' + wordCount + ' / ' + target + ')');
+      } else if (wordCount < target - 20) {
+        wcFb.push('⚠ Text too short (' + wordCount + ' words, target: ~' + target + '). Develop your arguments more.');
+      } else {
+        wcFb.push('⚠ Text a bit long (' + wordCount + ' words, target: ~' + target + '). Try to be more concise.');
+      }
+      feedback.push({ label: 'Longueur', type: (wordCount >= target - 20 && wordCount <= target + 30) ? 'good' : 'info', items: wcFb });
+
+      // --- OVERALL SCORE ---
+      scores.overall = Math.round((scores.structure + scores.vocabulary + scores.grammar) / 3 * 20) / 10;
+
+      // Render feedback
+      const fbEl = $('writing-feedback');
+      fbEl.innerHTML = `
+        <div class="writing-feedback-title">Text Analysis</div>
+        <div class="writing-score-bar">
+          <div class="writing-score-item">
+            <div class="writing-score-value">${scores.structure}/5</div>
+            <div class="writing-score-label">Structure</div>
+          </div>
+          <div class="writing-score-item">
+            <div class="writing-score-value">${scores.vocabulary}/5</div>
+            <div class="writing-score-label">Vocabulaire</div>
+          </div>
+          <div class="writing-score-item">
+            <div class="writing-score-value">${scores.grammar}/5</div>
+            <div class="writing-score-label">Grammaire</div>
+          </div>
+          <div class="writing-score-item">
+            <div class="writing-score-value" style="color:${scores.overall >= 4 ? 'var(--green)' : scores.overall >= 2.5 ? 'var(--orange)' : 'var(--red)'}">${scores.overall}/5</div>
+            <div class="writing-score-label">Global</div>
+          </div>
+        </div>
+        ${feedback.map(f => `
+          <div class="writing-fb-section">
+            <div class="writing-fb-label ${f.type}">${f.label}</div>
+            <ul class="writing-fb-list">
+              ${f.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
+      `;
+      fbEl.classList.add('show');
+      fbEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // === EXAM MODE ===
+    let currentExam = null;
+    let examSection = 0;
+    let examAnswers = {};
+    let examTimerInterval = null;
+    let examTimeLeft = 0;
+    let examSubmitted = false;
+
+    function examInit() {
+      if (typeof EXAM_DATA === 'undefined') return;
+      examShowSelect();
+    }
+
+    function examShowSelect() {
+      if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+      currentExam = null;
+      examSubmitted = false;
+      const content = $('exam-content');
+      content.innerHTML = `
+        <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;">Practice Exams</h2>
+        <p style="font-size:0.84rem;color:var(--text-dim);margin-bottom:20px;">Full written exam simulations following the B2 format: reading comprehension, terminology & grammar, essay writing, and professional email.</p>
+        ${EXAM_DATA.map(ex => `
+          <div class="exam-select-card" data-eid="${ex.id}">
+            <h3>${ex.title}</h3>
+            <div class="exam-meta">${ex.sections.length} sections · ${ex.duration} minutes · ${ex.sections.reduce((s,sec) => s + sec.points, 0)} points</div>
+          </div>
+        `).join('')}
+      `;
+      content.querySelectorAll('.exam-select-card').forEach(card => {
+        card.onclick = () => examStart(card.dataset.eid);
+      });
+    }
+
+    function examStart(id) {
+      currentExam = EXAM_DATA.find(e => e.id === id);
+      if (!currentExam) return;
+      examSection = 0;
+      examAnswers = {};
+      examSubmitted = false;
+      examTimeLeft = currentExam.duration * 60;
+
+      // Init answer storage
+      currentExam.sections.forEach((sec, si) => {
+        examAnswers[si] = {};
+      });
+
+      examRender();
+      // Start timer
+      examTimerInterval = setInterval(() => {
+        examTimeLeft--;
+        const timerEl = $('exam-timer');
+        if (timerEl) {
+          const m = Math.floor(examTimeLeft / 60);
+          const s = examTimeLeft % 60;
+          timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+          timerEl.className = 'exam-timer';
+          if (examTimeLeft <= 300) timerEl.classList.add('danger');
+          else if (examTimeLeft <= 600) timerEl.classList.add('warning');
+        }
+        if (examTimeLeft <= 0) {
+          clearInterval(examTimerInterval);
+          examTimerInterval = null;
+        }
+      }, 1000);
+    }
+
+    function examRender() {
+      const ex = currentExam;
+      const sec = ex.sections[examSection];
+      const content = $('exam-content');
+      const m = Math.floor(examTimeLeft / 60);
+      const s = examTimeLeft % 60;
+
+      let html = `
+        <div class="exam-header-bar">
+          <div class="exam-header-title">${ex.title}</div>
+          <div class="exam-timer" id="exam-timer">${m}:${s < 10 ? '0' : ''}${s}</div>
+        </div>
+        <div class="exam-nav" id="exam-nav">
+          ${ex.sections.map((s, i) => `<button class="${i === examSection ? 'active' : ''}" data-si="${i}">${s.title.replace('II. Connaissances de terminologie et grammaire', 'II. Terminologie & Grammaire')}</button>`).join('')}
+          <button data-si="submit" style="color:var(--green);font-weight:600;">Submit</button>
+        </div>
+      `;
+
+      html += `<div class="exam-section-card">`;
+      html += `<div class="exam-section-title">${sec.title}</div>`;
+      html += `<div class="exam-section-pts">${sec.points} points</div>`;
+
+      // Reading text if present
+      if (sec.text) {
+        html += `<div class="exam-text-block">
+          <div class="exam-text-title">${sec.text.title}</div>
+          <div class="exam-text-source">${sec.text.source}</div>
+          <div class="exam-text-body">${sec.text.content}</div>
+        </div>`;
+      }
+
+      // Exercises
+      if (sec.exercises) {
+        sec.exercises.forEach((ex, ei) => {
+          html += examRenderExercise(ex, ei);
+        });
+      }
+
+      // Writing sections (III & IV)
+      if (sec.exercise) {
+        html += examRenderWriting(sec.exercise, examSection);
+      }
+
+      html += `</div>`;
+
+      // Navigation
+      html += `<div class="speaking-actions" style="margin-top:20px;">`;
+      if (examSection > 0) html += `<button class="btn" id="exam-prev">← Previous</button>`;
+      if (examSection < ex.sections.length - 1) html += `<button class="btn primary" id="exam-next">Next →</button>`;
+      else html += `<button class="btn primary" id="exam-submit-btn">Submit Exam</button>`;
+      html += `</div>`;
+
+      content.innerHTML = html;
+
+      // Wire nav
+      content.querySelectorAll('#exam-nav button').forEach(btn => {
+        btn.onclick = () => {
+          if (btn.dataset.si === 'submit') { examSubmit(); return; }
+          examSaveCurrentAnswers();
+          examSection = parseInt(btn.dataset.si);
+          examRender();
+        };
+      });
+      if ($('exam-prev')) $('exam-prev').onclick = () => { examSaveCurrentAnswers(); examSection--; examRender(); };
+      if ($('exam-next')) $('exam-next').onclick = () => { examSaveCurrentAnswers(); examSection++; examRender(); };
+      if ($('exam-submit-btn')) $('exam-submit-btn').onclick = () => examSubmit();
+
+      // Restore saved answers
+      examRestoreAnswers();
+      // Wire up interactive elements
+      examWireExercises();
+    }
+
+    function examRenderExercise(ex, ei) {
+      let h = `<div class="exam-exercise" data-ei="${ei}">`;
+      h += `<div class="exam-ex-title">${ex.title} <span class="exam-ex-pts">(${ex.points} pts)</span></div>`;
+
+      if (ex.type === 'vrai-faux') {
+        ex.items.forEach((item, ii) => {
+          h += `<div class="exam-vf-item" data-ii="${ii}">
+            <div class="exam-vf-statement">${ii+1}. ${item.statement}</div>
+            <div class="exam-vf-options">
+              <button class="exam-vf-btn" data-val="vrai">V</button>
+              <button class="exam-vf-btn" data-val="faux">F</button>
+              <button class="exam-vf-btn" data-val="nm">NM</button>
+            </div>
+          </div>`;
+        });
+      } else if (ex.type === 'synonymes') {
+        ex.items.forEach((item, ii) => {
+          h += `<div class="exam-mc-item" data-ii="${ii}">
+            <div class="exam-mc-q">${ii+1}. <strong>${item.word}</strong></div>
+            <div class="exam-mc-opts">
+              ${item.options.map((o, oi) => `<div class="exam-mc-opt" data-oi="${oi}">${o}</div>`).join('')}
+            </div>
+          </div>`;
+        });
+      } else if (ex.type === 'mc') {
+        ex.items.forEach((item, ii) => {
+          h += `<div class="exam-mc-item" data-ii="${ii}">
+            <div class="exam-mc-q">${ii+1}. ${item.question}</div>
+            <div class="exam-mc-opts">
+              ${item.options.map((o, oi) => `<div class="exam-mc-opt" data-oi="${oi}">${o}</div>`).join('')}
+            </div>
+          </div>`;
+        });
+      } else if (ex.type === 'open') {
+        ex.items.forEach((item, ii) => {
+          h += `<div class="exam-open-item" data-ii="${ii}">
+            <div class="exam-open-q">${ii+1}. ${item.question}</div>
+            <textarea class="exam-open-textarea" data-key="open-${ei}-${ii}" placeholder="Answer in 2-3 sentences..."></textarea>
+            <div class="exam-open-guideline" data-key="guide-${ei}-${ii}">${item.guideline}</div>
+          </div>`;
+        });
+      } else if (ex.type === 'definition' || ex.type === 'fill-terminology') {
+        ex.items.forEach((item, ii) => {
+          const q = ex.type === 'definition' ? `<strong>${item.term}</strong>, c'est :` : item.sentence;
+          h += `<div class="exam-mc-item" data-ii="${ii}">
+            <div class="exam-mc-q">${ii+1}. ${q}</div>
+            <div class="exam-mc-opts">
+              ${item.options.map((o, oi) => `<div class="exam-mc-opt" data-oi="${oi}">${o}</div>`).join('')}
+            </div>
+          </div>`;
+        });
+      } else if (ex.type === 'cloze') {
+        h += `<div class="exam-cloze-instruction">${ex.instruction}</div>`;
+        h += `<div class="exam-cloze-words" id="cloze-words-${ei}">`;
+        ex.words.forEach(w => { h += `<span class="exam-cloze-word">${w}</span>`; });
+        h += `</div>`;
+        // Replace ____N____ with dropdowns
+        let textHtml = ex.text;
+        for (let i = 1; i <= ex.answers.length; i++) {
+          const opts = ex.words.map(w => `<option value="${w}">${w}</option>`).join('');
+          textHtml = textHtml.replace(`____${i}____`, `<select class="exam-cloze-select" data-ci="${i-1}"><option value="">— ${i} —</option>${opts}</select>`);
+        }
+        h += `<div class="exam-cloze-text">${textHtml}</div>`;
+      } else if (ex.type === 'conjugation') {
+        if (ex.intro) h += `<div style="font-size:0.84rem;font-style:italic;color:var(--text-dim);margin-bottom:12px;">${ex.intro}</div>`;
+        ex.items.forEach((item, ii) => {
+          h += `<div class="exam-conj-item" data-ii="${ii}">
+            <span>${ii+1}. ${item.before}</span>
+            <input class="exam-conj-input" data-key="conj-${ei}-${ii}" placeholder="${item.verb}" autocomplete="off" autocorrect="off" spellcheck="false">
+            <span>${item.after}</span>
+            <span class="exam-conj-tense">(${item.tense})</span>
+            <span class="exam-conj-answer" data-key="conj-ans-${ei}-${ii}">→ ${item.answer}</span>
+          </div>`;
+        });
+      }
+
+      h += `</div>`;
+      return h;
+    }
+
+    function examRenderWriting(exercise, si) {
+      let h = `<div class="exam-writing-area">`;
+      h += `<div style="font-size:0.88rem;font-weight:500;margin-bottom:8px;">${exercise.prompt}</div>`;
+      h += `<div style="font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-bottom:12px;">${exercise.instruction}</div>`;
+
+      if (exercise.jobAd) {
+        const ja = exercise.jobAd;
+        h += `<div class="exam-job-ad">
+          <h4>${ja.position} — ${ja.company}</h4>
+          <div class="jf"><strong>Location:</strong> ${ja.location}</div>
+          <div class="jf"><strong>Mission:</strong> ${ja.mission}</div>
+          <div class="jf"><strong>Profile:</strong> ${ja.profile}</div>
+          <div class="jf"><strong>Languages:</strong> ${ja.languages}</div>
+          <div class="jf"><strong>Contact:</strong> ${ja.contact}</div>
+        </div>`;
+      }
+
+      const placeholder = exercise.type === 'email' ? 'Objet : ...\n\nMadame / Monsieur,\n\n...' : 'Commencez à écrire ici...';
+      h += `<textarea class="exam-writing-textarea" id="exam-writing-${si}" placeholder="${placeholder}"></textarea>`;
+      h += `<div class="exam-wc" id="exam-wc-${si}">0 / ${exercise.wordTarget} words</div>`;
+      h += `</div>`;
+      return h;
+    }
+
+    function examWireExercises() {
+      // Vrai/Faux buttons
+      document.querySelectorAll('.exam-vf-btn').forEach(btn => {
+        btn.onclick = () => {
+          const row = btn.closest('.exam-vf-item');
+          row.querySelectorAll('.exam-vf-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        };
+      });
+      // MC/synonym/definition options
+      document.querySelectorAll('.exam-mc-opt').forEach(opt => {
+        opt.onclick = () => {
+          const item = opt.closest('.exam-mc-item');
+          if (item.classList.contains('answered')) return;
+          item.querySelectorAll('.exam-mc-opt').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        };
+      });
+      // Cloze dropdowns — mark used words in word bank
+      document.querySelectorAll('.exam-cloze-select').forEach(sel => {
+        sel.onchange = () => {
+          const exercise = sel.closest('.exam-exercise');
+          if (!exercise) return;
+          const ei = exercise.dataset.ei;
+          const bank = $('cloze-words-' + ei);
+          if (!bank) return;
+          const usedValues = new Set();
+          exercise.querySelectorAll('.exam-cloze-select').forEach(s => { if (s.value) usedValues.add(s.value); });
+          bank.querySelectorAll('.exam-cloze-word').forEach(w => {
+            w.classList.toggle('used', usedValues.has(w.textContent));
+          });
+        };
+      });
+      // Writing textareas word count
+      currentExam.sections.forEach((sec, si) => {
+        if (sec.exercise) {
+          const ta = $('exam-writing-' + si);
+          const wc = $('exam-wc-' + si);
+          if (ta && wc) {
+            ta.oninput = () => {
+              const words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+              const target = sec.exercise.wordTarget;
+              wc.textContent = words + ' / ' + target + ' words';
+              wc.className = 'exam-wc';
+              if (words >= target - 20 && words <= target + 30) wc.classList.add('good');
+              else if (words > target + 30) wc.classList.add('over');
+            };
+          }
+        }
+      });
+    }
+
+    function examSaveCurrentAnswers() {
+      if (!currentExam) return;
+      const si = examSection;
+      const sec = currentExam.sections[si];
+      const answers = examAnswers[si];
+
+      if (sec.exercises) {
+        sec.exercises.forEach((ex, ei) => {
+          if (ex.type === 'vrai-faux') {
+            answers['vf-' + ei] = {};
+            document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-vf-item`).forEach((row, ii) => {
+              const sel = row.querySelector('.exam-vf-btn.selected');
+              if (sel) answers['vf-' + ei][ii] = sel.dataset.val;
+            });
+          } else if (['synonymes', 'mc', 'definition', 'fill-terminology'].includes(ex.type)) {
+            answers['mc-' + ei] = {};
+            document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-mc-item`).forEach((item, ii) => {
+              const sel = item.querySelector('.exam-mc-opt.selected');
+              if (sel) answers['mc-' + ei][ii] = parseInt(sel.dataset.oi);
+            });
+          } else if (ex.type === 'cloze') {
+            answers['cloze-' + ei] = {};
+            document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-cloze-select`).forEach(sel => {
+              answers['cloze-' + ei][sel.dataset.ci] = sel.value;
+            });
+          } else if (ex.type === 'conjugation') {
+            answers['conj-' + ei] = {};
+            document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-conj-input`).forEach((inp, ii) => {
+              answers['conj-' + ei][ii] = inp.value;
+            });
+          } else if (ex.type === 'open') {
+            answers['open-' + ei] = {};
+            document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-open-textarea`).forEach((ta, ii) => {
+              answers['open-' + ei][ii] = ta.value;
+            });
+          }
+        });
+      }
+      if (sec.exercise) {
+        const ta = $('exam-writing-' + si);
+        if (ta) answers.writing = ta.value;
+      }
+    }
+
+    function examRestoreAnswers() {
+      const si = examSection;
+      const sec = currentExam.sections[si];
+      const answers = examAnswers[si];
+
+      if (sec.exercises) {
+        sec.exercises.forEach((ex, ei) => {
+          if (ex.type === 'vrai-faux' && answers['vf-' + ei]) {
+            Object.entries(answers['vf-' + ei]).forEach(([ii, val]) => {
+              const row = document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-vf-item`)[ii];
+              if (row) { const btn = row.querySelector(`.exam-vf-btn[data-val="${val}"]`); if (btn) btn.classList.add('selected'); }
+            });
+          } else if (['synonymes', 'mc', 'definition', 'fill-terminology'].includes(ex.type) && answers['mc-' + ei]) {
+            Object.entries(answers['mc-' + ei]).forEach(([ii, oi]) => {
+              const item = document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-mc-item`)[ii];
+              if (item) { const opt = item.querySelector(`.exam-mc-opt[data-oi="${oi}"]`); if (opt) opt.classList.add('selected'); }
+            });
+          } else if (ex.type === 'cloze' && answers['cloze-' + ei]) {
+            Object.entries(answers['cloze-' + ei]).forEach(([ci, val]) => {
+              const sel = document.querySelector(`.exam-exercise[data-ei="${ei}"] .exam-cloze-select[data-ci="${ci}"]`);
+              if (sel) sel.value = val;
+            });
+          } else if (ex.type === 'conjugation' && answers['conj-' + ei]) {
+            Object.entries(answers['conj-' + ei]).forEach(([ii, val]) => {
+              const inp = document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-conj-input`)[ii];
+              if (inp) inp.value = val;
+            });
+          } else if (ex.type === 'open' && answers['open-' + ei]) {
+            Object.entries(answers['open-' + ei]).forEach(([ii, val]) => {
+              const ta = document.querySelectorAll(`.exam-exercise[data-ei="${ei}"] .exam-open-textarea`)[ii];
+              if (ta) ta.value = val;
+            });
+          }
+        });
+      }
+      if (sec.exercise && answers.writing) {
+        const ta = $('exam-writing-' + si);
+        if (ta) { ta.value = answers.writing; ta.dispatchEvent(new Event('input')); }
+      }
+    }
+
+    function examSubmit() {
+      examSaveCurrentAnswers();
+      if (!confirm('Submit your exam? Your answers will be graded.')) return;
+      if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+      examSubmitted = true;
+
+      let totalScore = 0;
+      let totalPossible = 0;
+      const sectionScores = [];
+
+      currentExam.sections.forEach((sec, si) => {
+        let secScore = 0;
+        const answers = examAnswers[si];
+
+        if (sec.exercises) {
+          sec.exercises.forEach((ex, ei) => {
+            if (ex.type === 'vrai-faux') {
+              const a = answers['vf-' + ei] || {};
+              const ptsEach = ex.points / ex.items.length;
+              ex.items.forEach((item, ii) => {
+                if (a[ii] === item.answer) secScore += ptsEach;
+              });
+            } else if (['synonymes', 'mc', 'definition', 'fill-terminology'].includes(ex.type)) {
+              const a = answers['mc-' + ei] || {};
+              const ptsEach = ex.points / ex.items.length;
+              ex.items.forEach((item, ii) => {
+                if (a[ii] === item.correct) secScore += ptsEach;
+              });
+            } else if (ex.type === 'cloze') {
+              const a = answers['cloze-' + ei] || {};
+              const ptsEach = ex.points / ex.answers.length;
+              ex.answers.forEach((ans, ci) => {
+                if ((a[ci] || '').toLowerCase().trim() === ans.toLowerCase()) secScore += ptsEach;
+              });
+            } else if (ex.type === 'conjugation') {
+              const a = answers['conj-' + ei] || {};
+              const ptsEach = ex.points / ex.items.length;
+              ex.items.forEach((item, ii) => {
+                const given = (a[ii] || '').trim().toLowerCase().replace(/['ʼ']/g, "'");
+                const correct = item.answer.toLowerCase().replace(/['ʼ']/g, "'");
+                if (given === correct) secScore += ptsEach;
+              });
+            }
+            // open questions and writing are not auto-graded
+          });
+        }
+
+        secScore = Math.round(secScore * 10) / 10;
+        const autoGradable = sec.exercises ? sec.exercises.filter(e => e.type !== 'open').reduce((s, e) => s + e.points, 0) : 0;
+        totalScore += secScore;
+        totalPossible += autoGradable;
+        sectionScores.push({ title: sec.title, score: secScore, possible: sec.points, autoGradable });
+      });
+
+      // Show results + corrections
+      examShowResults(totalScore, totalPossible, sectionScores);
+    }
+
+    function examShowResults(totalScore, totalPossible, sectionScores) {
+      const totalPts = currentExam.sections.reduce((s, sec) => s + sec.points, 0);
+      const pct = totalPossible > 0 ? Math.round(totalScore / totalPossible * 100) : 0;
+      const pass = pct >= 60;
+
+      let html = `
+        <div class="exam-results-card">
+          <div class="exam-results-title">${currentExam.title}</div>
+          <div class="exam-results-score ${pass ? 'pass' : 'fail'}">${pct}%</div>
+          <div class="exam-results-sub">${Math.round(totalScore)} / ${totalPossible} auto-graded points (60% needed to pass)</div>
+          <div class="exam-results-sections">
+            ${sectionScores.map(s => `
+              <div class="exam-results-row">
+                <span>${s.title}</span>
+                <span><strong>${s.score}</strong> / ${s.autoGradable} pts ${s.possible !== s.autoGradable ? '<span style="font-size:0.72rem;color:var(--text-dim);">(+' + (s.possible - s.autoGradable) + ' manual)</span>' : ''}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      // Show corrections for each section
+      currentExam.sections.forEach((sec, si) => {
+        html += `<div class="exam-section-card"><div class="exam-section-title">${sec.title} — Corrections</div>`;
+        const answers = examAnswers[si];
+
+        if (sec.exercises) {
+          sec.exercises.forEach((ex, ei) => {
+            html += `<div class="exam-exercise"><div class="exam-ex-title">${ex.title}</div>`;
+
+            if (ex.type === 'vrai-faux') {
+              const a = answers['vf-' + ei] || {};
+              ex.items.forEach((item, ii) => {
+                const given = a[ii] || '';
+                const correct = given === item.answer;
+                html += `<div class="exam-vf-item">
+                  <div class="exam-vf-statement">${ii+1}. ${item.statement}</div>
+                  <div class="exam-vf-options">
+                    ${['vrai','faux','nm'].map(v => {
+                      let cls = 'exam-vf-btn';
+                      if (v === item.answer) cls += ' correct';
+                      if (v === given && !correct) cls += ' wrong';
+                      if (v === given && correct) cls += ' correct';
+                      return `<span class="${cls}">${v === 'vrai' ? 'V' : v === 'faux' ? 'F' : 'NM'}</span>`;
+                    }).join('')}
+                  </div>
+                </div>`;
+              });
+            } else if (['synonymes', 'mc', 'definition', 'fill-terminology'].includes(ex.type)) {
+              const a = answers['mc-' + ei] || {};
+              ex.items.forEach((item, ii) => {
+                const given = a[ii];
+                const correctIdx = item.correct;
+                const opts = item.options || [];
+                const qText = ex.type === 'definition' ? `<strong>${item.term}</strong>` : (ex.type === 'fill-terminology' ? item.sentence : (item.word ? `<strong>${item.word}</strong>` : item.question));
+                html += `<div class="exam-mc-item"><div class="exam-mc-q">${ii+1}. ${qText}</div><div class="exam-mc-opts">`;
+                opts.forEach((o, oi) => {
+                  let cls = 'exam-mc-opt';
+                  if (oi === correctIdx) cls += ' correct';
+                  if (oi === given && given !== correctIdx) cls += ' wrong';
+                  html += `<div class="${cls}" style="cursor:default;">${o}</div>`;
+                });
+                html += `</div></div>`;
+              });
+            } else if (ex.type === 'cloze') {
+              const a = answers['cloze-' + ei] || {};
+              html += `<div style="font-size:0.84rem;line-height:2;">`;
+              ex.answers.forEach((ans, ci) => {
+                const given = (a[ci] || '').trim();
+                const correct = given.toLowerCase() === ans.toLowerCase();
+                html += `<span style="margin-right:8px;">${ci+1}. <span style="font-weight:600;color:${correct ? 'var(--green)' : 'var(--red)'}">${given || '—'}</span> ${!correct ? '<span style="color:var(--green);font-size:0.78rem;">→ ' + ans + '</span>' : '✓'}</span><br>`;
+              });
+              html += `</div>`;
+            } else if (ex.type === 'conjugation') {
+              const a = answers['conj-' + ei] || {};
+              ex.items.forEach((item, ii) => {
+                const given = (a[ii] || '').trim();
+                const correct = given.toLowerCase().replace(/['ʼ']/g, "'") === item.answer.toLowerCase().replace(/['ʼ']/g, "'");
+                html += `<div style="font-size:0.84rem;margin-bottom:6px;">
+                  ${ii+1}. ${item.before} <span style="font-weight:600;color:${correct ? 'var(--green)' : 'var(--red)'}">${given || '—'}</span> ${item.after}
+                  ${!correct ? '<span style="color:var(--green);font-size:0.78rem;">→ ' + item.answer + '</span>' : '✓'}
+                  <span style="font-size:0.72rem;color:var(--text-dim);font-style:italic;">(${item.tense})</span>
+                </div>`;
+              });
+            } else if (ex.type === 'open') {
+              const a = answers['open-' + ei] || {};
+              ex.items.forEach((item, ii) => {
+                html += `<div style="margin-bottom:12px;">
+                  <div style="font-size:0.84rem;font-weight:500;margin-bottom:4px;">${ii+1}. ${item.question}</div>
+                  <div style="font-size:0.82rem;padding:8px 12px;background:var(--bg);border-radius:6px;margin-bottom:4px;">${a[ii] || '<em style="color:var(--text-dim);">No answer</em>'}</div>
+                  <div style="font-size:0.78rem;color:var(--green);padding:6px 10px;background:var(--green-dim);border-radius:6px;">Guideline: ${item.guideline}</div>
+                </div>`;
+              });
+            }
+            html += `</div>`;
+          });
+        }
+
+        if (sec.exercise) {
+          const text = answers.writing || '';
+          const wc = text.trim() ? text.trim().split(/\s+/).length : 0;
+          html += `<div class="exam-exercise">
+            <div class="exam-ex-title">${sec.exercise.type === 'email' ? 'E-mail' : 'Essay'} (${wc} words / target: ${sec.exercise.wordTarget})</div>
+            <div style="font-size:0.84rem;padding:12px;background:var(--bg);border-radius:8px;white-space:pre-line;line-height:1.7;">${text || '<em style="color:var(--text-dim);">No answer</em>'}</div>
+            <div style="font-size:0.78rem;color:var(--text-dim);margin-top:8px;font-style:italic;">Writing sections are self-assessed. Review your text for structure, vocabulary, and grammar.</div>
+          </div>`;
+        }
+
+        html += `</div>`;
+      });
+
+      html += `<div class="speaking-actions" style="margin-top:20px;">
+        <button class="btn primary" id="exam-back-select">Back to Exam List</button>
+      </div>`;
+
+      $('exam-content').innerHTML = html;
+      $('exam-back-select').onclick = () => examShowSelect();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // === SPEAKING MODE ===
+    let speakingState = 'select';
+    let speakingTimerInterval = null;
+    let speakingTimeLeft = 0;
+    let speakingTimeElapsed = 0;
+    let speakingRecognition = null;
+    let speakingTranscript = '';
+    let speakingInterimTranscript = '';
+    let currentSpeakingPrompt = null;
+    let speakingStartTime = null;
+    const hasSpeechRecognition = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+    function speakingFormatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function speakingInit() {
+      if (typeof SPEAKING_DATA === 'undefined') return;
+      speakingRenderSelect();
+    }
+
+    function speakingRenderSelect() {
+      speakingState = 'select';
+      const content = $('speaking-content');
+      const prompts = SPEAKING_DATA.prompts;
+
+      let browserWarn = '';
+      if (!hasSpeechRecognition) {
+        browserWarn = '<div class="speaking-browser-warn">⚠ Speech recognition is not supported in your browser. The timer and preparation features will still work, but your speech won\'t be transcribed. For full functionality, use Chrome or Edge.</div>';
+      }
+
+      content.innerHTML = `
+        ${browserWarn}
+        <div class="speaking-select-row">
+          <select id="speaking-select">
+            ${prompts.map(p => `<option value="${p.id}">${p.title}</option>`).join('')}
+          </select>
+        </div>
+        <div id="speaking-topic-area"></div>
+      `;
+
+      $('speaking-select').onchange = () => speakingLoadTopic($('speaking-select').value);
+      speakingLoadTopic(prompts[0].id);
+    }
+
+    function speakingLoadTopic(id) {
+      const p = SPEAKING_DATA.prompts.find(x => x.id === id);
+      if (!p) return;
+      currentSpeakingPrompt = p;
+
+      const typeName = p.type === 'monologue' ? 'Monologue structuré' : p.type === 'expose' ? 'Exposé argumenté' : 'Débat';
+
+      $('speaking-topic-area').innerHTML = `
+        <div class="speaking-topic-card">
+          <span class="speaking-type-badge ${p.type}">${typeName}</span>
+          <div class="speaking-topic-text">${p.topic}</div>
+          <div class="speaking-instruction">${p.instruction}</div>
+        </div>
+
+        <div class="writing-tips-card">
+          <div class="writing-tips-header" id="speaking-tips-toggle">
+            <span class="writing-tips-title">💡 Tips & Help</span>
+            <span class="writing-tips-chevron" id="speaking-tips-chevron">▼</span>
+          </div>
+          <div class="writing-tips-body" id="speaking-tips-body">
+            ${p.tips.map(t => `
+              <div class="writing-tip">
+                <div class="writing-tip-label">${t.label}</div>
+                <div class="writing-tip-text">${t.text}</div>
+              </div>
+            `).join('')}
+            ${p.sampleOutline ? `
+              <div class="writing-tip">
+                <div class="writing-tip-label">Sample Outline</div>
+                <div class="writing-tip-text">${p.sampleOutline}</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="speaking-actions">
+          <button class="btn primary" id="speaking-start-prep">Begin Preparation (${p.prepTime / 60} min)</button>
+        </div>
+      `;
+
+      $('speaking-tips-toggle').onclick = () => {
+        $('speaking-tips-body').classList.toggle('open');
+        $('speaking-tips-chevron').classList.toggle('open');
+      };
+
+      $('speaking-start-prep').onclick = () => speakingStartPrep();
+    }
+
+    function speakingStartPrep() {
+      const p = currentSpeakingPrompt;
+      speakingState = 'prep';
+      speakingTimeLeft = p.prepTime;
+
+      $('speaking-topic-area').innerHTML = `
+        <div class="speaking-timer-card">
+          <div class="speaking-phase-label prep">PREPARATION</div>
+          <div class="speaking-timer-display" id="speaking-timer">${speakingFormatTime(speakingTimeLeft)}</div>
+          <div class="speaking-timer-sub">Use this time to organize your thoughts</div>
+        </div>
+
+        <div class="speaking-topic-card">
+          <div class="speaking-topic-reminder">${p.topic}</div>
+          <div class="writing-tips-body open" style="display:block;">
+            ${p.tips.map(t => `
+              <div class="writing-tip">
+                <div class="writing-tip-label">${t.label}</div>
+                <div class="writing-tip-text">${t.text}</div>
+              </div>
+            `).join('')}
+            ${p.sampleOutline ? `
+              <div class="writing-tip">
+                <div class="writing-tip-label">Sample Outline</div>
+                <div class="writing-tip-text">${p.sampleOutline}</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="speaking-actions">
+          <button class="btn primary" id="speaking-start-rec">Start Speaking</button>
+          <button class="btn" id="speaking-cancel-prep">Cancel</button>
+        </div>
+      `;
+
+      $('speaking-start-rec').onclick = () => speakingStartRecording();
+      $('speaking-cancel-prep').onclick = () => {
+        clearInterval(speakingTimerInterval);
+        speakingTimerInterval = null;
+        speakingRenderSelect();
+        $('speaking-select').value = p.id;
+        speakingLoadTopic(p.id);
+      };
+
+      speakingTimerInterval = setInterval(() => {
+        speakingTimeLeft--;
+        const timerEl = $('speaking-timer');
+        if (timerEl) timerEl.textContent = speakingFormatTime(Math.max(0, speakingTimeLeft));
+        if (speakingTimeLeft <= 0) {
+          clearInterval(speakingTimerInterval);
+          speakingTimerInterval = null;
+          speakingStartRecording();
+        }
+      }, 1000);
+    }
+
+    function speakingStartRecording() {
+      if (speakingState === 'speaking') return; // guard against double-start
+      if (speakingTimerInterval) { clearInterval(speakingTimerInterval); speakingTimerInterval = null; }
+      const p = currentSpeakingPrompt;
+      speakingState = 'speaking';
+      speakingTranscript = '';
+      speakingInterimTranscript = '';
+      speakingTimeElapsed = 0;
+      speakingStartTime = Date.now();
+
+      $('speaking-topic-area').innerHTML = `
+        <div class="speaking-timer-card">
+          <div class="speaking-phase-label recording"><span class="speaking-rec-dot"></span>RECORDING</div>
+          <div class="speaking-timer-display" id="speaking-timer">0:00</div>
+          <div class="speaking-timer-sub">Target: ${speakingFormatTime(p.speakMinTime)} – ${speakingFormatTime(p.speakMaxTime)}</div>
+          <div class="speaking-wc-live" id="speaking-wc-live">0 words</div>
+        </div>
+
+        <div class="speaking-topic-reminder">${p.topic}</div>
+
+        <div class="speaking-transcript-area" id="speaking-transcript">
+          <div class="speaking-transcript-empty" id="speaking-transcript-placeholder">Your speech will appear here as you speak...</div>
+          <span class="speaking-transcript-text" id="speaking-transcript-final"></span>
+          <span class="speaking-transcript-interim" id="speaking-transcript-interim"></span>
+        </div>
+
+        <div class="speaking-actions">
+          <button class="btn danger" id="speaking-stop">Stop Recording</button>
+        </div>
+      `;
+
+      $('speaking-stop').onclick = () => speakingStop();
+
+      // Start timer (count up)
+      speakingTimerInterval = setInterval(() => {
+        speakingTimeElapsed++;
+        const timerEl = $('speaking-timer');
+        if (timerEl) {
+          timerEl.textContent = speakingFormatTime(speakingTimeElapsed);
+          if (speakingTimeElapsed >= p.speakMaxTime) timerEl.style.color = 'var(--red)';
+          else if (speakingTimeElapsed >= p.speakMinTime) timerEl.style.color = 'var(--green)';
+        }
+        // Update live word count
+        const wcEl = $('speaking-wc-live');
+        if (wcEl) {
+          const wc = speakingTranscript.trim() ? speakingTranscript.trim().split(/\s+/).length : 0;
+          wcEl.textContent = wc + ' words';
+        }
+      }, 1000);
+
+      // Start speech recognition
+      if (hasSpeechRecognition) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        speakingRecognition = new SpeechRecognition();
+        speakingRecognition.lang = 'fr-FR';
+        speakingRecognition.continuous = true;
+        speakingRecognition.interimResults = true;
+        speakingRecognition.maxAlternatives = 1;
+
+        speakingRecognition.onresult = (event) => {
+          let interim = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              speakingTranscript += event.results[i][0].transcript + ' ';
+            } else {
+              interim += event.results[i][0].transcript;
+            }
+          }
+          speakingInterimTranscript = interim;
+          speakingUpdateTranscription();
+        };
+
+        speakingRecognition.onerror = (event) => {
+          if (event.error === 'no-speech' || event.error === 'aborted') return;
+          console.warn('Speech recognition error:', event.error);
+          if (event.error === 'not-allowed') {
+            const ph = $('speaking-transcript-placeholder');
+            if (ph) ph.textContent = 'Microphone access denied. Your timer is still running — speak freely and self-review afterward.';
+          }
+        };
+
+        speakingRecognition.onend = () => {
+          if (speakingState === 'speaking') {
+            try { speakingRecognition.start(); } catch(e) {}
+          }
+        };
+
+        try { speakingRecognition.start(); } catch(e) {}
+      }
+    }
+
+    function speakingUpdateTranscription() {
+      const finalEl = $('speaking-transcript-final');
+      const interimEl = $('speaking-transcript-interim');
+      const phEl = $('speaking-transcript-placeholder');
+      if (phEl && speakingTranscript.trim()) phEl.style.display = 'none';
+      if (finalEl) finalEl.textContent = speakingTranscript;
+      if (interimEl) interimEl.textContent = speakingInterimTranscript;
+      // Auto-scroll
+      const area = $('speaking-transcript');
+      if (area) area.scrollTop = area.scrollHeight;
+    }
+
+    function speakingStop() {
+      speakingState = 'review';
+      if (speakingTimerInterval) { clearInterval(speakingTimerInterval); speakingTimerInterval = null; }
+      if (speakingRecognition) { try { speakingRecognition.stop(); } catch(e) {} speakingRecognition = null; }
+      speakingShowReview();
+    }
+
+    function speakingShowReview() {
+      const p = currentSpeakingPrompt;
+      const transcript = speakingTranscript.trim();
+      const words = transcript ? transcript.split(/\s+/) : [];
+      const wordCount = words.length;
+      const totalSeconds = speakingTimeElapsed || 1;
+      const wpm = Math.round(wordCount / (totalSeconds / 60));
+      const lower = transcript.toLowerCase();
+
+      // Analyze
+      const metrics = SPEAKING_DATA.fluencyMetrics;
+      const fillerCount = metrics.fillerWords.reduce((n, w) => {
+        const regex = new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+        const matches = lower.match(regex);
+        return n + (matches ? matches.length : 0);
+      }, 0);
+      const connectorsUsed = metrics.b2Connectors.filter(c => lower.includes(c.toLowerCase()));
+      const vocabUsed = metrics.sophisticatedVocab.filter(v => lower.includes(v.toLowerCase()));
+
+      // Duration feedback
+      let durationFb = '';
+      if (totalSeconds < p.speakMinTime) {
+        durationFb = `<li>⚠ Your speech was shorter than the target (${speakingFormatTime(totalSeconds)} vs ${speakingFormatTime(p.speakMinTime)}–${speakingFormatTime(p.speakMaxTime)}). Try to develop your arguments more.</li>`;
+      } else if (totalSeconds > p.speakMaxTime + 30) {
+        durationFb = `<li>⚠ Your speech went over time. Practice being more concise while keeping your arguments structured.</li>`;
+      } else {
+        durationFb = `<li>✓ Good duration — within the target range.</li>`;
+      }
+
+      // WPM feedback
+      let wpmFb = '';
+      if (wordCount === 0) {
+        wpmFb = '<li>No transcript available. If your browser doesn\'t support speech recognition, focus on the timer and self-assess your performance.</li>';
+      } else if (wpm < 80) {
+        wpmFb = `<li>⚠ Speaking pace is slow (${wpm} wpm). A natural pace for B2 is around 100-130 wpm. Try to speak more fluidly.</li>`;
+      } else if (wpm > 160) {
+        wpmFb = `<li>⚠ Speaking pace is fast (${wpm} wpm). Slow down slightly for clarity.</li>`;
+      } else {
+        wpmFb = `<li>✓ Good speaking pace (${wpm} words per minute).</li>`;
+      }
+
+      // Filler words
+      let fillerFb = '';
+      if (fillerCount === 0) {
+        fillerFb = '<li>✓ No filler words detected — excellent fluency!</li>';
+      } else if (fillerCount <= 3) {
+        fillerFb = `<li>✓ Only ${fillerCount} filler word(s) — good control.</li>`;
+      } else {
+        fillerFb = `<li>⚠ ${fillerCount} filler words detected (euh, ben, voilà...). Try to replace hesitations with short pauses.</li>`;
+      }
+
+      // Connectors
+      let connectorFb = '';
+      if (connectorsUsed.length >= 5) {
+        connectorFb = `<li>✓ Excellent use of B2 connectors (${connectorsUsed.length}): ${connectorsUsed.slice(0, 6).join(', ')}</li>`;
+      } else if (connectorsUsed.length >= 2) {
+        connectorFb = `<li>✓ Some B2 connectors used: ${connectorsUsed.join(', ')}</li><li>💡 Try adding more: néanmoins, par ailleurs, force est de constater, il n'en demeure pas moins</li>`;
+      } else {
+        connectorFb = '<li>⚠ Few B2 connectors detected. Structure your speech with: tout d\'abord, en outre, néanmoins, en définitive</li>';
+      }
+
+      // Vocab
+      let vocabFb = '';
+      if (vocabUsed.length >= 3) {
+        vocabFb = `<li>✓ Rich vocabulary detected: ${vocabUsed.join(', ')}</li>`;
+      } else if (vocabUsed.length >= 1) {
+        vocabFb = `<li>✓ Some advanced vocabulary: ${vocabUsed.join(', ')}</li><li>💡 Enrich with: considérable, engendrer, primordial, s'avérer</li>`;
+      } else if (wordCount > 0) {
+        vocabFb = '<li>⚠ Try using more sophisticated vocabulary: indéniable, susciter, contribuer, fondamental</li>';
+      }
+
+      $('speaking-topic-area').innerHTML = `
+        <div class="speaking-timer-card">
+          <div class="speaking-phase-label review">REVIEW</div>
+          <div class="speaking-metrics-bar">
+            <div class="speaking-metric-item">
+              <div class="speaking-metric-value">${speakingFormatTime(totalSeconds)}</div>
+              <div class="speaking-metric-label">Duration</div>
+            </div>
+            <div class="speaking-metric-item">
+              <div class="speaking-metric-value">${wordCount}</div>
+              <div class="speaking-metric-label">Words</div>
+            </div>
+            <div class="speaking-metric-item">
+              <div class="speaking-metric-value">${wpm}</div>
+              <div class="speaking-metric-label">WPM</div>
+            </div>
+            <div class="speaking-metric-item">
+              <div class="speaking-metric-value">${connectorsUsed.length}</div>
+              <div class="speaking-metric-label">Connectors</div>
+            </div>
+          </div>
+
+          <div class="speaking-fb-section">
+            <div class="speaking-fb-label ${totalSeconds >= p.speakMinTime && totalSeconds <= p.speakMaxTime + 30 ? 'good' : 'warn'}">Performance</div>
+            <ul class="writing-fb-list">
+              ${durationFb}
+              ${wpmFb}
+              ${fillerFb}
+            </ul>
+          </div>
+
+          ${wordCount > 0 ? `
+          <div class="speaking-fb-section">
+            <div class="speaking-fb-label ${connectorsUsed.length >= 3 ? 'good' : 'warn'}">Language Quality</div>
+            <ul class="writing-fb-list">
+              ${connectorFb}
+              ${vocabFb}
+            </ul>
+          </div>
+          ` : ''}
+        </div>
+
+        ${transcript ? `
+          <div class="speaking-transcript-area" style="max-height:400px;">
+            <div style="font-size:0.74rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Transcript</div>
+            <div class="speaking-transcript-text">${transcript}</div>
+          </div>
+        ` : ''}
+
+        ${p.sampleOutline ? `
+          <div class="speaking-outline" id="speaking-outline">
+            <div class="speaking-outline-label">Sample Outline</div>
+            <div class="speaking-outline-text">${p.sampleOutline}</div>
+          </div>
+        ` : ''}
+
+        <div class="speaking-actions">
+          <button class="btn primary" id="speaking-retry">Try Again</button>
+          ${p.sampleOutline ? '<button class="btn" id="speaking-show-outline">Show Outline</button>' : ''}
+          <button class="btn" id="speaking-new-topic">New Topic</button>
+        </div>
+      `;
+
+      $('speaking-retry').onclick = () => {
+        speakingLoadTopic(p.id);
+      };
+      const outlineBtn = $('speaking-show-outline');
+      if (outlineBtn) {
+        outlineBtn.onclick = () => {
+          $('speaking-outline').classList.toggle('show');
+          outlineBtn.textContent = $('speaking-outline').classList.contains('show') ? 'Hide Outline' : 'Show Outline';
+        };
+      }
+      $('speaking-new-topic').onclick = () => speakingRenderSelect();
+    }
+
+    // === DARK MODE ===
+    function initDarkMode() {
+      const saved = localStorage.getItem('frenchB2_theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        $('dark-toggle').textContent = '☼';
+      }
+      $('dark-toggle').onclick = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          $('dark-toggle').textContent = '☾';
+          localStorage.setItem('frenchB2_theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          $('dark-toggle').textContent = '☼';
+          localStorage.setItem('frenchB2_theme', 'dark');
+        }
+      };
+    }
+
+    // === PROGRESS DASHBOARD ===
+    function updateProgressDashboard() {
+      // Vocab
+      const vocabTotal = typeof VOCAB_DATA !== 'undefined' ? VOCAB_DATA.length : 0;
+      const vocabDone = learned.size;
+      setProgress('vocab', vocabTotal > 0 ? Math.round(vocabDone / vocabTotal * 100) : 0);
+
+      // Grammar (all 4 sub-types)
+      const grammarTotal = typeof GRAMMAR_EXERCISES !== 'undefined' ?
+        GRAMMAR_EXERCISES.conjugation.length + GRAMMAR_EXERCISES.fillInTheBlank.length +
+        GRAMMAR_EXERCISES.multipleChoice.length + GRAMMAR_EXERCISES.transformation.length : 0;
+      const grammarDone = conjLearned.size + fibCompleted.size + mcCompleted.size + transCompleted.size;
+      setProgress('grammar', grammarTotal > 0 ? Math.round(grammarDone / grammarTotal * 100) : 0);
+
+      // Reading
+      const readingTotal = typeof READING_DATA !== 'undefined' ? READING_DATA.length : 0;
+      const readingDone = Object.keys(readingProgress).length;
+      setProgress('reading', readingTotal > 0 ? Math.round(readingDone / readingTotal * 100) : 0);
+
+      // Listening (track via localStorage)
+      const listenStore = JSON.parse(localStorage.getItem('frenchB2_listenProgress') || '{}');
+      const listenTotal = typeof LISTENING_DATA !== 'undefined' ?
+        LISTENING_DATA.dictation.length + LISTENING_DATA.vocabListening.length + LISTENING_DATA.comprehension.length : 0;
+      const listenDone = (listenStore.dictation || 0) + (listenStore.vocab || 0) + (listenStore.comprehension || 0);
+      setProgress('listening', listenTotal > 0 ? Math.min(100, Math.round(listenDone / listenTotal * 100)) : 0);
+    }
+
+    function setProgress(key, pct) {
+      const label = $('pg-' + key);
+      const bar = $('pg-' + key + '-bar');
+      if (label) label.textContent = pct + '%';
+      if (bar) bar.style.width = pct + '%';
+    }
+
+    // Track listening progress
+    function trackListenComplete(subMode) {
+      const store = JSON.parse(localStorage.getItem('frenchB2_listenProgress') || '{}');
+      const key = subMode === 'dictation' ? 'dictation' : subMode === 'vocab-listen' ? 'vocab' : 'comprehension';
+      store[key] = (store[key] || 0) + 1;
+      localStorage.setItem('frenchB2_listenProgress', JSON.stringify(store));
+      updateProgressDashboard();
+    }
+
+    // === PROGRESS TOGGLE ===
+    (function() {
+      const btn = $('progress-toggle');
+      const dash = $('progress-dashboard');
+      const saved = localStorage.getItem('frenchB2_progressOpen');
+      if (saved === 'true') { dash.style.display = ''; btn.textContent = 'Progress ▴'; }
+      btn.onclick = () => {
+        const open = dash.style.display === 'none';
+        dash.style.display = open ? '' : 'none';
+        btn.textContent = open ? 'Progress ▴' : 'Progress ▾';
+        localStorage.setItem('frenchB2_progressOpen', open);
+      };
+    })();
+
+    // === INIT ===
+    initDarkMode();
+    buildDeck();
+    updateProgressDashboard();
+
+    // === PWA SERVICE WORKER ===
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
