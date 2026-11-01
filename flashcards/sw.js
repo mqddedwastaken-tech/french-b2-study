@@ -1,8 +1,9 @@
-const CACHE_NAME = 'french-b2-v9';
+const CACHE_NAME = 'french-b2-v10';
 const ASSETS = [
   '/',
   '/index.html',
   '/vocab-data.js',
+  '/linking-data.js',
   '/grammar-data.js',
   '/grammar-exercises.js',
   '/reading-data.js',

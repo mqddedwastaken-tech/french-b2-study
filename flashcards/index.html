@@ -551,6 +551,137 @@
       border-radius: 2px;
     }
 
+    /* === VOCAB SUB-NAV === */
+    .vocab-sub-nav-wrap { display: flex; justify-content: center; padding: 20px 40px 0; }
+    .vocab-sub-nav-wrap .grammar-sub-nav { margin-bottom: 0; }
+
+    /* === SWIPE (touch) === */
+    .card-wrapper { user-select: none; -webkit-user-select: none; }
+    .card-wrapper.swipe-release { transition: transform 0.25s ease, opacity 0.25s ease; }
+    .swipe-label {
+      position: absolute;
+      top: 46px;
+      z-index: 5;
+      padding: 6px 14px;
+      border: 2px solid;
+      border-radius: 10px;
+      background: var(--surface);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .swipe-label.know { left: 18px; color: var(--green); border-color: var(--green); }
+    .swipe-label.dont-know { right: 18px; color: var(--red); border-color: var(--red); }
+    .swipe-hint {
+      text-align: center;
+      padding: 4px 16px 28px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    .touch-only { display: none; }
+    @media (hover: none) and (pointer: coarse) {
+      .card-wrapper { touch-action: pan-y; }
+      .touch-only { display: block; }
+      span.touch-only { display: inline; }
+      .no-touch { display: none !important; }
+    }
+
+    /* === VOCAB WRITE DRILL === */
+    .write-drill { padding: 24px 40px 48px; }
+    .wd-card { text-align: center; }
+    .wd-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .wd-card-top .fib-hint { margin-bottom: 0; }
+    .wd-tag {
+      font-size: 0.65rem;
+      padding: 3px 10px;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+    .wd-tag.again { color: var(--orange); }
+    .wd-prompt {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+    .wd-input { max-width: 420px; text-align: center; font-size: 1.1rem; }
+    [data-theme="dark"] .wd-input.correct { background: #1A3A2A; }
+    [data-theme="dark"] .wd-input.incorrect { background: #3A1A1A; }
+    [data-theme="dark"] .wd-input.close { background: #3A2A10; }
+    .wd-accents {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .wd-accents button {
+      min-width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .wd-accents button:hover { background: var(--surface-hover); }
+    .wd-reveal {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border-radius: 10px;
+      text-align: left;
+    }
+    .wd-reveal.show { display: block; }
+    .wd-answer { font-size: 1.05rem; font-weight: 600; }
+    .wd-speak {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0 4px;
+      color: var(--text-dim);
+    }
+    .wd-also { margin-top: 4px; font-size: 0.78rem; color: var(--text-dim); }
+    .wd-expression { margin-top: 6px; font-size: 0.85rem; font-style: italic; color: var(--text-dim); }
+    .wd-note { margin-top: 6px; font-size: 0.8rem; color: var(--orange); }
+    .wd-card .fib-actions { justify-content: center; flex-wrap: wrap; }
+    .btn.wd-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn.wd-primary:hover { background: var(--accent-dim); }
+    [data-theme="dark"] .btn.wd-primary { color: #1A1A1A; }
+    .wd-hint-line { margin-top: 14px; font-size: 0.72rem; color: var(--text-dim); }
+    .wd-footer {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+    .wd-footer strong { color: var(--text); font-weight: 600; }
+    .wd-missed { max-width: 440px; margin: 20px auto 0; text-align: left; font-size: 0.88rem; }
+    .wd-missed div { padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .wd-missed span { color: var(--text-dim); }
+    @media (max-width: 640px) {
+      .vocab-sub-nav-wrap { padding: 16px 16px 0; }
+      .write-drill { padding: 16px; }
+      .wd-prompt { font-size: 1.3rem; }
+    }
+
     /* === FILL IN THE BLANK === */
     .fib-card {
       background: var(--surface);
@@ -1632,9 +1763,17 @@
   </div>
   <div class="progress-dashboard" id="progress-dashboard" style="display:none;">
     <div class="progress-chip">Vocab <strong id="pg-vocab">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-vocab-bar" style="width:0%"></div></div></div>
+    <div class="progress-chip">Write <strong id="pg-write">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-write-bar" style="width:0%"></div></div></div>
     <div class="progress-chip">Grammar <strong id="pg-grammar">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-grammar-bar" style="width:0%"></div></div></div>
     <div class="progress-chip">Reading <strong id="pg-reading">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-reading-bar" style="width:0%"></div></div></div>
     <div class="progress-chip">Listening <strong id="pg-listening">0%</strong><div class="progress-mini-bar"><div class="progress-mini-fill" id="pg-listening-bar" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="vocab-sub-nav-wrap" id="vocab-sub-nav-wrap">
+    <div class="grammar-sub-nav" id="vocab-sub-nav">
+      <button class="active" data-vsub="cards">Flashcards</button>
+      <button data-vsub="write">Write</button>
+    </div>
   </div>
 
   <div class="header-stats">
@@ -1671,12 +1810,14 @@
   <div id="card-area">
     <div class="card-container">
       <div class="card-wrapper" id="card-wrapper">
+        <div class="swipe-label know" id="swipe-know">Know it</div>
+        <div class="swipe-label dont-know" id="swipe-dont-know">Don't know</div>
         <div class="card" id="card">
           <div class="card-face card-front">
             <div class="card-label" id="front-label">FRANÇAIS</div>
             <div class="card-category" id="front-category"></div>
             <div class="card-word" id="front-word"></div>
-            <div class="card-hint">Click or press Space to flip</div>
+            <div class="card-hint"><span class="no-touch">Click or press Space to flip</span><span class="touch-only">Tap to flip · swipe to answer</span></div>
           </div>
           <div class="card-face card-back">
             <div class="card-label" id="back-label">DEUTSCH</div>
@@ -1694,13 +1835,14 @@
       <button class="action-btn know" id="btn-know">Know it!</button>
     </div>
 
-    <div class="keyboard-hints">
+    <div class="keyboard-hints no-touch">
       <span><kbd>Space</kbd> Flip</span>
       <span><kbd>←</kbd> Don't know</span>
       <span><kbd>→</kbd> Skip / Next</span>
       <span><kbd>↑</kbd> Know it</span>
       <span><kbd>D</kbd> Direction</span>
     </div>
+    <div class="swipe-hint touch-only">← Swipe: Don't know · Swipe: Know it →</div>
   </div>
 
   <div id="empty-state" class="empty-state" style="display:none;">
@@ -1709,6 +1851,77 @@
     <button class="btn" id="btn-reset-filter">Show all cards</button>
     <br>
     <button class="btn" id="btn-reset-progress" style="margin-top:12px;">Reset all progress</button>
+  </div>
+
+  <!-- VOCAB WRITE DRILL -->
+  <div id="vocab-write-view" class="write-drill" style="display:none;">
+    <div class="practice-view">
+      <div class="practice-header">
+        <select class="btn" id="wd-category">
+          <option value="all">All words + linking words</option>
+          <option value="Mots de liaison">Mots de liaison only</option>
+          <option value="Entreprise">Entreprise</option>
+          <option value="Ressources Humaines">Ressources Humaines</option>
+          <option value="Marketing">Marketing</option>
+        </select>
+        <select class="btn" id="wd-pool">
+          <option value="unmastered">Not mastered</option>
+          <option value="all">All words</option>
+        </select>
+        <select class="btn" id="wd-size">
+          <option value="20">20 words</option>
+          <option value="50">50 words</option>
+          <option value="all">Whole set</option>
+        </select>
+        <button class="btn" id="wd-direction" title="Switch direction">DE → FR</button>
+        <div class="spacer"></div>
+        <div class="practice-score">Mastered <strong id="wd-mastered">0</strong> / <strong id="wd-set-total">0</strong></div>
+      </div>
+      <div class="practice-progress"><div class="practice-progress-fill" id="wd-progress"></div></div>
+
+      <div id="wd-card-area">
+        <div class="fib-card wd-card">
+          <div class="wd-card-top">
+            <span class="fib-hint" id="wd-label">Deutsch → Français</span>
+            <span>
+              <span class="wd-tag again" id="wd-again" style="display:none;">Again</span>
+              <span class="wd-tag" id="wd-tag"></span>
+            </span>
+          </div>
+          <div class="wd-prompt" id="wd-prompt"></div>
+          <input class="fib-input wd-input" id="wd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+          <div class="wd-accents" id="wd-accents">
+            <button type="button">é</button><button type="button">è</button><button type="button">ê</button><button type="button">ë</button><button type="button">à</button><button type="button">â</button><button type="button">ç</button><button type="button">î</button><button type="button">ï</button><button type="button">ô</button><button type="button">û</button><button type="button">ù</button><button type="button">œ</button>
+          </div>
+          <div class="fib-feedback" id="wd-feedback"></div>
+          <div class="wd-reveal" id="wd-reveal">
+            <div class="wd-answer"><span id="wd-answer"></span> <button class="wd-speak" id="wd-speak" title="Listen">🔊</button></div>
+            <div class="wd-also" id="wd-also"></div>
+            <div class="wd-expression" id="wd-expression"></div>
+            <div class="wd-note" id="wd-note"></div>
+          </div>
+          <div class="fib-actions">
+            <button class="btn wd-primary" id="wd-action">Check</button>
+            <button class="btn" id="wd-giveup">Show answer</button>
+            <button class="btn" id="wd-override" style="display:none;">I was right</button>
+          </div>
+          <div class="wd-hint-line" id="wd-hint-line">Return to check · Return on an empty field shows the answer</div>
+        </div>
+        <div class="wd-footer">
+          <span>Word <strong id="wd-index">0</strong> / <strong id="wd-total">0</strong></span>
+          <span>First try <strong id="wd-correct">0</strong></span>
+        </div>
+      </div>
+
+      <div id="wd-done" class="empty-state" style="display:none;">
+        <h2 id="wd-done-title">Session complete</h2>
+        <p id="wd-done-text"></p>
+        <div class="wd-missed" id="wd-missed"></div>
+        <button class="btn wd-primary" id="wd-new">New session</button>
+        <button class="btn" id="wd-retry-missed" style="display:none;">Practice missed words</button>
+        <div class="wd-hint-line no-touch">Press Return to start a new session</div>
+      </div>
+    </div>
   </div>
 
   <!-- GRAMMAR VIEW -->
@@ -1948,6 +2161,7 @@
   </div>
 
   <script src="vocab-data.js"></script>
+  <script src="linking-data.js"></script>
   <script src="grammar-data.js"></script>
   <script src="grammar-exercises.js"></script>
   <script src="reading-data.js"></script>
@@ -2179,7 +2393,7 @@
 
     // Keyboard shortcuts
     document.addEventListener('keydown', e => {
-      if (currentMode !== 'vocab') return;
+      if (currentMode !== 'vocab' || vocabSubMode !== 'cards') return;
       if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       switch (e.key) {
         case ' ':
@@ -2202,6 +2416,88 @@
           break;
       }
     });
+
+    // === SWIPE (touch) ===
+    // Swipe right = Know it, swipe left = Don't know. Taps still flip.
+    (function initSwipe() {
+      const w = els.cardWrapper;
+      const labelKnow = $('swipe-know');
+      const labelDont = $('swipe-dont-know');
+      const THRESHOLD = 90;
+      let startX = 0, startY = 0, dx = 0;
+      let tracking = false, dragging = false, suppressClickUntil = 0;
+
+      function setLabels(x) {
+        labelKnow.style.opacity = Math.max(0, Math.min(1, x / THRESHOLD));
+        labelDont.style.opacity = Math.max(0, Math.min(1, -x / THRESHOLD));
+      }
+      function springBack() {
+        w.classList.add('swipe-release');
+        w.style.transform = '';
+        setLabels(0);
+      }
+
+      w.addEventListener('pointerdown', e => {
+        if (e.pointerType !== 'touch' || currentDeck.length === 0) return;
+        tracking = true;
+        dragging = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        dx = 0;
+        w.classList.remove('swipe-release');
+      });
+
+      w.addEventListener('pointermove', e => {
+        if (!tracking) return;
+        dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (!dragging) {
+          // Vertical movement wins → let the page scroll
+          if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { tracking = false; return; }
+          if (Math.abs(dx) < 10) return;
+          dragging = true;
+          w.setPointerCapture(e.pointerId);
+        }
+        w.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+        setLabels(dx);
+      });
+
+      w.addEventListener('pointerup', () => {
+        if (!tracking) return;
+        tracking = false;
+        if (!dragging) return;
+        dragging = false;
+        suppressClickUntil = Date.now() + 400;
+        if (Math.abs(dx) < THRESHOLD) { springBack(); return; }
+
+        const dir = dx > 0 ? 1 : -1;
+        w.classList.add('swipe-release');
+        w.style.transform = `translateX(${dir * window.innerWidth}px) rotate(${dir * 25}deg)`;
+        w.style.opacity = '0';
+        setTimeout(() => {
+          // Snap back into place invisibly, swap the card, then fade it in
+          w.classList.remove('swipe-release');
+          w.style.transform = '';
+          setLabels(0);
+          if (dir > 0) markKnown(); else markUnknown();
+          w.offsetHeight; // force reflow
+          w.classList.add('swipe-release');
+          w.style.opacity = '';
+        }, 250);
+      });
+
+      w.addEventListener('pointercancel', () => {
+        if (!tracking) return;
+        tracking = false;
+        dragging = false;
+        springBack();
+      });
+
+      // Don't flip the card at the end of a drag
+      w.addEventListener('click', e => {
+        if (Date.now() < suppressClickUntil) e.stopImmediatePropagation();
+      }, true);
+    })();
 
     // === UTILITY ===
     function normalizeAnswer(str) {
@@ -2240,8 +2536,12 @@
     const readingView = $('reading-view');
     const listeningView = $('listening-view');
 
+    const vocabSubNav = $('vocab-sub-nav-wrap');
+    const wdView = $('vocab-write-view');
+
     let currentMode = 'vocab';
     let grammarSubMode = 'reference';
+    let vocabSubMode = 'cards'; // 'cards' or 'write'
 
     function switchMode(mode) {
       currentMode = mode;
@@ -2272,12 +2572,12 @@
       writingView.style.display = 'none';
       speakingView.style.display = 'none';
       examView.style.display = 'none';
+      vocabSubNav.style.display = 'none';
+      wdView.style.display = 'none';
 
       if (mode === 'vocab') {
-        vocabControls.style.display = '';
-        vocabProgress.style.display = '';
-        headerStats.style.display = '';
-        render();
+        vocabSubNav.style.display = '';
+        switchVocabSub(vocabSubMode);
       } else if (mode === 'grammar') {
         grammarView.style.display = 'block';
         switchGrammarSub(grammarSubMode);
@@ -4715,12 +5015,321 @@
       };
     }
 
+    // === VOCAB SUB-MODES ===
+    function switchVocabSub(sub) {
+      vocabSubMode = sub;
+      document.querySelectorAll('#vocab-sub-nav button').forEach(b => {
+        b.classList.toggle('active', b.dataset.vsub === sub);
+      });
+      const isCards = sub === 'cards';
+      vocabControls.style.display = isCards ? '' : 'none';
+      vocabProgress.style.display = isCards ? '' : 'none';
+      headerStats.style.display = isCards ? '' : 'none';
+      wdView.style.display = isCards ? 'none' : 'block';
+      if (isCards) {
+        render();
+      } else {
+        els.cardArea.style.display = 'none';
+        els.emptyState.style.display = 'none';
+        if (wdDeck.length === 0 && wdState !== 'done') wdStart();
+        else wdRender();
+      }
+    }
+
+    document.querySelectorAll('#vocab-sub-nav button').forEach(btn => {
+      btn.addEventListener('click', () => switchVocabSub(btn.dataset.vsub));
+    });
+
+    // === VOCAB WRITE DRILL ===
+    // Shows a word, you type the translation, Return checks, Return again moves on.
+    // Misses come back a few words later. Mastery is tracked separately from flashcards.
+    const WD_STORAGE = 'frenchB2_writeMastered';
+    const WD_ALL = [...VOCAB_DATA, ...(typeof LINKING_DATA !== 'undefined' ? LINKING_DATA : [])];
+    const WD_ARTICLE = /^(le |la |les |l'|un |une |des |der |die |das |ein |eine )/;
+    const WD_REQUEUE_GAP = 3; // words in between before a miss comes back
+    const wdInput = $('wd-input');
+
+    let wdMastered = (() => {
+      try { return new Set(JSON.parse(localStorage.getItem(WD_STORAGE)) || []); }
+      catch { return new Set(); }
+    })();
+    let wdDirection = 'de-fr'; // 'de-fr' = see German, type French
+    let wdDeck = [];           // items: { entry, retry, requeued }
+    let wdIndex = 0;
+    let wdState = 'ask';       // 'ask' | 'checked' | 'done'
+    let wdFirstTryCount = 0;
+    let wdMissed = [];
+    let wdLastGiveUp = false;
+
+    function wdSave() {
+      localStorage.setItem(WD_STORAGE, JSON.stringify([...wdMastered]));
+      updateProgressDashboard();
+    }
+
+    function wdNorm(str) {
+      return normalizeAnswer(str.replace(/…|\.\.\./g, ' ')).replace(/'\s+/g, "'").replace(/\s+/g, ' ').trim();
+    }
+    function wdFold(str) {
+      return stripAccents(str).replace(/œ/g, 'oe');
+    }
+
+    // All accepted spellings of a field, e.g.
+    // "le créateur, la créatrice (d'entreprise)" → le créateur, la créatrice, la créatrice d'entreprise, ...
+    // "le/la stagiaire" → le stagiaire, la stagiaire
+    function wdExpand(text) {
+      const out = new Set();
+      const add = s => { s = wdNorm(s); if (s) out.add(s); };
+      let base = text, suffix = '';
+      const m = text.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+      if (m && /^(d'|de |du |un |une |la |le |l'|les )/i.test(m[2])) { base = m[1]; suffix = m[2]; }
+      [base, ...base.split(/\s*[,;]\s*/)].forEach(part => {
+        const am = part.match(/^(\S+)\/(\S+)\s+(.+)$/);
+        const variants = am ? [am[1] + ' ' + am[3], am[2] + ' ' + am[3]] : [part];
+        variants.forEach(v => {
+          const plain = v.replace(/\s*\([^)]*\)/g, '');
+          add(plain);
+          add(v.replace(/[()]/g, ''));
+          if (suffix) add(plain + ' ' + suffix);
+        });
+      });
+      return [...out];
+    }
+
+    function wdPromptOf(entry) {
+      return wdDirection === 'de-fr' ? entry.german : entry.french;
+    }
+    function wdAnswerOf(entry) {
+      return wdDirection === 'de-fr' ? entry.french : entry.german;
+    }
+    function wdForms(entry) {
+      const forms = wdExpand(wdAnswerOf(entry));
+      if (wdDirection === 'de-fr' && entry.answers) entry.answers.forEach(a => forms.push(wdNorm(a)));
+      return forms;
+    }
+
+    function wdJudge(entry, typed) {
+      const u = wdNorm(typed);
+      const uf = wdFold(u);
+      const forms = wdForms(entry);
+      if (forms.includes(u)) return { result: 'correct', msg: 'Correct!' };
+      if (forms.some(f => wdFold(f) === uf)) return { result: 'close', msg: 'Almost! Check your accents.' };
+      // Another word with the same prompt (e.g. collaborer / coopérer = zusammenarbeiten)
+      const prompt = wdPromptOf(entry);
+      const syn = WD_ALL.find(e => e !== entry && wdPromptOf(e) === prompt && wdForms(e).some(f => wdFold(f) === uf));
+      if (syn) return { result: 'close', msg: `« ${wdAnswerOf(syn)} » means the same, so it counts. This card's word is:` };
+      // Right word, wrong or missing article
+      const artForm = forms.find(f => WD_ARTICLE.test(f) && wdFold(f.replace(WD_ARTICLE, '')) === wdFold(u.replace(WD_ARTICLE, '')));
+      if (artForm) return { result: 'wrong', msg: WD_ARTICLE.test(u) ? 'Wrong article.' : 'Article missing.' };
+      return { result: 'wrong', msg: 'Not quite.' };
+    }
+
+    function wdPool() {
+      const cat = $('wd-category').value;
+      let pool = cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+      if ($('wd-pool').value === 'unmastered') pool = pool.filter(e => !wdMastered.has(e.id));
+      return pool;
+    }
+
+    function wdStart(entries) {
+      let words = entries || shuffleArray([...wdPool()]);
+      const size = $('wd-size').value;
+      if (!entries && size !== 'all') words = words.slice(0, parseInt(size, 10));
+      wdDeck = words.map(entry => ({ entry, retry: false, requeued: null }));
+      wdIndex = 0;
+      wdFirstTryCount = 0;
+      wdMissed = [];
+      wdState = wdDeck.length ? 'ask' : 'done';
+      wdRender();
+    }
+
+    function wdUpdateHeader() {
+      const cat = $('wd-category').value;
+      const set = cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+      $('wd-mastered').textContent = set.filter(e => wdMastered.has(e.id)).length;
+      $('wd-set-total').textContent = set.length;
+      $('wd-index').textContent = Math.min(wdIndex + 1, wdDeck.length);
+      $('wd-total').textContent = wdDeck.length;
+      $('wd-correct').textContent = wdFirstTryCount;
+      const done = wdIndex + (wdState === 'checked' ? 1 : 0);
+      $('wd-progress').style.width = wdDeck.length ? `${(done / wdDeck.length) * 100}%` : '0%';
+    }
+
+    function wdRender() {
+      wdUpdateHeader();
+      if (wdState === 'done') { wdRenderDone(); return; }
+      $('wd-card-area').style.display = 'block';
+      $('wd-done').style.display = 'none';
+
+      const item = wdDeck[wdIndex];
+      const e = item.entry;
+      $('wd-label').textContent = wdDirection === 'de-fr' ? 'Deutsch → Français' : 'Français → Deutsch';
+      $('wd-tag').textContent = e.group ? `${e.group}` : e.category;
+      $('wd-again').style.display = item.retry ? '' : 'none';
+      $('wd-prompt').textContent = wdPromptOf(e);
+      wdInput.value = '';
+      wdInput.className = 'fib-input wd-input';
+      wdInput.placeholder = wdDirection === 'de-fr' ? 'Écrivez en français…' : 'Auf Deutsch…';
+      $('wd-feedback').textContent = '';
+      $('wd-feedback').className = 'fib-feedback';
+      $('wd-reveal').className = 'wd-reveal';
+      $('wd-action').textContent = 'Check';
+      $('wd-giveup').style.display = '';
+      $('wd-override').style.display = 'none';
+      $('wd-accents').style.display = wdDirection === 'de-fr' ? '' : 'none';
+      $('wd-hint-line').textContent = 'Return to check · Return on an empty field shows the answer';
+      wdInput.focus();
+    }
+
+    function wdRenderDone() {
+      $('wd-card-area').style.display = 'none';
+      $('wd-done').style.display = 'block';
+      const unique = wdDeck.filter(i => !i.retry).length;
+      if (unique === 0) {
+        $('wd-done-title').textContent = 'Nothing to practice';
+        $('wd-done-text').textContent = 'You have mastered every word in this set. Switch to "All words" to keep practicing.';
+      } else {
+        $('wd-done-title').textContent = 'Session complete';
+        $('wd-done-text').textContent = `${wdFirstTryCount} / ${unique} right on the first try.`;
+      }
+      $('wd-missed').innerHTML = wdMissed.map(e =>
+        `<div><strong>${e.french}</strong> <span>— ${e.german}</span></div>`).join('');
+      $('wd-retry-missed').style.display = wdMissed.length ? '' : 'none';
+      $('wd-retry-missed').textContent = `Practice missed words (${wdMissed.length})`;
+      $('wd-progress').style.width = unique ? '100%' : '0%';
+    }
+
+    function wdRequeue(item) {
+      const copy = { entry: item.entry, retry: true, requeued: null };
+      wdDeck.splice(Math.min(wdIndex + 1 + WD_REQUEUE_GAP, wdDeck.length), 0, copy);
+      item.requeued = copy;
+    }
+
+    function wdCheck(giveUp) {
+      if (wdState !== 'ask') return;
+      const item = wdDeck[wdIndex];
+      const e = item.entry;
+      if (!wdNorm(wdInput.value)) giveUp = true;
+      const j = giveUp ? { result: 'wrong', msg: '' } : wdJudge(e, wdInput.value);
+      const ok = j.result !== 'wrong';
+      wdState = 'checked';
+      wdLastGiveUp = giveUp;
+
+      if (!item.retry) {
+        if (ok) { wdFirstTryCount++; wdMastered.add(e.id); }
+        else { wdMastered.delete(e.id); wdMissed.push(e); }
+        wdSave();
+      }
+      if (!ok) wdRequeue(item);
+
+      wdInput.className = 'fib-input wd-input ' + (j.result === 'correct' ? 'correct' : j.result === 'close' ? 'close' : 'incorrect');
+      $('wd-feedback').className = 'fib-feedback ' + (j.result === 'correct' ? 'correct' : j.result === 'close' ? 'close' : 'incorrect');
+      $('wd-feedback').textContent = giveUp ? 'The answer is:' : ok ? j.msg : `${j.msg} It'll come back in a moment.`;
+
+      $('wd-answer').textContent = wdAnswerOf(e);
+      const also = wdDirection === 'de-fr' && e.answers
+        ? e.answers.filter(a => wdNorm(a) !== wdNorm(e.french)) : [];
+      $('wd-also').textContent = also.length ? 'Also accepted: ' + also.join(', ') : '';
+      $('wd-expression').textContent = e.expression || '';
+      $('wd-note').textContent = e.note || '';
+      $('wd-reveal').className = 'wd-reveal show';
+
+      $('wd-action').textContent = 'Next →';
+      $('wd-giveup').style.display = 'none';
+      $('wd-override').style.display = !ok && !giveUp ? '' : 'none';
+      $('wd-hint-line').textContent = 'Return for the next word';
+      wdUpdateHeader();
+      wdInput.focus();
+    }
+
+    // Typo you want to count anyway: undo the miss
+    function wdOverride() {
+      if (wdState !== 'checked') return;
+      const item = wdDeck[wdIndex];
+      if (item.requeued) {
+        wdDeck.splice(wdDeck.indexOf(item.requeued), 1);
+        item.requeued = null;
+      }
+      if (!item.retry) {
+        wdFirstTryCount++;
+        wdMastered.add(item.entry.id);
+        wdMissed = wdMissed.filter(e => e !== item.entry);
+        wdSave();
+      }
+      wdInput.className = 'fib-input wd-input correct';
+      $('wd-feedback').className = 'fib-feedback correct';
+      $('wd-feedback').textContent = 'Counted as correct.';
+      $('wd-override').style.display = 'none';
+      wdUpdateHeader();
+      wdInput.focus();
+    }
+
+    function wdNext() {
+      if (wdState !== 'checked') return;
+      wdIndex++;
+      wdState = wdIndex >= wdDeck.length ? 'done' : 'ask';
+      wdRender();
+    }
+
+    wdInput.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' || e.isComposing) return;
+      e.preventDefault();
+      if (e.repeat) return;
+      if (wdState === 'ask') wdCheck(false);
+      else if (wdState === 'checked') wdNext();
+    });
+    // Lock the field after checking but keep focus, so the mobile keyboard stays open
+    wdInput.addEventListener('beforeinput', e => { if (wdState !== 'ask') e.preventDefault(); });
+
+    // Return anywhere else in the Write view (e.g. after clicking a button, or on the done screen)
+    document.addEventListener('keydown', e => {
+      if (currentMode !== 'vocab' || vocabSubMode !== 'write' || e.key !== 'Enter' || e.repeat) return;
+      if (e.target === wdInput || ['BUTTON', 'SELECT', 'TEXTAREA', 'INPUT'].includes(e.target.tagName)) return;
+      e.preventDefault();
+      if (wdState === 'done') wdStart();
+      else if (wdState === 'checked') wdNext();
+      else wdInput.focus();
+    });
+
+    // Buttons inside the card shouldn't steal focus from the input (keeps the keyboard up on mobile)
+    document.querySelectorAll('.wd-card button').forEach(b => {
+      b.addEventListener('pointerdown', e => e.preventDefault());
+    });
+
+    $('wd-action').addEventListener('click', () => {
+      if (wdState === 'ask') wdCheck(false); else wdNext();
+    });
+    $('wd-giveup').addEventListener('click', () => wdCheck(true));
+    $('wd-override').addEventListener('click', wdOverride);
+    $('wd-speak').addEventListener('click', () => {
+      const e = wdDeck[wdIndex] && wdDeck[wdIndex].entry;
+      if (e) speakFrench(e.french.replace(/…/g, ' '));
+    });
+    $('wd-accents').querySelectorAll('button').forEach(b => {
+      b.addEventListener('click', () => {
+        if (wdState !== 'ask') return;
+        const start = wdInput.selectionStart ?? wdInput.value.length;
+        const end = wdInput.selectionEnd ?? wdInput.value.length;
+        wdInput.value = wdInput.value.slice(0, start) + b.textContent + wdInput.value.slice(end);
+        wdInput.focus();
+        wdInput.setSelectionRange(start + 1, start + 1);
+      });
+    });
+    ['wd-category', 'wd-pool', 'wd-size'].forEach(id => $(id).addEventListener('change', () => wdStart()));
+    $('wd-direction').addEventListener('click', () => {
+      wdDirection = wdDirection === 'de-fr' ? 'fr-de' : 'de-fr';
+      $('wd-direction').textContent = wdDirection === 'de-fr' ? 'DE → FR' : 'FR → DE';
+      wdStart();
+    });
+    $('wd-new').addEventListener('click', () => wdStart());
+    $('wd-retry-missed').addEventListener('click', () => wdStart(shuffleArray([...wdMissed])));
+
     // === PROGRESS DASHBOARD ===
     function updateProgressDashboard() {
       // Vocab
       const vocabTotal = typeof VOCAB_DATA !== 'undefined' ? VOCAB_DATA.length : 0;
       const vocabDone = learned.size;
       setProgress('vocab', vocabTotal > 0 ? Math.round(vocabDone / vocabTotal * 100) : 0);
+      setProgress('write', WD_ALL.length > 0 ? Math.round(wdMastered.size / WD_ALL.length * 100) : 0);
 
       // Grammar (all 4 sub-types)
       const grammarTotal = typeof GRAMMAR_EXERCISES !== 'undefined' ?
