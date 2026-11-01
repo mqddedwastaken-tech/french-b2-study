@@ -1919,6 +1919,7 @@
         <div class="wd-missed" id="wd-missed"></div>
         <button class="btn wd-primary" id="wd-new">New session</button>
         <button class="btn" id="wd-retry-missed" style="display:none;">Practice missed words</button>
+        <button class="btn" id="wd-reset" style="display:none;">Reset mastered</button>
         <div class="wd-hint-line no-touch">Press Return to start a new session</div>
       </div>
     </div>
@@ -5142,9 +5143,17 @@
       wdRender();
     }
 
-    function wdUpdateHeader() {
+    function wdCategorySet() {
       const cat = $('wd-category').value;
-      const set = cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+      return cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+    }
+    function wdCategoryLabel() {
+      const sel = $('wd-category');
+      return sel.value === 'all' ? 'all words' : sel.value;
+    }
+
+    function wdUpdateHeader() {
+      const set = wdCategorySet();
       $('wd-mastered').textContent = set.filter(e => wdMastered.has(e.id)).length;
       $('wd-set-total').textContent = set.length;
       $('wd-index').textContent = Math.min(wdIndex + 1, wdDeck.length);
@@ -5195,6 +5204,11 @@
         `<div><strong>${e.french}</strong> <span>— ${e.german}</span></div>`).join('');
       $('wd-retry-missed').style.display = wdMissed.length ? '' : 'none';
       $('wd-retry-missed').textContent = `Practice missed words (${wdMissed.length})`;
+      // Only offered once the whole selected category is mastered
+      const set = wdCategorySet();
+      const allMastered = unique === 0 && set.length > 0 && set.every(e => wdMastered.has(e.id));
+      $('wd-reset').style.display = allMastered ? '' : 'none';
+      $('wd-reset').textContent = `Reset mastered (${wdCategoryLabel()})`;
       $('wd-progress').style.width = unique ? '100%' : '0%';
     }
 
@@ -5322,6 +5336,12 @@
     });
     $('wd-new').addEventListener('click', () => wdStart());
     $('wd-retry-missed').addEventListener('click', () => wdStart(shuffleArray([...wdMissed])));
+    $('wd-reset').addEventListener('click', () => {
+      if (!confirm(`Reset mastered words for ${wdCategoryLabel()}? Flashcard progress is not affected.`)) return;
+      wdCategorySet().forEach(e => wdMastered.delete(e.id));
+      wdSave();
+      wdStart();
+    });
 
     // === PROGRESS DASHBOARD ===
     function updateProgressDashboard() {

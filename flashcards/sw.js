@@ -1,4 +1,4 @@
-const CACHE_NAME = 'french-b2-v10';
+const CACHE_NAME = 'french-b2-v11';
 const ASSETS = [
   '/',
   '/index.html',
