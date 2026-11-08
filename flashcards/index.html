@@ -676,6 +676,36 @@
     .wd-missed { max-width: 440px; margin: 20px auto 0; text-align: left; font-size: 0.88rem; }
     .wd-missed div { padding: 6px 0; border-bottom: 1px solid var(--border); }
     .wd-missed span { color: var(--text-dim); }
+    /* === IRREGULAR VERBS DRILL === */
+    .irr-persons { margin: -14px 0 18px; font-size: 0.85rem; color: var(--text-dim); }
+    .irr-forms { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .irr-form {
+      padding: 3px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .irr-form.ok { color: var(--green); border-color: var(--green); }
+    .irr-form.close { color: var(--orange); border-color: var(--orange); }
+    .irr-form.bad { color: var(--red); border-color: var(--red); }
+    .irr-form small { font-weight: 400; color: var(--text-dim); }
+    .irr-row { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    .irr-row th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--text-dim);
+      padding: 4px 16px 4px 0;
+      width: 1%;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    .irr-row td { padding: 4px 0; color: var(--text); }
+    .irr-row tr.asked th { color: var(--text); text-decoration: underline; }
+    .irr-row b { font-weight: 700; }
+    .irr-row td span { font-weight: 400; }
+
     @media (max-width: 640px) {
       .vocab-sub-nav-wrap { padding: 16px 16px 0; }
       .write-drill { padding: 16px; }
@@ -1930,6 +1960,7 @@
     <div class="grammar-sub-nav" id="grammar-sub-nav">
       <button class="active" data-sub="reference">Reference</button>
       <button data-sub="conjugation">Conjugation</button>
+      <button data-sub="irregulars">Irregulars</button>
       <button data-sub="fill-blank">Fill in Blank</button>
       <button data-sub="multiple-choice">Multiple Choice</button>
       <button data-sub="transformation">Transformation</button>
@@ -2007,6 +2038,69 @@
           <button class="btn" id="conj-reset-filter">Show all cards</button>
           <br>
           <button class="btn" id="conj-reset-progress" style="margin-top:12px;">Reset progress</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Irregular verbs (typed) sub-view -->
+    <div id="grammar-sub-irregulars" style="display:none;">
+      <div class="practice-view">
+        <div class="practice-header">
+          <select class="btn" id="irr-column">
+            <option value="all">All tenses</option>
+            <option value="present">Présent</option>
+            <option value="futur">Futur / cond.</option>
+            <option value="subj">Subjonctif</option>
+            <option value="participe">Participe</option>
+          </select>
+          <select class="btn" id="irr-pool">
+            <option value="unmastered">Not mastered</option>
+            <option value="all">All cards</option>
+          </select>
+          <div class="spacer"></div>
+          <div class="practice-score">Mastered <strong id="irr-mastered">0</strong> / <strong id="irr-set-total">0</strong></div>
+        </div>
+        <div class="practice-progress"><div class="practice-progress-fill" id="irr-progress"></div></div>
+
+        <div id="irr-card-area">
+          <div class="fib-card wd-card">
+            <div class="wd-card-top">
+              <span class="fib-hint" id="irr-label"></span>
+              <span><span class="wd-tag again" id="irr-again" style="display:none;">Again</span></span>
+            </div>
+            <div class="wd-prompt" id="irr-prompt"></div>
+            <div class="irr-persons" id="irr-persons"></div>
+            <input class="fib-input wd-input" id="irr-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+            <div class="wd-accents" id="irr-accents">
+              <button type="button">é</button><button type="button">è</button><button type="button">ê</button><button type="button">à</button><button type="button">â</button><button type="button">ç</button><button type="button">î</button><button type="button">ô</button><button type="button">û</button><button type="button">ù</button>
+            </div>
+            <div class="fib-feedback" id="irr-feedback"></div>
+            <div class="wd-reveal" id="irr-reveal">
+              <div class="irr-forms" id="irr-forms"></div>
+              <table class="irr-row" id="irr-row"></table>
+              <div class="wd-note" id="irr-intro"></div>
+            </div>
+            <div class="fib-actions">
+              <button class="btn wd-primary" id="irr-action">Check</button>
+              <button class="btn" id="irr-giveup">Show answer</button>
+              <button class="btn" id="irr-override" style="display:none;">I was right</button>
+            </div>
+            <div class="wd-hint-line" id="irr-hint-line"></div>
+          </div>
+          <div class="wd-footer">
+            <span>Card <strong id="irr-index">0</strong> / <strong id="irr-total">0</strong></span>
+            <span>First try <strong id="irr-correct">0</strong></span>
+          </div>
+        </div>
+
+        <div id="irr-done" class="empty-state" style="display:none;">
+          <h2 id="irr-done-title">Session complete</h2>
+          <p id="irr-done-text"></p>
+          <div class="wd-missed" id="irr-missed"></div>
+          <button class="btn wd-primary" id="irr-new">New session</button>
+          <button class="btn" id="irr-retry-missed" style="display:none;">Practice missed cards</button>
+          <button class="btn" id="irr-reset" style="display:none;">Reset mastered</button>
+          <div class="wd-hint-line no-touch">Press Return to start a new session</div>
         </div>
       </div>
     </div>
@@ -2165,6 +2259,7 @@
   <script src="linking-data.js"></script>
   <script src="grammar-data.js"></script>
   <script src="grammar-exercises.js"></script>
+  <script src="irregulars-data.js"></script>
   <script src="reading-data.js"></script>
   <script src="listening-data.js"></script>
   <script src="writing-data.js"></script>
@@ -2605,13 +2700,14 @@
       document.querySelectorAll('#grammar-sub-nav button').forEach(b => {
         b.classList.toggle('active', b.dataset.sub === sub);
       });
-      ['reference','conjugation','fill-blank','multiple-choice','transformation'].forEach(s => {
+      ['reference','conjugation','irregulars','fill-blank','multiple-choice','transformation'].forEach(s => {
         const el = $('grammar-sub-' + s);
         if (el) el.style.display = s === sub ? 'block' : 'none';
       });
 
       if (sub === 'reference') renderGrammar();
       else if (sub === 'conjugation') conjInit();
+      else if (sub === 'irregulars') irrShow();
       else if (sub === 'fill-blank') fibInit();
       else if (sub === 'multiple-choice') mcInit();
       else if (sub === 'transformation') transInit();
@@ -5343,6 +5439,285 @@
       wdStart();
     });
 
+    // === IRREGULAR VERBS DRILL (Grammar → Irregulars) ===
+    // Same flow as the vocab Write drill: one card = verb + tense, type every form, Return checks / advances.
+    const IRR_STORAGE = 'frenchB2_irregMastered';
+    const IRR_COLS = { present: 'Présent', futur: 'Futur / cond.', subj: 'Subjonctif', participe: 'Participe' };
+    const IRR_SKIP = new Set(['je', 'nous', 'ils', 'il', 'vous', 'que', 'elle', 'elles', 'on', 'être', 'avoir']);
+    const IRR_CARDS = IRREGULARS_DATA.flatMap(row =>
+      Object.keys(IRR_COLS).map(col => ({ id: row.verb + '|' + col, row, col })));
+    const irrInput = $('irr-input');
+
+    let irrMastered = (() => {
+      try { return new Set(JSON.parse(localStorage.getItem(IRR_STORAGE)) || []); }
+      catch { return new Set(); }
+    })();
+    let irrDeck = [];   // items: { card, retry, requeued }
+    let irrIndex = 0;
+    let irrState = 'ask'; // 'ask' | 'checked' | 'done'
+    let irrFirstTryCount = 0;
+    let irrMissed = [];
+
+    function irrSave() {
+      localStorage.setItem(IRR_STORAGE, JSON.stringify([...irrMastered]));
+      updateProgressDashboard();
+    }
+
+    const irrBold = s => s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    const irrClean = s => s.replace(/\*\*/g, '');
+
+    // "je suis, nous sommes · sont" → ["suis", "sommes", "sont"]; "qu'il faille" → ["faille"]
+    function irrTokens(str) {
+      return wdNorm(str).replace(/(qu|j)'/g, ' ').replace(/[()]/g, ' ')
+        .split(/[\s,·;\/]+/).map(t => t.replace(/-+$/, '')).filter(t => t && !IRR_SKIP.has(t));
+    }
+
+    function irrForms(card) {
+      const r = card.row;
+      return card.col === 'present' ? r.present
+        : card.col === 'subj' ? r.subj
+        : [card.col === 'futur' ? r.futur : r.participe];
+    }
+
+    function irrPersons(card) {
+      const r = card.row;
+      if (card.col === 'present') return r.impersonal ? 'il …' : ['je', 'nous', 'ils', 'vous'].slice(0, r.present.length).join(' · ');
+      if (card.col === 'subj') return r.impersonal ? "qu'il …" : r.subj.length > 1 ? 'que je · que nous' : 'que je';
+      if (card.col === 'futur') return 'stem for futur & conditionnel';
+      return 'participe passé';
+    }
+
+    function irrJudge(card, typed) {
+      const user = irrTokens(typed);
+      const expected = irrForms(card).map(f => irrTokens(irrClean(f))[0]);
+      const match = (exp, u) => {
+        if (!u) return 'bad';
+        // Futur: the stem, or the je / il form built on it
+        const accepted = card.col === 'futur' ? [exp, exp + 'ai', exp + 'a'] : [exp];
+        if (accepted.includes(u)) return 'ok';
+        if (accepted.some(a => wdFold(a) === wdFold(u))) return 'close';
+        return 'bad';
+      };
+      const marks = expected.map((exp, i) => match(exp, user[i]));
+      const okCount = marks.filter(m => m !== 'bad').length;
+      if (user.length > expected.length) return { result: 'wrong', marks, msg: `Too many forms: expected ${expected.length}.` };
+      if (marks.every(m => m === 'ok')) return { result: 'correct', marks, msg: 'Correct!' };
+      if (okCount === marks.length) return { result: 'close', marks, msg: 'Almost! Check your accents.' };
+      return { result: 'wrong', marks, msg: expected.length > 1 ? `${okCount} / ${expected.length} right.` : 'Not quite.' };
+    }
+
+    function irrPool() {
+      const col = $('irr-column').value;
+      let pool = col === 'all' ? IRR_CARDS : IRR_CARDS.filter(c => c.col === col);
+      if ($('irr-pool').value === 'unmastered') pool = pool.filter(c => !irrMastered.has(c.id));
+      return pool;
+    }
+    function irrColumnSet() {
+      const col = $('irr-column').value;
+      return col === 'all' ? IRR_CARDS : IRR_CARDS.filter(c => c.col === col);
+    }
+    function irrColumnLabel() {
+      const col = $('irr-column').value;
+      return col === 'all' ? 'all tenses' : IRR_COLS[col];
+    }
+
+    function irrShow() {
+      if (irrDeck.length === 0 && irrState !== 'done') irrStart();
+      else irrRender();
+    }
+
+    function irrStart(cards) {
+      irrDeck = (cards || shuffleArray([...irrPool()])).map(card => ({ card, retry: false, requeued: null }));
+      irrIndex = 0;
+      irrFirstTryCount = 0;
+      irrMissed = [];
+      irrState = irrDeck.length ? 'ask' : 'done';
+      irrRender();
+    }
+
+    function irrUpdateHeader() {
+      const set = irrColumnSet();
+      $('irr-mastered').textContent = set.filter(c => irrMastered.has(c.id)).length;
+      $('irr-set-total').textContent = set.length;
+      $('irr-index').textContent = Math.min(irrIndex + 1, irrDeck.length);
+      $('irr-total').textContent = irrDeck.length;
+      $('irr-correct').textContent = irrFirstTryCount;
+      const done = irrIndex + (irrState === 'checked' ? 1 : 0);
+      $('irr-progress').style.width = irrDeck.length ? `${(done / irrDeck.length) * 100}%` : '0%';
+    }
+
+    function irrRender() {
+      irrUpdateHeader();
+      if (irrState === 'done') { irrRenderDone(); return; }
+      $('irr-card-area').style.display = 'block';
+      $('irr-done').style.display = 'none';
+
+      const item = irrDeck[irrIndex];
+      const card = item.card;
+      $('irr-label').textContent = IRR_COLS[card.col];
+      $('irr-again').style.display = item.retry ? '' : 'none';
+      $('irr-prompt').textContent = card.row.verb;
+      $('irr-persons').textContent = irrPersons(card);
+      irrInput.value = '';
+      irrInput.className = 'fib-input wd-input';
+      irrInput.placeholder = irrForms(card).length > 1 ? 'Forms separated by commas…' : 'Type the form…';
+      $('irr-feedback').textContent = '';
+      $('irr-feedback').className = 'fib-feedback';
+      $('irr-reveal').className = 'wd-reveal';
+      $('irr-action').textContent = 'Check';
+      $('irr-giveup').style.display = '';
+      $('irr-override').style.display = 'none';
+      $('irr-hint-line').textContent = 'Return to check · Return on an empty field shows the answer';
+      irrInput.focus();
+    }
+
+    function irrRowHtml(card) {
+      const r = card.row;
+      const present = r.present.slice(0, 3).map(irrBold).join(' · ') + (r.present[3] ? ` (vous ${irrBold(r.present[3])})` : '');
+      const subj = irrBold(r.subj[0]) + (r.subj[1] ? ` <span>(${irrBold(r.subj[1])})</span>` : '');
+      const participe = irrBold(r.participe) + (r.aux ? ` <span>(${r.aux})</span>` : '');
+      const cells = { present, futur: irrBold(r.futur), subj, participe };
+      return Object.keys(IRR_COLS).map(col =>
+        `<tr class="${col === card.col ? 'asked' : ''}"><th>${IRR_COLS[col]}</th><td>${cells[col]}</td></tr>`).join('');
+    }
+
+    function irrRenderDone() {
+      $('irr-card-area').style.display = 'none';
+      $('irr-done').style.display = 'block';
+      const unique = irrDeck.filter(i => !i.retry).length;
+      if (unique === 0) {
+        $('irr-done-title').textContent = 'Nothing to practice';
+        $('irr-done-text').textContent = 'You have mastered every card in this set. Switch to "All cards" to keep practicing.';
+      } else {
+        $('irr-done-title').textContent = 'Session complete';
+        $('irr-done-text').textContent = `${irrFirstTryCount} / ${unique} right on the first try.`;
+      }
+      $('irr-missed').innerHTML = irrMissed.map(c =>
+        `<div><strong>${c.row.verb}</strong> <span>— ${IRR_COLS[c.col]}: ${irrForms(c).map(irrClean).join(', ')}</span></div>`).join('');
+      $('irr-retry-missed').style.display = irrMissed.length ? '' : 'none';
+      $('irr-retry-missed').textContent = `Practice missed cards (${irrMissed.length})`;
+      // Reset only once the whole selected set is mastered
+      const set = irrColumnSet();
+      $('irr-reset').style.display = unique === 0 && set.every(c => irrMastered.has(c.id)) ? '' : 'none';
+      $('irr-reset').textContent = `Reset mastered (${irrColumnLabel()})`;
+      $('irr-progress').style.width = unique ? '100%' : '0%';
+    }
+
+    function irrCheck(giveUp) {
+      if (irrState !== 'ask') return;
+      const item = irrDeck[irrIndex];
+      const card = item.card;
+      if (!wdNorm(irrInput.value)) giveUp = true;
+      const j = giveUp ? { result: 'wrong', marks: irrForms(card).map(() => 'bad'), msg: '' } : irrJudge(card, irrInput.value);
+      const ok = j.result !== 'wrong';
+      irrState = 'checked';
+
+      if (!item.retry) {
+        if (ok) { irrFirstTryCount++; irrMastered.add(card.id); }
+        else { irrMastered.delete(card.id); irrMissed.push(card); }
+        irrSave();
+      }
+      if (!ok) {
+        const copy = { card, retry: true, requeued: null };
+        irrDeck.splice(Math.min(irrIndex + 1 + WD_REQUEUE_GAP, irrDeck.length), 0, copy);
+        item.requeued = copy;
+      }
+
+      const cls = j.result === 'correct' ? 'correct' : j.result === 'close' ? 'close' : 'incorrect';
+      irrInput.className = 'fib-input wd-input ' + cls;
+      $('irr-feedback').className = 'fib-feedback ' + cls;
+      $('irr-feedback').textContent = giveUp ? 'The answer is:' : ok ? j.msg : `${j.msg} It'll come back in a moment.`;
+
+      const persons = irrPersons(card).split(' · ');
+      const showPersons = card.col === 'present' || card.col === 'subj';
+      $('irr-forms').innerHTML = irrForms(card).map((f, i) =>
+        `<span class="irr-form ${giveUp ? '' : j.marks[i]}">${showPersons && persons[i] && !card.row.impersonal ? `<small>${persons[i]}</small> ` : ''}${irrClean(f)}</span>`).join('');
+      $('irr-row').innerHTML = irrRowHtml(card);
+      $('irr-intro').textContent = card.col === 'present' ? IRREGULARS_INTRO : '';
+      $('irr-reveal').className = 'wd-reveal show';
+
+      $('irr-action').textContent = 'Next →';
+      $('irr-giveup').style.display = 'none';
+      $('irr-override').style.display = !ok && !giveUp ? '' : 'none';
+      $('irr-hint-line').textContent = 'Return for the next card';
+      irrUpdateHeader();
+      irrInput.focus();
+    }
+
+    function irrOverride() {
+      if (irrState !== 'checked') return;
+      const item = irrDeck[irrIndex];
+      if (item.requeued) {
+        irrDeck.splice(irrDeck.indexOf(item.requeued), 1);
+        item.requeued = null;
+      }
+      if (!item.retry) {
+        irrFirstTryCount++;
+        irrMastered.add(item.card.id);
+        irrMissed = irrMissed.filter(c => c !== item.card);
+        irrSave();
+      }
+      irrInput.className = 'fib-input wd-input correct';
+      $('irr-feedback').className = 'fib-feedback correct';
+      $('irr-feedback').textContent = 'Counted as correct.';
+      $('irr-override').style.display = 'none';
+      irrUpdateHeader();
+      irrInput.focus();
+    }
+
+    function irrNext() {
+      if (irrState !== 'checked') return;
+      irrIndex++;
+      irrState = irrIndex >= irrDeck.length ? 'done' : 'ask';
+      irrRender();
+    }
+
+    irrInput.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' || e.isComposing) return;
+      e.preventDefault();
+      if (e.repeat) return;
+      if (irrState === 'ask') irrCheck(false);
+      else if (irrState === 'checked') irrNext();
+    });
+    irrInput.addEventListener('beforeinput', e => { if (irrState !== 'ask') e.preventDefault(); });
+
+    document.addEventListener('keydown', e => {
+      if (currentMode !== 'grammar' || grammarSubMode !== 'irregulars' || e.key !== 'Enter' || e.repeat) return;
+      if (e.target === irrInput || ['BUTTON', 'SELECT', 'TEXTAREA', 'INPUT'].includes(e.target.tagName)) return;
+      e.preventDefault();
+      if (irrState === 'done') irrStart();
+      else if (irrState === 'checked') irrNext();
+      else irrInput.focus();
+    });
+
+    document.querySelectorAll('#irr-card-area button').forEach(b => {
+      b.addEventListener('pointerdown', e => e.preventDefault());
+    });
+    $('irr-action').addEventListener('click', () => {
+      if (irrState === 'ask') irrCheck(false); else irrNext();
+    });
+    $('irr-giveup').addEventListener('click', () => irrCheck(true));
+    $('irr-override').addEventListener('click', irrOverride);
+    $('irr-accents').querySelectorAll('button').forEach(b => {
+      b.addEventListener('click', () => {
+        if (irrState !== 'ask') return;
+        const start = irrInput.selectionStart ?? irrInput.value.length;
+        const end = irrInput.selectionEnd ?? irrInput.value.length;
+        irrInput.value = irrInput.value.slice(0, start) + b.textContent + irrInput.value.slice(end);
+        irrInput.focus();
+        irrInput.setSelectionRange(start + 1, start + 1);
+      });
+    });
+    ['irr-column', 'irr-pool'].forEach(id => $(id).addEventListener('change', () => irrStart()));
+    $('irr-new').addEventListener('click', () => irrStart());
+    $('irr-retry-missed').addEventListener('click', () => irrStart(shuffleArray([...irrMissed])));
+    $('irr-reset').addEventListener('click', () => {
+      if (!confirm(`Reset mastered cards for ${irrColumnLabel()}?`)) return;
+      irrColumnSet().forEach(c => irrMastered.delete(c.id));
+      irrSave();
+      irrStart();
+    });
+
     // === PROGRESS DASHBOARD ===
     function updateProgressDashboard() {
       // Vocab
@@ -5354,8 +5729,8 @@
       // Grammar (all 4 sub-types)
       const grammarTotal = typeof GRAMMAR_EXERCISES !== 'undefined' ?
         GRAMMAR_EXERCISES.conjugation.length + GRAMMAR_EXERCISES.fillInTheBlank.length +
-        GRAMMAR_EXERCISES.multipleChoice.length + GRAMMAR_EXERCISES.transformation.length : 0;
-      const grammarDone = conjLearned.size + fibCompleted.size + mcCompleted.size + transCompleted.size;
+        GRAMMAR_EXERCISES.multipleChoice.length + GRAMMAR_EXERCISES.transformation.length + IRR_CARDS.length : 0;
+      const grammarDone = conjLearned.size + fibCompleted.size + mcCompleted.size + transCompleted.size + irrMastered.size;
       setProgress('grammar', grammarTotal > 0 ? Math.round(grammarDone / grammarTotal * 100) : 0);
 
       // Reading
