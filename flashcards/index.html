@@ -1893,6 +1893,8 @@
           <option value="Entreprise">Entreprise</option>
           <option value="Ressources Humaines">Ressources Humaines</option>
           <option value="Marketing">Marketing</option>
+          <option value="set:expressions">Expressions (162)</option>
+          <option value="set:bonus">Bonus (100)</option>
         </select>
         <select class="btn" id="wd-pool">
           <option value="unmastered">Not mastered</option>
@@ -2257,6 +2259,8 @@
 
   <script src="vocab-data.js"></script>
   <script src="linking-data.js"></script>
+  <script src="expressions-data.js"></script>
+  <script src="bonus-data.js"></script>
   <script src="grammar-data.js"></script>
   <script src="grammar-exercises.js"></script>
   <script src="irregulars-data.js"></script>
@@ -5141,7 +5145,7 @@
     // Shows a word, you type the translation, Return checks, Return again moves on.
     // Misses come back a few words later. Mastery is tracked separately from flashcards.
     const WD_STORAGE = 'frenchB2_writeMastered';
-    const WD_ALL = [...VOCAB_DATA, ...(typeof LINKING_DATA !== 'undefined' ? LINKING_DATA : [])];
+    const WD_ALL = [...VOCAB_DATA, ...[LINKING_DATA, EXPRESSIONS_DATA, BONUS_DATA].filter(Boolean).flat()];
     const WD_ARTICLE = /^(le |la |les |l'|un |une |des |der |die |das |ein |eine )/;
     const WD_REQUEUE_GAP = 3; // words in between before a miss comes back
     const wdInput = $('wd-input');
@@ -5221,8 +5225,7 @@
     }
 
     function wdPool() {
-      const cat = $('wd-category').value;
-      let pool = cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+      let pool = wdCategorySet();
       if ($('wd-pool').value === 'unmastered') pool = pool.filter(e => !wdMastered.has(e.id));
       return pool;
     }
@@ -5239,13 +5242,16 @@
       wdRender();
     }
 
+    // "all" = word bank + linking words; the Expressions and Bonus lists only come up when picked
     function wdCategorySet() {
       const cat = $('wd-category').value;
-      return cat === 'all' ? WD_ALL : WD_ALL.filter(e => e.category === cat);
+      if (cat === 'all') return WD_ALL.filter(e => !e.set);
+      if (cat.startsWith('set:')) return WD_ALL.filter(e => e.set === cat.slice(4));
+      return WD_ALL.filter(e => e.category === cat);
     }
     function wdCategoryLabel() {
       const sel = $('wd-category');
-      return sel.value === 'all' ? 'all words' : sel.value;
+      return sel.value === 'all' ? 'all words' : sel.options[sel.selectedIndex].text.replace(/ \(\d+\)$/, '');
     }
 
     function wdUpdateHeader() {
