@@ -2055,6 +2055,12 @@
             <option value="subj">Subjonctif</option>
             <option value="participe">Participe</option>
           </select>
+          <select class="btn" id="irr-verbs">
+            <option value="all">All 42 verbs</option>
+            <option value="core">Original 16</option>
+            <option value="extra">New 26</option>
+            <option value="common">Common only</option>
+          </select>
           <select class="btn" id="irr-pool">
             <option value="unmastered">Not mastered</option>
             <option value="all">All cards</option>
@@ -2081,6 +2087,7 @@
               <div class="irr-forms" id="irr-forms"></div>
               <table class="irr-row" id="irr-row"></table>
               <div class="wd-note" id="irr-intro"></div>
+              <div class="wd-note" id="irr-family"></div>
             </div>
             <div class="fib-actions">
               <button class="btn wd-primary" id="irr-action">Check</button>
@@ -2264,6 +2271,7 @@
   <script src="grammar-data.js"></script>
   <script src="grammar-exercises.js"></script>
   <script src="irregulars-data.js"></script>
+  <script src="irregulars-extra-data.js"></script>
   <script src="reading-data.js"></script>
   <script src="listening-data.js"></script>
   <script src="writing-data.js"></script>
@@ -5449,7 +5457,13 @@
     // Same flow as the vocab Write drill: one card = verb + tense, type every form, Return checks / advances.
     const IRR_STORAGE = 'frenchB2_irregMastered';
     const IRR_COLS = { present: 'Présent', futur: 'Futur / cond.', subj: 'Subjonctif', participe: 'Participe' };
-    const IRR_SKIP = new Set(['je', 'nous', 'ils', 'il', 'vous', 'que', 'elle', 'elles', 'on', 'être', 'avoir']);
+    const IRR_SKIP = new Set(['je', 'nous', 'ils', 'il', 'vous', 'que', 'elle', 'elles', 'on', 'être', 'avoir', 'me', 'se']);
+    const IRR_VERB_SETS = {
+      all: () => true,
+      core: r => !r.extra,
+      extra: r => r.extra,
+      common: r => r.priority !== 2,
+    };
     const IRR_CARDS = IRREGULARS_DATA.flatMap(row =>
       Object.keys(IRR_COLS).map(col => ({ id: row.verb + '|' + col, row, col })));
     const irrInput = $('irr-input');
@@ -5472,9 +5486,9 @@
     const irrBold = s => s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
     const irrClean = s => s.replace(/\*\*/g, '');
 
-    // "je suis, nous sommes · sont" → ["suis", "sommes", "sont"]; "qu'il faille" → ["faille"]
+    // "je suis, nous sommes · sont" → ["suis", "sommes", "sont"]; "qu'il faille" → ["faille"]; "je m'assieds" → ["assieds"]
     function irrTokens(str) {
-      return wdNorm(str).replace(/(qu|j)'/g, ' ').replace(/[()]/g, ' ')
+      return wdNorm(str).replace(/(qu|j|m|t|s)'/g, ' ').replace(/[()]/g, ' ')
         .split(/[\s,·;\/]+/).map(t => t.replace(/-+$/, '')).filter(t => t && !IRR_SKIP.has(t));
     }
 
@@ -5513,18 +5527,20 @@
     }
 
     function irrPool() {
-      const col = $('irr-column').value;
-      let pool = col === 'all' ? IRR_CARDS : IRR_CARDS.filter(c => c.col === col);
+      let pool = irrColumnSet();
       if ($('irr-pool').value === 'unmastered') pool = pool.filter(c => !irrMastered.has(c.id));
       return pool;
     }
     function irrColumnSet() {
       const col = $('irr-column').value;
-      return col === 'all' ? IRR_CARDS : IRR_CARDS.filter(c => c.col === col);
+      const inVerbs = IRR_VERB_SETS[$('irr-verbs').value];
+      return IRR_CARDS.filter(c => (col === 'all' || c.col === col) && inVerbs(c.row));
     }
     function irrColumnLabel() {
       const col = $('irr-column').value;
-      return col === 'all' ? 'all tenses' : IRR_COLS[col];
+      const verbs = $('irr-verbs');
+      const tenses = col === 'all' ? 'all tenses' : IRR_COLS[col];
+      return verbs.value === 'all' ? tenses : `${tenses}, ${verbs.options[verbs.selectedIndex].text}`;
     }
 
     function irrShow() {
@@ -5640,6 +5656,7 @@
         `<span class="irr-form ${giveUp ? '' : j.marks[i]}">${showPersons && persons[i] && !card.row.impersonal ? `<small>${persons[i]}</small> ` : ''}${irrClean(f)}</span>`).join('');
       $('irr-row').innerHTML = irrRowHtml(card);
       $('irr-intro').textContent = card.col === 'present' ? IRREGULARS_INTRO : '';
+      $('irr-family').textContent = card.row.family ? `Same pattern / notes: ${card.row.family}` : '';
       $('irr-reveal').className = 'wd-reveal show';
 
       $('irr-action').textContent = 'Next →';
@@ -5714,7 +5731,7 @@
         irrInput.setSelectionRange(start + 1, start + 1);
       });
     });
-    ['irr-column', 'irr-pool'].forEach(id => $(id).addEventListener('change', () => irrStart()));
+    ['irr-column', 'irr-verbs', 'irr-pool'].forEach(id => $(id).addEventListener('change', () => irrStart()));
     $('irr-new').addEventListener('click', () => irrStart());
     $('irr-retry-missed').addEventListener('click', () => irrStart(shuffleArray([...irrMissed])));
     $('irr-reset').addEventListener('click', () => {

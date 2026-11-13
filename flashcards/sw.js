@@ -1,4 +1,4 @@
-const CACHE_NAME = 'french-b2-v13';
+const CACHE_NAME = 'french-b2-v14';
 const ASSETS = [
   '/',
   '/index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
   '/grammar-data.js',
   '/grammar-exercises.js',
   '/irregulars-data.js',
+  '/irregulars-extra-data.js',
   '/reading-data.js',
   '/listening-data.js',
   '/writing-data.js',
